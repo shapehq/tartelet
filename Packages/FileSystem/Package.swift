@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "FileSystem",
+    platforms: [.macOS(.v13)],
     products: [
         .library(name: "FileSystem", targets: ["FileSystem"]),
         .library(name: "FileSystemDisk", targets: ["FileSystemDisk"])

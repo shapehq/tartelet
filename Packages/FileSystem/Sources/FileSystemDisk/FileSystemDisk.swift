@@ -3,7 +3,12 @@ import Foundation
 
 public final class FileSystemDisk: FileSystem {
     public var applicationSupportDirectoryURL: URL {
-        return fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+        let baseDirectoryURL = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+        if let bundleIdentifier = Bundle.main.bundleIdentifier {
+            return baseDirectoryURL.appending(path: bundleIdentifier, directoryHint: .isDirectory)
+        } else {
+            return baseDirectoryURL
+        }
     }
 
     private let fileManager: FileManager = .default
