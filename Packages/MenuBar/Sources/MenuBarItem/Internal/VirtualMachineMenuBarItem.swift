@@ -1,9 +1,9 @@
 import SwiftUI
-import VirtualMachineService
 
 struct VirtualMachineMenuBarItem: View {
-    let canStartFleet: Bool
+    let hasSelectedVirtualMachine: Bool
     let isFleetStarted: Bool
+    let isEditorStarted: Bool
     let startsSingleVirtualMachine: Bool
     let onSelect: () -> Void
 
@@ -21,7 +21,7 @@ struct VirtualMachineMenuBarItem: View {
                     }
                 }
             }
-        } else if canStartFleet {
+        } else if hasSelectedVirtualMachine {
             Button {
                 onSelect()
             } label: {
@@ -33,7 +33,7 @@ struct VirtualMachineMenuBarItem: View {
                         Text(L10n.MenuBarItem.VirtualMachines.Start.pluralis)
                     }
                 }
-            }
+            }.disabled(isEditorStarted)
         } else {
             Button {
                 onSelect()

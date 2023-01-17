@@ -8,11 +8,13 @@ let package = Package(
     platforms: [.macOS(.v13)],
     products: [
         .library(name: "VirtualMachine", targets: ["VirtualMachine"]),
+        .library(name: "VirtualMachineEditorService", targets: ["VirtualMachineEditorService"]),
         .library(name: "VirtualMachineFactory", targets: ["VirtualMachineFactory"]),
         .library(name: "VirtualMachineFleet", targets: ["VirtualMachineFleet"]),
         .library(name: "VirtualMachineFleetFactory", targets: ["VirtualMachineFleetFactory"]),
         .library(name: "VirtualMachineFleetService", targets: ["VirtualMachineFleetService"]),
         .library(name: "VirtualMachineResourcesService", targets: ["VirtualMachineResourcesService"]),
+        .library(name: "VirtualMachineResourcesServiceEditor", targets: ["VirtualMachineResourcesServiceEditor"]),
         .library(name: "VirtualMachineResourcesServiceFleet", targets: ["VirtualMachineResourcesServiceFleet"]),
         .library(name: "VirtualMachineSourceNameRepository", targets: ["VirtualMachineSourceNameRepository"])
     ],
@@ -21,6 +23,10 @@ let package = Package(
     ],
     targets: [
         .target(name: "VirtualMachine"),
+        .target(name: "VirtualMachineEditorService", dependencies: [
+            "VirtualMachine",
+            "VirtualMachineFactory"
+        ]),
         .target(name: "VirtualMachineFactory", dependencies: [
             "VirtualMachine"
         ]),
@@ -35,6 +41,10 @@ let package = Package(
             "VirtualMachineFleetFactory"
         ]),
         .target(name: "VirtualMachineResourcesService"),
+        .target(name: "VirtualMachineResourcesServiceEditor", dependencies: [
+            "VirtualMachineResourcesService",
+            .product(name: "FileSystem", package: "FileSystem")
+        ]),
         .target(name: "VirtualMachineResourcesServiceFleet", dependencies: [
             "VirtualMachineResourcesService",
             .product(name: "FileSystem", package: "FileSystem")

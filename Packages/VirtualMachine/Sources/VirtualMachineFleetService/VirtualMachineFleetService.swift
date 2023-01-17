@@ -9,7 +9,6 @@ public final class VirtualMachineFleetService {
     private let fleetFactory: VirtualMachineFleetFactory
     private var fleet: VirtualMachineFleet?
     private var _isStarted = CurrentValueSubject<Bool, Never>(false)
-    private var cancellables: Set<AnyCancellable> = []
 
     public init(fleetFactory: VirtualMachineFleetFactory) {
         self.fleetFactory = fleetFactory

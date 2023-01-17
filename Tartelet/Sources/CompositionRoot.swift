@@ -9,23 +9,33 @@ import Shell
 import SwiftUI
 import Tart
 import TartVirtualMachineSourceNameRepository
+import VirtualMachineEditorService
 import VirtualMachineFactory
 import VirtualMachineFleetFactory
 import VirtualMachineFleetService
 import VirtualMachineResourcesService
+import VirtualMachineResourcesServiceEditor
 import VirtualMachineResourcesServiceFleet
 import VirtualMachineSourceNameRepository
 
 enum CompositionRoot {
     static let dock = Dock(showAppInDock: showAppInDockPublisher.rawValue)
 
-    static let virtualMachineFleetService = VirtualMachineFleetService(fleetFactory: virtualMachineFleetFactory)
+    static let fleetService = VirtualMachineFleetService(fleetFactory: fleetFactory)
+
+    static let editorService = VirtualMachineEditorService(
+        virtualMachineFactory: virtualMachineFactory(
+            resourcesService: editorResourcesService
+        )
+    )
 
     static var menuBarItem: some Scene {
         MenuBarItem(
             viewModel: MenuBarItemViewModel(
                 settingsStore: settingsStore,
-                virtualMachineFleetService: virtualMachineFleetService
+                fleetService: fleetService,
+                editorService: editorService,
+                editorResourcesService: editorResourcesService
             )
         )
     }
@@ -33,8 +43,9 @@ enum CompositionRoot {
     static var settingsWindow: some Scene {
         SettingsScene(
             settingsStore: settingsStore,
-            virtualMachinesSourceNameRepository: virtualMachineSourceNameRepository,
-            virtualMachineFleetService: virtualMachineFleetService
+            sourceNameRepository: virtualMachineSourceNameRepository,
+            fleetService: fleetService,
+            editorService: editorService
         )
     }
 }
@@ -42,19 +53,24 @@ enum CompositionRoot {
 private extension CompositionRoot {
     private static let showAppInDockPublisher = ShowAppInDockPublisher(settingsStore: settingsStore)
 
-    private static var virtualMachineFleetFactory: VirtualMachineFleetFactory {
-        DefaultVirtualMachineFleetFactory(settingsStore: settingsStore, virtualMachineFactory: virtualMachineFactory)
+    private static var fleetFactory: VirtualMachineFleetFactory {
+        let virtualMachineFactory = virtualMachineFactory(resourcesService: fleetResourcesService)
+        return DefaultVirtualMachineFleetFactory(settingsStore: settingsStore, virtualMachineFactory: virtualMachineFactory)
     }
 
-    private static var virtualMachineFactory: VirtualMachineFactory {
+    private static func virtualMachineFactory(resourcesService: VirtualMachineResourcesService) -> VirtualMachineFactory {
         DefaultVirtualMachineFactory(
             tart: tart,
             settingsStore: settingsStore,
-            resourcesService: virtualMachineResourcesService
+            resourcesService: resourcesService
         )
     }
 
-    private static var virtualMachineResourcesService: VirtualMachineResourcesService {
+    private static var editorResourcesService: VirtualMachineResourcesService {
+        VirtualMachineResourcesServiceEditor(fileSystem: fileSystem)
+    }
+
+    private static var fleetResourcesService: VirtualMachineResourcesService {
         VirtualMachineResourcesServiceFleet(fileSystem: fileSystem)
     }
 

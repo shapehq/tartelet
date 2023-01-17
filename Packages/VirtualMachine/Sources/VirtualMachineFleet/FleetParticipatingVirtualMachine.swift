@@ -20,7 +20,7 @@ final class FleetParticipatingVirtualMachine {
                 try await self.virtualMachine.start()
                 self.delegate?.virtualMachineDidStop(self)
             }
-        } 
+        }
     }
 
     func stop() {

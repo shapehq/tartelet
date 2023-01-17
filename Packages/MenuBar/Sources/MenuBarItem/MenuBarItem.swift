@@ -15,24 +15,31 @@ public struct MenuBarItem: Scene {
     public var body: some Scene {
         MenuBarExtra(isInserted: $isInserted) {
             VirtualMachineMenuBarItem(
-                canStartFleet: viewModel.canStartFleet,
+                hasSelectedVirtualMachine: viewModel.hasSelectedVirtualMachine,
                 isFleetStarted: viewModel.isFleetStarted,
+                isEditorStarted: viewModel.isEditorStarted,
                 startsSingleVirtualMachine: settingsStore.numberOfVirtualMachines == 1
             ) {
                 if viewModel.isFleetStarted {
-                    viewModel.stopVirtualMachines()
-                } else if viewModel.canStartFleet {
-                    viewModel.startVirtualMachines()
+                    viewModel.stopFleet()
+                } else if viewModel.hasSelectedVirtualMachine {
+                    viewModel.startFleet()
                 } else {
                     viewModel.presentSettings()
                 }
             }
             Divider()
             Button {
-
+                viewModel.startEditor()
             } label: {
-                Text(L10n.MenuBarItem.editVirtualMachine)
+                Text(L10n.MenuBarItem.Editor.editVirtualMachine)
+            }.disabled(viewModel.isFleetStarted || viewModel.isEditorStarted || !viewModel.hasSelectedVirtualMachine)
+            Button {
+                viewModel.openEditorResources()
+            } label: {
+                Text(L10n.MenuBarItem.Editor.openResources)
             }
+            Divider()
             Button {
                 viewModel.presentSettings()
             } label: {

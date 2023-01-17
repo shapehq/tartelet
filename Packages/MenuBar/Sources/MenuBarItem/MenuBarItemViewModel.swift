@@ -2,30 +2,43 @@ import Combine
 import Foundation
 import SettingsStore
 import SwiftUI
+import VirtualMachineEditorService
 import VirtualMachineFleetService
+import VirtualMachineResourcesService
 
 public final class MenuBarItemViewModel: ObservableObject {
     let settingsStore: SettingsStore
-    @Published private(set) var canStartFleet: Bool
+    @Published private(set) var hasSelectedVirtualMachine: Bool
     @Published private(set) var isFleetStarted = false
+    @Published private(set) var isEditorStarted = false
 
-    private let virtualMachineFleetService: VirtualMachineFleetService
+    private let fleetService: VirtualMachineFleetService
+    private let editorService: VirtualMachineEditorService
+    private let editorResourcesService: VirtualMachineResourcesService
     private var cancellables: Set<AnyCancellable> = []
 
-    public init(settingsStore: SettingsStore, virtualMachineFleetService: VirtualMachineFleetService) {
+    public init(
+        settingsStore: SettingsStore,
+        fleetService: VirtualMachineFleetService,
+        editorService: VirtualMachineEditorService,
+        editorResourcesService: VirtualMachineResourcesService
+    ) {
         self.settingsStore = settingsStore
-        self.virtualMachineFleetService = virtualMachineFleetService
-        self.canStartFleet = settingsStore.virtualMachine != .unknown
-        settingsStore.onChange.map { $0.virtualMachine != .unknown }.assign(to: \.canStartFleet, on: self).store(in: &cancellables)
-        virtualMachineFleetService.isStarted.assign(to: \.isFleetStarted, on: self).store(in: &cancellables)
+        self.fleetService = fleetService
+        self.editorService = editorService
+        self.editorResourcesService = editorResourcesService
+        self.hasSelectedVirtualMachine = settingsStore.virtualMachine != .unknown
+        settingsStore.onChange.map { $0.virtualMachine != .unknown }.assign(to: \.hasSelectedVirtualMachine, on: self).store(in: &cancellables)
+        fleetService.isStarted.assign(to: \.isFleetStarted, on: self).store(in: &cancellables)
+        editorService.isStarted.assign(to: \.isEditorStarted, on: self).store(in: &cancellables)
     }
 
-    func startVirtualMachines() {
-        guard !isFleetStarted && canStartFleet else {
+    func startFleet() {
+        guard !isFleetStarted && hasSelectedVirtualMachine else {
             return
         }
         do {
-            try virtualMachineFleetService.start()
+            try fleetService.start()
         } catch {
             #if DEBUG
             print(error)
@@ -33,10 +46,29 @@ public final class MenuBarItemViewModel: ObservableObject {
         }
     }
 
-    func stopVirtualMachines() {
+    func stopFleet() {
         if isFleetStarted {
-            virtualMachineFleetService.stop()
+            fleetService.stop()
         }
+    }
+
+    func startEditor() {
+        guard !isEditorStarted else {
+            return
+        }
+        do {
+            try editorService.start()
+        } catch {
+            #if DEBUG
+            print(error)
+            #endif
+        }
+    }
+
+    func openEditorResources() {
+        do {
+            try editorResourcesService.openDirectory()
+        } catch {}
     }
 
     func presentAbout() {

@@ -13,12 +13,16 @@ internal enum L10n {
   internal enum MenuBarItem {
     /// About...
     internal static let about = L10n.tr("Localizable", "menu_bar_item.about", fallback: "About...")
-    /// Edit Virtual Machine
-    internal static let editVirtualMachine = L10n.tr("Localizable", "menu_bar_item.edit_virtual_machine", fallback: "Edit Virtual Machine")
     /// Quit
     internal static let quit = L10n.tr("Localizable", "menu_bar_item.quit", fallback: "Quit")
     /// Settings...
     internal static let settings = L10n.tr("Localizable", "menu_bar_item.settings", fallback: "Settings...")
+    internal enum Editor {
+      /// Edit Virtual Machine
+      internal static let editVirtualMachine = L10n.tr("Localizable", "menu_bar_item.editor.edit_virtual_machine", fallback: "Edit Virtual Machine")
+      /// Open Resources
+      internal static let openResources = L10n.tr("Localizable", "menu_bar_item.editor.open_resources", fallback: "Open Resources")
+    }
     internal enum VirtualMachines {
       /// Select Virtual Machine...
       internal static let unavailable = L10n.tr("Localizable", "menu_bar_item.virtual_machines.unavailable", fallback: "Select Virtual Machine...")

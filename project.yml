@@ -47,9 +47,13 @@ targets:
       - package: VirtualMachine
         product: VirtualMachineFleet
       - package: VirtualMachine
+        product: VirtualMachineEditorService
+      - package: VirtualMachine
         product: VirtualMachineFleetFactory
       - package: VirtualMachine
         product: VirtualMachineResourcesService
+      - package: VirtualMachine
+        product: VirtualMachineResourcesServiceEditor
       - package: VirtualMachine
         product: VirtualMachineResourcesServiceFleet
       - package: VirtualMachine

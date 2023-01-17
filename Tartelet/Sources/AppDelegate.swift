@@ -7,6 +7,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationWillTerminate(_ notification: Notification) {
-        CompositionRoot.virtualMachineFleetService.stop()
+        CompositionRoot.editorService.stop()
+        CompositionRoot.fleetService.stop()
     }
 }

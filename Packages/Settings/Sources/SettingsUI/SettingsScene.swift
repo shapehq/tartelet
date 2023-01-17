@@ -1,6 +1,7 @@
 import Combine
 import SettingsStore
 import SwiftUI
+import VirtualMachineEditorService
 import VirtualMachineFleetService
 import VirtualMachineSourceNameRepository
 
@@ -11,12 +12,18 @@ public struct SettingsScene: Scene {
 
     public init(
         settingsStore: SettingsStore,
-        virtualMachinesSourceNameRepository: VirtualMachineSourceNameRepository,
-        virtualMachineFleetService: VirtualMachineFleetService
+        sourceNameRepository: VirtualMachineSourceNameRepository,
+        fleetService: VirtualMachineFleetService,
+        editorService: VirtualMachineEditorService
     ) {
         self.settingsStore = settingsStore
-        self.virtualMachinesSourceNameRepository = virtualMachinesSourceNameRepository
-        self.isVirtualMachineSettingsEnabled = virtualMachineFleetService.isStarted.map { !$0 }.eraseToAnyPublisher()
+        self.virtualMachinesSourceNameRepository = sourceNameRepository
+        self.isVirtualMachineSettingsEnabled = Publishers.CombineLatest(
+            fleetService.isStarted,
+            editorService.isStarted
+        )
+        .map { !$0 && !$1 }
+        .eraseToAnyPublisher()
     }
 
     public var body: some Scene {

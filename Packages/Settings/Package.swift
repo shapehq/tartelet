@@ -22,6 +22,7 @@ let package = Package(
         .target(name: "SettingsUI", dependencies: [
             "Settings",
             "SettingsStore",
+            .product(name: "VirtualMachineEditorService", package: "VirtualMachine"),
             .product(name: "VirtualMachineFleetService", package: "VirtualMachine"),
             .product(name: "VirtualMachineSourceNameRepository", package: "VirtualMachine")
         ], resources: [.process("Supporting files/Localizable.strings")])
