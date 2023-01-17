@@ -1,0 +1,12 @@
+"settings.general" = "General";
+"settings.general.application_ui_mode" = "Show In";
+"settings.general.application_ui_mode.dock" = "Dock";
+"settings.general.application_ui_mode.menu_bar" = "Menu Bar";
+"settings.general.application_ui_mode.dock_and_menu_bar" = "Dock and Menu Bar";
+
+"settings.virtual_machine" = "Virtual Machine";
+"settings.virtual_machine.unknown" = "Unknown";
+"settings.virtual_machine.no_virtual_machines_available" = "Use the Tart CLI to create a virtual machine.";
+"settings.virtual_machine.count" = "Amount of Virtual Machines";
+"settings.virtual_machine.count.one" = "One";
+"settings.virtual_machine.count.two" = "Two";

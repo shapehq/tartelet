@@ -1,0 +1,65 @@
+name: Tartelet
+options:
+  bundleIdPrefix: dk.shape
+  developmentLanguage: en
+configs:
+  Debug: debug
+  Release: release
+configFiles:
+  Debug: xcconfigs/General.xcconfig
+  Release: xcconfigs/General.xcconfig
+targets:
+  Tartelet:
+    type: application
+    platform: macOS
+    sources: [Tartelet]
+    postCompileScripts:
+    - name: Run SwiftLint
+      path: scripts/swiftlint.sh
+      basedOnDependencyAnalysis: false
+    dependencies:
+      - package: Dock
+        product: Dock
+      - package: FileSystem
+        product: FileSystem
+      - package: FileSystem
+        product: FileSystemDisk
+      - package: MenuBar
+        product: MenuBarItem
+      - package: Settings
+        product: Settings
+      - package: Settings
+        product: SettingsStore
+      - package: Settings
+        product: SettingsUI
+      - package: Shell
+        product: Shell
+      - package: Tart
+        product: Tart
+      - package: TartVirtualMachine
+        product: TartVirtualMachine
+      - package: TartVirtualMachine
+        product: TartVirtualMachineSourceNameRepository
+      - package: VirtualMachine
+        product: VirtualMachine
+      - package: VirtualMachine
+        product: VirtualMachineFactory
+      - package: VirtualMachine
+        product: VirtualMachineFleet
+      - package: VirtualMachine
+        product: VirtualMachineFleetFactory
+      - package: VirtualMachine
+        product: VirtualMachineResourcesService
+      - package: VirtualMachine
+        product: VirtualMachineResourcesServiceFleet
+      - package: VirtualMachine
+        product: VirtualMachineSourceNameRepository
+localPackages:
+  - Packages/Dock
+  - Packages/FileSystem
+  - Packages/MenuBar
+  - Packages/Settings
+  - Packages/Shell
+  - Packages/Tart
+  - Packages/VirtualMachine
+  - Packages/TartVirtualMachine
