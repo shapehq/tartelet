@@ -7,6 +7,7 @@ let package = Package(
     name: "TartVirtualMachine",
     platforms: [.macOS(.v13)],
     products: [
+        .library(name: "EphemeralTartVirtualMachine", targets: ["EphemeralTartVirtualMachine"]),
         .library(name: "TartVirtualMachine", targets: ["TartVirtualMachine"]),
         .library(name: "TartVirtualMachineSourceNameRepository", targets: ["TartVirtualMachineSourceNameRepository"])
     ],
@@ -15,7 +16,16 @@ let package = Package(
         .package(path: "../VirtualMachine")
     ],
     targets: [
+        .target(name: "EphemeralTartVirtualMachine", dependencies: [
+            "TartDirectoryHelpers",
+            .product(name: "Tart", package: "Tart"),
+            .product(name: "VirtualMachine", package: "VirtualMachine")
+        ]),
+        .target(name: "TartDirectoryHelpers", dependencies: [
+            .product(name: "Tart", package: "Tart")
+        ]),
         .target(name: "TartVirtualMachine", dependencies: [
+            "TartDirectoryHelpers",
             .product(name: "Tart", package: "Tart"),
             .product(name: "VirtualMachine", package: "VirtualMachine")
         ]),

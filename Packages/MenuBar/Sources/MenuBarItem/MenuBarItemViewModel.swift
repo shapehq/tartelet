@@ -53,15 +53,8 @@ public final class MenuBarItemViewModel: ObservableObject {
     }
 
     func startEditor() {
-        guard !isEditorStarted else {
-            return
-        }
-        do {
-            try editorService.start()
-        } catch {
-            #if DEBUG
-            print(error)
-            #endif
+        if !isEditorStarted {
+            editorService.start()
         }
     }
 

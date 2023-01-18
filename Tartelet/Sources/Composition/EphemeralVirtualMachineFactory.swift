@@ -1,13 +1,12 @@
-import FileSystem
+import EphemeralTartVirtualMachine
 import Foundation
 import SettingsStore
 import Tart
-import TartVirtualMachine
 import VirtualMachine
 import VirtualMachineFactory
 import VirtualMachineResourcesService
 
-enum DefaultVirtualMachineFactoryError: LocalizedError {
+enum EphemeralVirtualMachineFactoryError: LocalizedError {
     case sourceVirtualMachineNameUnavailable
 
     var errorDescription: String? {
@@ -18,16 +17,20 @@ enum DefaultVirtualMachineFactoryError: LocalizedError {
     }
 }
 
-struct DefaultVirtualMachineFactory: VirtualMachineFactory {
+struct EphemeralVirtualMachineFactory: VirtualMachineFactory {
     let tart: Tart
     let settingsStore: SettingsStore
     let resourcesService: VirtualMachineResourcesService
 
     func makeVirtualMachine() throws -> VirtualMachine {
         guard case let .virtualMachine(sourceVMName) = settingsStore.virtualMachine else {
-            throw DefaultVirtualMachineFactoryError.sourceVirtualMachineNameUnavailable
+            throw EphemeralVirtualMachineFactoryError.sourceVirtualMachineNameUnavailable
         }
         let resourcesDirectoryURL = resourcesService.directoryURL
-        return TartVirtualMachine(tart: tart, sourceVMName: sourceVMName, resourcesDirectoryURL: resourcesDirectoryURL)
+        return EphemeralTartVirtualMachine(
+            tart: tart,
+            sourceVMName: sourceVMName,
+            resourcesDirectoryURL: resourcesDirectoryURL
+        )
     }
 }

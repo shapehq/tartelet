@@ -23,11 +23,7 @@ enum CompositionRoot {
 
     static let fleetService = VirtualMachineFleetService(fleetFactory: fleetFactory)
 
-    static let editorService = VirtualMachineEditorService(
-        virtualMachineFactory: virtualMachineFactory(
-            resourcesService: editorResourcesService
-        )
-    )
+    static let editorService = VirtualMachineEditorService(virtualMachineFactory: editorVirtualMachineFactory)
 
     static var menuBarItem: some Scene {
         MenuBarItem(
@@ -54,15 +50,22 @@ private extension CompositionRoot {
     private static let showAppInDockPublisher = ShowAppInDockPublisher(settingsStore: settingsStore)
 
     private static var fleetFactory: VirtualMachineFleetFactory {
-        let virtualMachineFactory = virtualMachineFactory(resourcesService: fleetResourcesService)
-        return DefaultVirtualMachineFleetFactory(settingsStore: settingsStore, virtualMachineFactory: virtualMachineFactory)
+        return DefaultVirtualMachineFleetFactory(settingsStore: settingsStore, virtualMachineFactory: fleetVirtualMachineFactory)
     }
 
-    private static func virtualMachineFactory(resourcesService: VirtualMachineResourcesService) -> VirtualMachineFactory {
-        DefaultVirtualMachineFactory(
+    private static var editorVirtualMachineFactory: VirtualMachineFactory {
+        LongLivedVirtualMachineFactory(
             tart: tart,
             settingsStore: settingsStore,
-            resourcesService: resourcesService
+            resourcesService: editorResourcesService
+        )
+    }
+
+    private static var fleetVirtualMachineFactory: VirtualMachineFactory {
+        EphemeralVirtualMachineFactory(
+            tart: tart,
+            settingsStore: settingsStore,
+            resourcesService: editorResourcesService
         )
     }
 

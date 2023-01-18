@@ -37,6 +37,8 @@ targets:
       - package: Tart
         product: Tart
       - package: TartVirtualMachine
+        product: EphemeralTartVirtualMachine
+      - package: TartVirtualMachine
         product: TartVirtualMachine
       - package: TartVirtualMachine
         product: TartVirtualMachineSourceNameRepository

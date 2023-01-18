@@ -15,16 +15,21 @@ final class FleetParticipatingVirtualMachine {
     }
 
     func start() {
-        runTask = Task { [weak self] in
-            if let self = self {
+        runTask = Task {
+            try await withTaskCancellationHandler {
                 try await self.virtualMachine.start()
+                self.runTask = nil
                 self.delegate?.virtualMachineDidStop(self)
+            } onCancel: {
+                runTask = Task {
+                    try await self.virtualMachine.stop()
+                    self.runTask = nil
+                }
             }
         }
     }
 
     func stop() {
         runTask?.cancel()
-        runTask = nil
     }
 }
