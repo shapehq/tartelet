@@ -17,5 +17,14 @@ public struct VirtualMachineResourcesServiceEditor: VirtualMachineResourcesServi
 
     public func createResourcesIfNeeded() throws {
         try fileSystem.createDirectoryIfNeeded(at: directoryURL)
+        guard let resourcesDirectoryURL = Bundle.module.resourceURL?.appending(path: "Resources") else {
+            return
+        }
+        let sourceFileURLs = try fileSystem.contentsOfDirectory(at: resourcesDirectoryURL)
+        for sourceFileURL in sourceFileURLs {
+            let destinationFileURL = directoryURL.appending(path: sourceFileURL.lastPathComponent)
+            try? fileSystem.removeItem(at: destinationFileURL)
+            try fileSystem.copyItem(from: sourceFileURL, to: destinationFileURL)
+        }
     }
 }

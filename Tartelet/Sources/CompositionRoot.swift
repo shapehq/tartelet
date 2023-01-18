@@ -21,9 +21,15 @@ import VirtualMachineSourceNameRepository
 enum CompositionRoot {
     static let dock = Dock(showAppInDock: showAppInDockPublisher.rawValue)
 
-    static let fleetService = VirtualMachineFleetService(fleetFactory: fleetFactory)
+    static let fleetService = VirtualMachineFleetService(
+        fleetFactory: fleetFactory,
+        resourcesService: fleetResourcesService
+    )
 
-    static let editorService = VirtualMachineEditorService(virtualMachineFactory: editorVirtualMachineFactory)
+    static let editorService = VirtualMachineEditorService(
+        virtualMachineFactory: editorVirtualMachineFactory,
+        resourcesService: editorResourcesService
+    )
 
     static var menuBarItem: some Scene {
         MenuBarItem(

@@ -1,18 +1,20 @@
 import Combine
 import Foundation
-import SettingsStore
 import VirtualMachine
 import VirtualMachineFactory
+import VirtualMachineResourcesService
 
 public final class VirtualMachineEditorService {
     public let isStarted: AnyPublisher<Bool, Never>
 
     private let virtualMachineFactory: VirtualMachineFactory
+    private let resourcesService: VirtualMachineResourcesService
     private var virtualMachine: VirtualMachine?
     private var runTask = CurrentValueSubject<Task<(), Error>?, Never>(nil)
 
-    public init(virtualMachineFactory: VirtualMachineFactory) {
+    public init(virtualMachineFactory: VirtualMachineFactory, resourcesService: VirtualMachineResourcesService) {
         self.virtualMachineFactory = virtualMachineFactory
+        self.resourcesService = resourcesService
         self.isStarted = runTask
             .receive(on: DispatchQueue.main)
             .map { $0 != nil }
@@ -28,6 +30,7 @@ public final class VirtualMachineEditorService {
                 defer {
                     self.runTask.value = nil
                 }
+                try resourcesService.createResourcesIfNeeded()
                 virtualMachine = try virtualMachineFactory.makeVirtualMachine()
                 try await virtualMachine?.start()
             } onCancel: {
