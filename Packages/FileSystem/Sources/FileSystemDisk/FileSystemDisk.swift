@@ -22,4 +22,18 @@ public final class FileSystemDisk: FileSystem {
             try fileManager.createDirectory(at: directoryURL, withIntermediateDirectories: true)
         }
     }
+
+    public func removeItem(at itemURL: URL) throws {
+        try fileManager.removeItem(at: itemURL)
+    }
+
+    public func copyItem(from sourceItemURL: URL, to destinationItemURL: URL) throws {
+        try NSFileCoordinator.coordinateReadingItem(at: sourceItemURL, writingTo: destinationItemURL) { safeReadingFileURL, safeWritingFileURL in
+            try fileManager.copyItem(at: safeReadingFileURL, to: safeWritingFileURL)
+        }
+    }
+
+    public func contentsOfDirectory(at directoryURL: URL) throws -> [URL] {
+        try fileManager.contentsOfDirectory(at: directoryURL, includingPropertiesForKeys: nil)
+    }
 }
