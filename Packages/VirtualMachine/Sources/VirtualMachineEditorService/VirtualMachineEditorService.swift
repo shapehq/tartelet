@@ -25,9 +25,11 @@ public final class VirtualMachineEditorService {
         }
         runTask.value = Task {
             try await withTaskCancellationHandler {
+                defer {
+                    self.runTask.value = nil
+                }
                 virtualMachine = try virtualMachineFactory.makeVirtualMachine()
                 try await virtualMachine?.start()
-                self.runTask.value = nil
             } onCancel: {
                 self.stop()
             }
