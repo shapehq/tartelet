@@ -9,7 +9,6 @@ public protocol VirtualMachineResourcesService {
 
 public extension VirtualMachineResourcesService {
     func openDirectory() throws {
-        try createResourcesIfNeeded()
         NSWorkspace.shared.open(directoryURL)
     }
 }

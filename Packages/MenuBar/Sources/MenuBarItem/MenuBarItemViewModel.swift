@@ -60,6 +60,7 @@ public final class MenuBarItemViewModel: ObservableObject {
 
     func openEditorResources() {
         do {
+            try editorResourcesService.createResourcesIfNeeded()
             try editorResourcesService.openDirectory()
         } catch {}
     }
