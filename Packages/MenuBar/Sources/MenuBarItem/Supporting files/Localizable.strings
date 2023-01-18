@@ -3,7 +3,8 @@
 "menu_bar_item.virtual_machines.stop.singularis" = "Stop";
 "menu_bar_item.virtual_machines.stop.pluralis" = "Stop";
 "menu_bar_item.virtual_machines.unavailable" = "Select Virtual Machine...";
-"menu_bar_item.editor.edit_virtual_machine" = "Edit Virtual Machine";
+"menu_bar_item.editor.edit_virtual_machine.start" = "Edit Virtual Machine";
+"menu_bar_item.editor.edit_virtual_machine.editing" = "Editing...";
 "menu_bar_item.editor.open_resources" = "Open Resources";
 "menu_bar_item.about" = "About...";
 "menu_bar_item.settings" = "Settings...";

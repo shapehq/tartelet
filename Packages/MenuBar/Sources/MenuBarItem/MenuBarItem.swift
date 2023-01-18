@@ -32,7 +32,11 @@ public struct MenuBarItem: Scene {
             Button {
                 viewModel.startEditor()
             } label: {
-                Text(L10n.MenuBarItem.Editor.editVirtualMachine)
+                if viewModel.isEditorStarted {
+                    Text(L10n.MenuBarItem.Editor.EditVirtualMachine.editing)
+                } else {
+                    Text(L10n.MenuBarItem.Editor.EditVirtualMachine.start)
+                }
             }.disabled(viewModel.isFleetStarted || viewModel.isEditorStarted || !viewModel.hasSelectedVirtualMachine)
             Button {
                 viewModel.openEditorResources()

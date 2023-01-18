@@ -18,25 +18,29 @@ internal enum L10n {
     /// Settings...
     internal static let settings = L10n.tr("Localizable", "menu_bar_item.settings", fallback: "Settings...")
     internal enum Editor {
-      /// Edit Virtual Machine
-      internal static let editVirtualMachine = L10n.tr("Localizable", "menu_bar_item.editor.edit_virtual_machine", fallback: "Edit Virtual Machine")
       /// Open Resources
       internal static let openResources = L10n.tr("Localizable", "menu_bar_item.editor.open_resources", fallback: "Open Resources")
+      internal enum EditVirtualMachine {
+        /// Editing...
+        internal static let editing = L10n.tr("Localizable", "menu_bar_item.editor.edit_virtual_machine.editing", fallback: "Editing...")
+        /// Edit Virtual Machine
+        internal static let start = L10n.tr("Localizable", "menu_bar_item.editor.edit_virtual_machine.start", fallback: "Edit Virtual Machine")
+      }
     }
     internal enum VirtualMachines {
       /// Select Virtual Machine...
       internal static let unavailable = L10n.tr("Localizable", "menu_bar_item.virtual_machines.unavailable", fallback: "Select Virtual Machine...")
       internal enum Start {
-        /// Start Virtual Machines
-        internal static let pluralis = L10n.tr("Localizable", "menu_bar_item.virtual_machines.start.pluralis", fallback: "Start Virtual Machines")
-        /// Start Virtual Machine
-        internal static let singularis = L10n.tr("Localizable", "menu_bar_item.virtual_machines.start.singularis", fallback: "Start Virtual Machine")
+        /// Start
+        internal static let pluralis = L10n.tr("Localizable", "menu_bar_item.virtual_machines.start.pluralis", fallback: "Start")
+        /// Start
+        internal static let singularis = L10n.tr("Localizable", "menu_bar_item.virtual_machines.start.singularis", fallback: "Start")
       }
       internal enum Stop {
-        /// Stop Virtual Machines
-        internal static let pluralis = L10n.tr("Localizable", "menu_bar_item.virtual_machines.stop.pluralis", fallback: "Stop Virtual Machines")
-        /// Stop Virtual Machine
-        internal static let singularis = L10n.tr("Localizable", "menu_bar_item.virtual_machines.stop.singularis", fallback: "Stop Virtual Machine")
+        /// Stop
+        internal static let pluralis = L10n.tr("Localizable", "menu_bar_item.virtual_machines.stop.pluralis", fallback: "Stop")
+        /// Stop
+        internal static let singularis = L10n.tr("Localizable", "menu_bar_item.virtual_machines.stop.singularis", fallback: "Stop")
       }
     }
   }
