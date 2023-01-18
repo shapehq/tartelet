@@ -65,7 +65,7 @@ private extension CompositionRoot {
         EphemeralVirtualMachineFactory(
             tart: tart,
             settingsStore: settingsStore,
-            resourcesService: editorResourcesService
+            resourcesService: fleetResourcesService
         )
     }
 
