@@ -20,13 +20,12 @@ enum EphemeralVirtualMachineFactoryError: LocalizedError {
 struct EphemeralVirtualMachineFactory: VirtualMachineFactory {
     let tart: Tart
     let settingsStore: SettingsStore
-    let resourcesService: VirtualMachineResourcesService
+    let resourcesDirectoryURL: URL
 
     func makeVirtualMachine() throws -> VirtualMachine {
         guard case let .virtualMachine(sourceVMName) = settingsStore.virtualMachine else {
             throw EphemeralVirtualMachineFactoryError.sourceVirtualMachineNameUnavailable
         }
-        let resourcesDirectoryURL = resourcesService.directoryURL
         return EphemeralTartVirtualMachine(
             tart: tart,
             sourceVMName: sourceVMName,

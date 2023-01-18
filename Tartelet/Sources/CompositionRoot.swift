@@ -57,7 +57,7 @@ private extension CompositionRoot {
         LongLivedVirtualMachineFactory(
             tart: tart,
             settingsStore: settingsStore,
-            resourcesService: editorResourcesService
+            resourcesDirectoryURL: editorResourcesService.directoryURL
         )
     }
 
@@ -65,7 +65,7 @@ private extension CompositionRoot {
         EphemeralVirtualMachineFactory(
             tart: tart,
             settingsStore: settingsStore,
-            resourcesService: fleetResourcesService
+            resourcesDirectoryURL: fleetResourcesService.directoryURL
         )
     }
 

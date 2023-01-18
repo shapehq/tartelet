@@ -20,13 +20,12 @@ enum LongLivedVirtualMachineFactoryError: LocalizedError {
 struct LongLivedVirtualMachineFactory: VirtualMachineFactory {
     let tart: Tart
     let settingsStore: SettingsStore
-    let resourcesService: VirtualMachineResourcesService
+    let resourcesDirectoryURL: URL
 
     func makeVirtualMachine() throws -> VirtualMachine {
         guard case let .virtualMachine(vmName) = settingsStore.virtualMachine else {
             throw EphemeralVirtualMachineFactoryError.sourceVirtualMachineNameUnavailable
         }
-        let resourcesDirectoryURL = resourcesService.directoryURL
         return TartVirtualMachine(
             tart: tart,
             vmName: vmName,
