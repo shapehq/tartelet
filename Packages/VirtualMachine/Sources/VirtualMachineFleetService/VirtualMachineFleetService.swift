@@ -7,26 +7,23 @@ public final class VirtualMachineFleetService {
     public let isStarted: AnyPublisher<Bool, Never>
 
     private let fleetFactory: VirtualMachineFleetFactory
-    private var fleet: VirtualMachineFleet?
-    private var _isStarted = CurrentValueSubject<Bool, Never>(false)
+    private var fleet = CurrentValueSubject<VirtualMachineFleet?, Never>(nil)
 
     public init(fleetFactory: VirtualMachineFleetFactory) {
         self.fleetFactory = fleetFactory
-        self.isStarted = _isStarted.eraseToAnyPublisher()
+        self.isStarted = fleet.map { $0 != nil }.eraseToAnyPublisher()
     }
 
     public func start() throws {
-        guard !_isStarted.value else {
+        guard fleet.value == nil else {
             return
         }
-        fleet = try fleetFactory.makeFleet()
-        fleet?.start()
-        _isStarted.value = true
+        fleet.value = try fleetFactory.makeFleet()
+        fleet.value?.start()
     }
 
     public func stop() {
-        fleet?.stop()
-        fleet = nil
-        _isStarted.value = false
+        fleet.value?.stop()
+        fleet.value = nil
     }
 }
