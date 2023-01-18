@@ -11,7 +11,7 @@ public struct Tart {
         try await executeCommand(withArguments: ["clone", sourceName, newName])
     }
 
-    public func run(name: String, mounting directories: [MountedDirectory] = []) async throws {
+    public func run(name: String, mounting directories: [Directory] = []) async throws {
         let mountArgs = directories.map { "--dir=\($0.name):\($0.directoryURL.path)" }
         let args = ["run"] + mountArgs + [name]
         try await executeCommand(withArguments: args)
