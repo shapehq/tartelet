@@ -22,7 +22,7 @@ public struct Tart {
     }
 
     public func list() async throws -> [String] {
-        let result = try await executeCommand(withArguments: ["list", "-q"])
+        let result = try await executeCommand(withArguments: ["list", "-q", "--source", "local"])
         return result.split(separator: "\n").map(String.init)
     }
 }
