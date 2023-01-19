@@ -11,6 +11,16 @@ public final class MenuBarItemViewModel: ObservableObject {
     @Published private(set) var hasSelectedVirtualMachine: Bool
     @Published private(set) var isFleetStarted = false
     @Published private(set) var isEditorStarted = false
+    var isEditorMenuBarItemEnabled: Bool {
+        return !isFleetStarted && !isEditorStarted && hasSelectedVirtualMachine
+    }
+    var virtualMachinesMenuTitle: String {
+        if settingsStore.numberOfVirtualMachines == 1 {
+            return L10n.Menu.VirtualMachines.singularis
+        } else {
+            return L10n.Menu.VirtualMachines.pluralis
+        }
+    }
 
     private let fleetService: VirtualMachineFleetService
     private let editorService: VirtualMachineEditorService
@@ -33,22 +43,13 @@ public final class MenuBarItemViewModel: ObservableObject {
         editorService.isStarted.assign(to: \.isEditorStarted, on: self).store(in: &cancellables)
     }
 
-    func startFleet() {
-        guard !isFleetStarted && hasSelectedVirtualMachine else {
-            return
-        }
-        do {
-            try fleetService.start()
-        } catch {
-            #if DEBUG
-            print(error)
-            #endif
-        }
-    }
-
-    func stopFleet() {
+    func presentFleet() {
         if isFleetStarted {
-            fleetService.stop()
+            stopFleet()
+        } else if hasSelectedVirtualMachine {
+            startFleet()
+        } else {
+            presentSettings()
         }
     }
 
@@ -77,5 +78,26 @@ public final class MenuBarItemViewModel: ObservableObject {
 
     func quitApp() {
         NSApplication.shared.terminate(nil)
+    }
+}
+
+private extension MenuBarItemViewModel {
+    private func startFleet() {
+        guard !isFleetStarted && hasSelectedVirtualMachine else {
+            return
+        }
+        do {
+            try fleetService.start()
+        } catch {
+            #if DEBUG
+            print(error)
+            #endif
+        }
+    }
+
+    private func stopFleet() {
+        if isFleetStarted {
+            fleetService.stop()
+        }
     }
 }

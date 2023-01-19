@@ -10,6 +10,14 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal enum L10n {
+  internal enum Menu {
+    internal enum VirtualMachines {
+      /// Virtual Machines
+      internal static let pluralis = L10n.tr("Localizable", "menu.virtual_machines.pluralis", fallback: "Virtual Machines")
+      /// Virtual Machine
+      internal static let singularis = L10n.tr("Localizable", "menu.virtual_machines.singularis", fallback: "Virtual Machine")
+    }
+  }
   internal enum MenuBarItem {
     /// About...
     internal static let about = L10n.tr("Localizable", "menu_bar_item.about", fallback: "About...")

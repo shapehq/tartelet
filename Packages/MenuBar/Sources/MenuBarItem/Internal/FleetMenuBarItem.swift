@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct VirtualMachineMenuBarItem: View {
+struct FleetMenuBarItem: View {
     let hasSelectedVirtualMachine: Bool
     let isFleetStarted: Bool
     let isEditorStarted: Bool

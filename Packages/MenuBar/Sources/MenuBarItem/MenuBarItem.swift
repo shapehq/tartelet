@@ -14,35 +14,19 @@ public struct MenuBarItem: Scene {
 
     public var body: some Scene {
         MenuBarExtra(isInserted: $isInserted) {
-            VirtualMachineMenuBarItem(
+            FleetMenuBarItem(
                 hasSelectedVirtualMachine: viewModel.hasSelectedVirtualMachine,
                 isFleetStarted: viewModel.isFleetStarted,
                 isEditorStarted: viewModel.isEditorStarted,
-                startsSingleVirtualMachine: settingsStore.numberOfVirtualMachines == 1
-            ) {
-                if viewModel.isFleetStarted {
-                    viewModel.stopFleet()
-                } else if viewModel.hasSelectedVirtualMachine {
-                    viewModel.startFleet()
-                } else {
-                    viewModel.presentSettings()
-                }
-            }
+                startsSingleVirtualMachine: settingsStore.numberOfVirtualMachines == 1,
+                onSelect: viewModel.presentFleet
+            )
             Divider()
-            Button {
-                viewModel.startEditor()
-            } label: {
-                if viewModel.isEditorStarted {
-                    Text(L10n.MenuBarItem.Editor.EditVirtualMachine.editing)
-                } else {
-                    Text(L10n.MenuBarItem.Editor.EditVirtualMachine.start)
-                }
-            }.disabled(viewModel.isFleetStarted || viewModel.isEditorStarted || !viewModel.hasSelectedVirtualMachine)
-            Button {
-                viewModel.openEditorResources()
-            } label: {
-                Text(L10n.MenuBarItem.Editor.openResources)
-            }
+            EditorMenuBarItem(
+                isEditorStarted: viewModel.isEditorStarted,
+                onSelect: viewModel.startEditor
+            ).disabled(!viewModel.isEditorMenuBarItemEnabled)
+            PresentEditorResourcesMenuBarItem(onSelect: viewModel.openEditorResources)
             Divider()
             Button {
                 viewModel.presentSettings()
@@ -64,6 +48,22 @@ public struct MenuBarItem: Scene {
             Image(systemName: "desktopcomputer")
         }.onChange(of: settingsStore.applicationUIMode) { mode in
             isInserted = mode.showInMenuBar
+        }.commands {
+            CommandMenu(viewModel.virtualMachinesMenuTitle) {
+                FleetMenuBarItem(
+                    hasSelectedVirtualMachine: viewModel.hasSelectedVirtualMachine,
+                    isFleetStarted: viewModel.isFleetStarted,
+                    isEditorStarted: viewModel.isEditorStarted,
+                    startsSingleVirtualMachine: settingsStore.numberOfVirtualMachines == 1,
+                    onSelect: viewModel.presentFleet
+                )
+                Divider()
+                EditorMenuBarItem(
+                    isEditorStarted: viewModel.isEditorStarted,
+                    onSelect: viewModel.startEditor
+                ).disabled(!viewModel.isEditorMenuBarItemEnabled)
+                PresentEditorResourcesMenuBarItem(onSelect: viewModel.openEditorResources)
+            }
         }
     }
 }

@@ -9,3 +9,6 @@
 "menu_bar_item.about" = "About...";
 "menu_bar_item.settings" = "Settings...";
 "menu_bar_item.quit" = "Quit";
+
+"menu.virtual_machines.singularis" = "Virtual Machine";
+"menu.virtual_machines.pluralis" = "Virtual Machines";
