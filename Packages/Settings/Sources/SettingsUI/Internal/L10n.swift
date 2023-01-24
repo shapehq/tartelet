@@ -13,6 +13,8 @@ internal enum L10n {
   internal enum Settings {
     /// General
     internal static let general = L10n.tr("Localizable", "settings.general", fallback: "General")
+    /// GitHub
+    internal static let github = L10n.tr("Localizable", "settings.github", fallback: "GitHub")
     /// Virtual Machine
     internal static let virtualMachine = L10n.tr("Localizable", "settings.virtual_machine", fallback: "Virtual Machine")
     internal enum General {
@@ -25,6 +27,25 @@ internal enum L10n {
         internal static let dockAndMenuBar = L10n.tr("Localizable", "settings.general.application_ui_mode.dock_and_menu_bar", fallback: "Dock and Menu Bar")
         /// Menu Bar
         internal static let menuBar = L10n.tr("Localizable", "settings.general.application_ui_mode.menu_bar", fallback: "Menu Bar")
+      }
+    }
+    internal enum Github {
+      /// App ID
+      internal static let appId = L10n.tr("Localizable", "settings.github.app_id", fallback: "App ID")
+      /// Create GitHub App
+      internal static let createApp = L10n.tr("Localizable", "settings.github.create_app", fallback: "Create GitHub App")
+      /// Organization Name
+      internal static let organizationName = L10n.tr("Localizable", "settings.github.organization_name", fallback: "Organization Name")
+      /// Private Key (PEM)
+      internal static let privateKey = L10n.tr("Localizable", "settings.github.private_key", fallback: "Private Key (PEM)")
+      internal enum PrivateKey {
+        /// Select a private key (PEM)
+        internal static let placeholder = L10n.tr("Localizable", "settings.github.private_key.placeholder", fallback: "Select a private key (PEM)")
+        /// The private key must have these scopes set:
+        /// ✔ Self-hosted runners (Read and write)
+        internal static let scopes = L10n.tr("Localizable", "settings.github.private_key.scopes", fallback: "The private key must have these scopes set:\n✔ Self-hosted runners (Read and write)")
+        /// Select File
+        internal static let selectFile = L10n.tr("Localizable", "settings.github.private_key.select_file", fallback: "Select File")
       }
     }
     internal enum VirtualMachine {

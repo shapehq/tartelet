@@ -7,6 +7,7 @@ public final class SettingsStore: ObservableObject {
         static let applicationUIMode = "applicationUIMode"
         static let virtualMachine = "virtualMachine"
         static let numberOfVirtualMachines = "numberOfVirtualMachines"
+        static let gitHubPrivateKeyName = "gitHubPrivateKeyName"
     }
 
     @AppStorage(AppStorageKey.applicationUIMode)
@@ -15,6 +16,8 @@ public final class SettingsStore: ObservableObject {
     public var virtualMachine: VirtualMachine = .unknown
     @AppStorage(AppStorageKey.numberOfVirtualMachines)
     public var numberOfVirtualMachines = 1
+    @AppStorage(AppStorageKey.gitHubPrivateKeyName)
+    public var gitHubPrivateKeyName: String?
 
     public init() {}
 

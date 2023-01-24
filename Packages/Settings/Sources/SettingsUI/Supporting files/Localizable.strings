@@ -10,3 +10,12 @@
 "settings.virtual_machine.count" = "Amount of Virtual Machines";
 "settings.virtual_machine.count.one" = "One";
 "settings.virtual_machine.count.two" = "Two";
+
+"settings.github" = "GitHub";
+"settings.github.organization_name" = "Organization Name";
+"settings.github.app_id" = "App ID";
+"settings.github.private_key" = "Private Key (PEM)";
+"settings.github.private_key.select_file" = "Select File";
+"settings.github.private_key.placeholder" = "Select a private key (PEM)";
+"settings.github.private_key.scopes" = "The private key must have these scopes set:\n✔ Self-hosted runners (Read and write)";
+"settings.github.create_app" = "Create GitHub App";

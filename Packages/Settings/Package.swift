@@ -12,6 +12,7 @@ let package = Package(
         .library(name: "SettingsUI", targets: ["SettingsUI"])
     ],
     dependencies: [
+        .package(path: "../GitHub"),
         .package(path: "../VirtualMachine")
     ],
     targets: [
@@ -20,6 +21,7 @@ let package = Package(
             "Settings"
         ]),
         .target(name: "SettingsUI", dependencies: [
+            .product(name: "GitHubCredentialsStore", package: "GitHub"),
             "Settings",
             "SettingsStore",
             .product(name: "VirtualMachineEditorService", package: "VirtualMachine"),
