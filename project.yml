@@ -24,8 +24,24 @@ targets:
         product: FileSystem
       - package: FileSystem
         product: FileSystemDisk
+      - package: GitHub
+        product: GitHubCredentialsStore
+      - package: GitHub
+        product: GitHubCredentialsStoreKeychain
+      - package: GitHub
+        product: GitHubService
+      - package: GitHub
+        product: GitHubServiceLive
+      - package: Keychain
+        product: Keychain
+      - package: Keychain
+        product: KeychainLive
       - package: MenuBar
         product: MenuBarItem
+      - package: Networking
+        product: NetworkingService
+      - package: Networking
+        product: NetworkingServiceLive
       - package: Settings
         product: Settings
       - package: Settings
@@ -63,7 +79,10 @@ targets:
 localPackages:
   - Packages/Dock
   - Packages/FileSystem
+  - Packages/GitHub
+  - Packages/Keychain
   - Packages/MenuBar
+  - Packages/Networking
   - Packages/Settings
   - Packages/Shell
   - Packages/Tart

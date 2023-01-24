@@ -19,7 +19,8 @@ let package = Package(
         .library(name: "VirtualMachineSourceNameRepository", targets: ["VirtualMachineSourceNameRepository"])
     ],
     dependencies: [
-        .package(path: "../FileSystem")
+        .package(path: "../FileSystem"),
+        .package(path: "../GitHub")
     ],
     targets: [
         .target(name: "VirtualMachine"),
@@ -49,7 +50,8 @@ let package = Package(
         ], resources: [.copy("Resources")]),
         .target(name: "VirtualMachineResourcesServiceFleet", dependencies: [
             "VirtualMachineResourcesService",
-            .product(name: "FileSystem", package: "FileSystem")
+            .product(name: "FileSystem", package: "FileSystem"),
+            .product(name: "GitHubService", package: "GitHub")
         ]),
         .target(name: "VirtualMachineSourceNameRepository")
     ]

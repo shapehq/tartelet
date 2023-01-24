@@ -56,24 +56,28 @@ final class VirtualMachinesMenuContentViewModel: ObservableObject {
     }
 
     func openEditorResources() {
-        do {
-            try editorResourcesService.createResourcesIfNeeded()
-            try editorResourcesService.openDirectory()
-        } catch {}
+        Task {
+            do {
+                try await editorResourcesService.createResourcesIfNeeded()
+                try editorResourcesService.openDirectory()
+            } catch {}
+        }
     }
 }
 
 private extension VirtualMachinesMenuContentViewModel {
     private func startFleet() {
-        guard !isFleetStarted && hasSelectedVirtualMachine else {
-            return
-        }
-        do {
-            try fleetService.start()
-        } catch {
-            #if DEBUG
-            print(error)
-            #endif
+        Task {
+            guard !isFleetStarted && hasSelectedVirtualMachine else {
+                return
+            }
+            do {
+                try await fleetService.start()
+            } catch {
+#if DEBUG
+                print(error)
+#endif
+            }
         }
     }
 

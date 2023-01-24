@@ -17,13 +17,15 @@ public final class VirtualMachineFleetService {
         self.isStarted = fleet.map { $0 != nil }.eraseToAnyPublisher()
     }
 
-    public func start() throws {
+    public func start() async throws {
         guard fleet.value == nil else {
             return
         }
-        try resourcesService.createResourcesIfNeeded()
-        fleet.value = try fleetFactory.makeFleet()
-        fleet.value?.start()
+        try await resourcesService.createResourcesIfNeeded()
+        try await MainActor.run {
+            fleet.value = try fleetFactory.makeFleet()
+            fleet.value?.start()
+        }
     }
 
     public func stop() {

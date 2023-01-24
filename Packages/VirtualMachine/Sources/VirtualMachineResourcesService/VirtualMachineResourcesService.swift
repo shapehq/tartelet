@@ -3,7 +3,7 @@ import Foundation
 
 public protocol VirtualMachineResourcesService {
     var directoryURL: URL { get }
-    func createResourcesIfNeeded() throws
+    func createResourcesIfNeeded() async throws
     func openDirectory() throws
 }
 

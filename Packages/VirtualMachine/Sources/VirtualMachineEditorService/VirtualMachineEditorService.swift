@@ -30,7 +30,7 @@ public final class VirtualMachineEditorService {
                 defer {
                     self.runTask.value = nil
                 }
-                try resourcesService.createResourcesIfNeeded()
+                try await resourcesService.createResourcesIfNeeded()
                 virtualMachine = try virtualMachineFactory.makeVirtualMachine()
                 try await virtualMachine?.start()
             } onCancel: {

@@ -2,7 +2,15 @@ import Combine
 import Dock
 import FileSystem
 import FileSystemDisk
+import GitHubCredentialsStore
+import GitHubCredentialsStoreKeychain
+import GitHubService
+import GitHubServiceLive
+import Keychain
+import KeychainLive
 import MenuBarItem
+import NetworkingService
+import NetworkingServiceLive
 import SettingsStore
 import SettingsUI
 import Shell
@@ -45,6 +53,7 @@ enum CompositionRoot {
     static var settingsWindow: some Scene {
         SettingsScene(
             settingsStore: settingsStore,
+            gitHubCredentialsStore: gitHubCredentialsStore,
             sourceNameRepository: virtualMachineSourceNameRepository,
             fleetService: fleetService,
             editorService: editorService
@@ -80,11 +89,30 @@ private extension CompositionRoot {
     }
 
     private static var fleetResourcesService: VirtualMachineResourcesService {
-        VirtualMachineResourcesServiceFleet(fileSystem: fileSystem)
+        VirtualMachineResourcesServiceFleet(fileSystem: fileSystem, gitHubService: gitHubService)
     }
 
     private static var virtualMachineSourceNameRepository: VirtualMachineSourceNameRepository {
         TartVirtualMachineSourceNameRepository(tart: tart)
+    }
+
+    private static var gitHubService: GitHubService {
+        GitHubServiceLive(
+            credentialsStore: gitHubCredentialsStore,
+            networkingService: networkingService
+        )
+    }
+
+    private static var gitHubCredentialsStore: GitHubCredentialsStore {
+        GitHubCredentialsStoreKeychain(keychain: keychain, serviceName: "Tartelet GitHub Account")
+    }
+
+    private static var keychain: Keychain {
+        KeychainLive(accessGroup: "566MC7D8D4.dk.shape.Tartelet")
+    }
+
+    private static var networkingService: NetworkingService {
+        NetworkingServiceLive(session: .shared)
     }
 
     private static let settingsStore = SettingsStore()

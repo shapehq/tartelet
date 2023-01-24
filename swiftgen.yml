@@ -1,3 +1,9 @@
+xcassets:
+  inputs:
+    - Packages/Settings/Sources/SettingsUI/Supporting files/Assets.xcassets
+  outputs:
+  - templateName: swift5
+    output: Packages/Settings/Sources/SettingsUI/Internal/Assets.swift
 strings:
   - inputs: 
     - Packages/MenuBar/Sources/MenuBarItem/Supporting files/Localizable.strings
