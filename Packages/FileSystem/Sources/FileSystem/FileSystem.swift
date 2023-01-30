@@ -6,4 +6,5 @@ public protocol FileSystem {
     func removeItem(at itemURL: URL) throws
     func copyItem(from sourceItemURL: URL, to destinationItemURL: URL) throws
     func contentsOfDirectory(at directoryURL: URL) throws -> [URL]
+    func itemExists(at directoryURL: URL) -> Bool
 }

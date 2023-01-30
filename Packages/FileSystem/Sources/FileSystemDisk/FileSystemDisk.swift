@@ -36,4 +36,8 @@ public final class FileSystemDisk: FileSystem {
     public func contentsOfDirectory(at directoryURL: URL) throws -> [URL] {
         try fileManager.contentsOfDirectory(at: directoryURL, includingPropertiesForKeys: nil)
     }
+
+    public func itemExists(at directoryURL: URL) -> Bool {
+        fileManager.fileExists(atPath: directoryURL.path)
+    }
 }
