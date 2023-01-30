@@ -2,7 +2,7 @@
 PRE_RUN_SCRIPT="pre-run.sh"
 POST_RUN_SCRIPT="post-run.sh"
 RUNNER_GROUP=""
-LABELS=""
+LABELS="tartelet"
 ACTIONS_RUNNER_ARCHIVE=./actions-runner.tar.gz
 ACTIONS_RUNNER_DIRECTORY=~/actions-runner
 WORK_DIRECTORY=_work
