@@ -28,7 +28,7 @@ public final class VirtualMachineEditorService {
                 defer {
                     self.runTask.value = nil
                 }
-                virtualMachine = await try virtualMachineFactory.makeVirtualMachine()
+                virtualMachine = try await virtualMachineFactory.makeVirtualMachine()
                 try await virtualMachine?.start()
             } onCancel: {
                 self.stop()
