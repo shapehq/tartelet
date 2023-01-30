@@ -11,6 +11,13 @@ RUNNER_URL_FILE=./RUNNER_URL
 RUNNER_TOKEN_FILE=./RUNNER_TOKEN
 RUNNER_DOWNLOAD_URL_FILE=./RUNNER_DOWNLOAD_URL
 
+# Ensure the virtual machine is restarted when a job is done.
+set -e pipefail
+function onexit {
+  sudo shutdown -h now
+}
+trap onexit EXIT
+
 # Run the script from the Resources folder
 cd "/Volumes/My Shared Files/Resources"
 
