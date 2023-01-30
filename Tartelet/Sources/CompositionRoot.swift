@@ -65,7 +65,7 @@ private extension CompositionRoot {
     private static let showAppInDockPublisher = ShowAppInDockPublisher(settingsStore: settingsStore)
 
     private static var fleetFactory: VirtualMachineFleetFactory {
-        return DefaultVirtualMachineFleetFactory(settingsStore: settingsStore, virtualMachineFactory: fleetVirtualMachineFactory)
+        DefaultVirtualMachineFleetFactory(settingsStore: settingsStore, virtualMachineFactory: fleetVirtualMachineFactory)
     }
 
     private static var editorVirtualMachineFactory: VirtualMachineFactory {
