@@ -1,5 +1,5 @@
 import VirtualMachine
 
 public protocol VirtualMachineFactory {
-    func makeVirtualMachine() throws -> VirtualMachine
+    func makeVirtualMachine() async throws -> VirtualMachine
 }

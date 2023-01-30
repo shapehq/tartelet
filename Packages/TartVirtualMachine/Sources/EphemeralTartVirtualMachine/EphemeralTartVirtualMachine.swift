@@ -6,26 +6,38 @@ import VirtualMachine
 import VirtualMachineFactory
 
 public final class EphemeralTartVirtualMachine: VirtualMachine {
+    public typealias CleanupHandler = () -> Void
+
     private let tart: Tart
     private let sourceVMName: String
-    private let vmName: String
+    private let destinationVMName: String
     private let resourcesDirectoryURL: URL
+    private let onCleanup: CleanupHandler
     private var runTask: Task<(), Error>?
 
-    public init(tart: Tart, sourceVMName: String, resourcesDirectoryURL: URL) {
+    public init(
+        tart: Tart,
+        sourceVMName: String,
+        destinationVMName: String,
+        resourcesDirectoryURL: URL,
+        onCleanup: @escaping CleanupHandler
+    ) {
         self.tart = tart
         self.sourceVMName = sourceVMName
-        self.vmName = sourceVMName + "-" + UUID().uuidString
+        self.destinationVMName = destinationVMName
         self.resourcesDirectoryURL = resourcesDirectoryURL
+        self.onCleanup = onCleanup
     }
 
     public func start() async throws {
-        try await tart.clone(sourceName: sourceVMName, newName: vmName)
-        try await tart.run(name: vmName, mounting: [.resources(at: resourcesDirectoryURL)])
-        try await tart.delete(name: vmName)
+        try await tart.clone(sourceName: sourceVMName, newName: destinationVMName)
+        try await tart.run(name: destinationVMName, mounting: [.resources(at: resourcesDirectoryURL)])
+        try await tart.delete(name: destinationVMName)
+        onCleanup()
     }
 
     public func stop() async throws {
-        try await tart.delete(name: vmName)
+        try await tart.delete(name: destinationVMName)
+        onCleanup()
     }
 }

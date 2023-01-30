@@ -1,30 +1,31 @@
 import FileSystem
 import Foundation
+import VirtualMachineResourcesCopier
 import VirtualMachineResourcesService
 
 public struct VirtualMachineResourcesServiceEditor: VirtualMachineResourcesService {
     public var directoryURL: URL {
         fileSystem
             .applicationSupportDirectoryURL
-            .appending(path: "Virtual Machine Editor Resources", directoryHint: .isDirectory)
+            .appending(path: "Virtual Machine Resources", directoryHint: .isDirectory)
     }
 
     private let fileSystem: FileSystem
+    private let resourcesCopier: VirtualMachineResourcesCopier
 
-    public init(fileSystem: FileSystem) {
+    public init(fileSystem: FileSystem, resourcesCopier: VirtualMachineResourcesCopier) {
         self.fileSystem = fileSystem
+        self.resourcesCopier = resourcesCopier
     }
 
     public func createResourcesIfNeeded() throws {
         try fileSystem.createDirectoryIfNeeded(at: directoryURL)
-        guard let resourcesDirectoryURL = Bundle.module.resourceURL?.appending(path: "Resources") else {
-            return
+        if let resourcesDirectoryURL = Bundle.module.resourceURL?.appending(path: "Resources") {
+            try resourcesCopier.copyResources(from: resourcesDirectoryURL, to: directoryURL)
         }
-        let sourceFileURLs = try fileSystem.contentsOfDirectory(at: resourcesDirectoryURL)
-        for sourceFileURL in sourceFileURLs {
-            let destinationFileURL = directoryURL.appending(path: sourceFileURL.lastPathComponent)
-            try? fileSystem.removeItem(at: destinationFileURL)
-            try fileSystem.copyItem(from: sourceFileURL, to: destinationFileURL)
-        }
+    }
+
+    public func removeResources() throws {
+        try fileSystem.removeItem(at: directoryURL)
     }
 }

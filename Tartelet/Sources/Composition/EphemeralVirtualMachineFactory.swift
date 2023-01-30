@@ -20,16 +20,24 @@ enum EphemeralVirtualMachineFactoryError: LocalizedError {
 struct EphemeralVirtualMachineFactory: VirtualMachineFactory {
     let tart: Tart
     let settingsStore: SettingsStore
-    let resourcesDirectoryURL: URL
+    let resourcesServiceFactory: VirtualMachineResourcesServiceFactory
+    let destinationVMNameFactory: DestinationVMNameFactory
 
-    func makeVirtualMachine() throws -> VirtualMachine {
+    func makeVirtualMachine() async throws -> VirtualMachine {
         guard case let .virtualMachine(sourceVMName) = settingsStore.virtualMachine else {
             throw EphemeralVirtualMachineFactoryError.sourceVirtualMachineNameUnavailable
         }
+        let destinationVMName = await destinationVMNameFactory.destinationVMName(fromSourceName: sourceVMName)
+        let resourcesService = resourcesServiceFactory.makeService(virtualMachineName: destinationVMName)
+        try await resourcesService.createResourcesIfNeeded()
+        // swiftlint:disable:next trailing_closure
         return EphemeralTartVirtualMachine(
             tart: tart,
             sourceVMName: sourceVMName,
-            resourcesDirectoryURL: resourcesDirectoryURL
-        )
+            destinationVMName: destinationVMName,
+            resourcesDirectoryURL: resourcesService.directoryURL,
+            onCleanup: {
+                try? resourcesService.removeResources()
+            })
     }
 }

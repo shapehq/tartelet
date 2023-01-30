@@ -35,16 +35,18 @@ public final class VirtualMachineFleet {
 
 private extension VirtualMachineFleet {
     func startMachine() {
-        do {
-            let virtualMachine = try virtualMachineFactory.makeVirtualMachine()
-            let fleetMachine = FleetParticipatingVirtualMachine(virtualMachine: virtualMachine)
-            activeMachines.append(fleetMachine)
-            fleetMachine.delegate = self
-            fleetMachine.start()
-        } catch {
-            #if DEBUG
-            print(error)
-            #endif
+        Task {
+            do {
+                let virtualMachine = try await virtualMachineFactory.makeVirtualMachine()
+                let fleetMachine = FleetParticipatingVirtualMachine(virtualMachine: virtualMachine)
+                activeMachines.append(fleetMachine)
+                fleetMachine.delegate = self
+                fleetMachine.start()
+            } catch {
+                #if DEBUG
+                print(error)
+                #endif
+            }
         }
     }
 }

@@ -21,23 +21,17 @@ import VirtualMachineEditorService
 import VirtualMachineFactory
 import VirtualMachineFleetFactory
 import VirtualMachineFleetService
+import VirtualMachineResourcesCopier
 import VirtualMachineResourcesService
 import VirtualMachineResourcesServiceEditor
-import VirtualMachineResourcesServiceFleet
 import VirtualMachineSourceNameRepository
 
 enum CompositionRoot {
     static let dock = Dock(showAppInDock: showAppInDockPublisher.rawValue)
 
-    static let fleetService = VirtualMachineFleetService(
-        fleetFactory: fleetFactory,
-        resourcesService: fleetResourcesService
-    )
+    static let fleetService = VirtualMachineFleetService(fleetFactory: fleetFactory)
 
-    static let editorService = VirtualMachineEditorService(
-        virtualMachineFactory: editorVirtualMachineFactory,
-        resourcesService: editorResourcesService
-    )
+    static let editorService = VirtualMachineEditorService(virtualMachineFactory: editorVirtualMachineFactory)
 
     static var menuBarItem: some Scene {
         MenuBarItem(
@@ -72,7 +66,7 @@ private extension CompositionRoot {
         LongLivedVirtualMachineFactory(
             tart: tart,
             settingsStore: settingsStore,
-            resourcesDirectoryURL: editorResourcesService.directoryURL
+            resourcesService: editorResourcesService
         )
     }
 
@@ -80,20 +74,33 @@ private extension CompositionRoot {
         EphemeralVirtualMachineFactory(
             tart: tart,
             settingsStore: settingsStore,
-            resourcesDirectoryURL: fleetResourcesService.directoryURL
+            resourcesServiceFactory: ephemeralVirtualMachineResourcesServiceFactory,
+            destinationVMNameFactory: destinationVMNameFactory
         )
     }
 
     private static var editorResourcesService: VirtualMachineResourcesService {
-        VirtualMachineResourcesServiceEditor(fileSystem: fileSystem)
+        VirtualMachineResourcesServiceEditor(fileSystem: fileSystem, resourcesCopier: virtualMachineResourcesCopier)
     }
 
-    private static var fleetResourcesService: VirtualMachineResourcesService {
-        VirtualMachineResourcesServiceFleet(fileSystem: fileSystem, gitHubService: gitHubService)
+    private static let destinationVMNameFactory = DestinationVMNameFactory()
+
+    private static var ephemeralVirtualMachineResourcesServiceFactory: VirtualMachineResourcesServiceFactory {
+        EphemeralVirtualMachineResourcesServiceFactory(
+            fileSystem: fileSystem,
+            gitHubService: gitHubService,
+            gitHubCredentialsStore: gitHubCredentialsStore,
+            resourcesCopier: virtualMachineResourcesCopier,
+            editorResourcesDirectoryURL: editorResourcesService.directoryURL
+        )
     }
 
     private static var virtualMachineSourceNameRepository: VirtualMachineSourceNameRepository {
         TartVirtualMachineSourceNameRepository(tart: tart)
+    }
+
+    private static var virtualMachineResourcesCopier: VirtualMachineResourcesCopier {
+        VirtualMachineResourcesCopier(fileSystem: fileSystem)
     }
 
     private static var gitHubService: GitHubService {

@@ -69,11 +69,13 @@ targets:
       - package: VirtualMachine
         product: VirtualMachineFleetFactory
       - package: VirtualMachine
+        product: VirtualMachineResourcesCopier
+      - package: VirtualMachine
         product: VirtualMachineResourcesService
       - package: VirtualMachine
         product: VirtualMachineResourcesServiceEditor
       - package: VirtualMachine
-        product: VirtualMachineResourcesServiceFleet
+        product: VirtualMachineResourcesServiceEphemeral
       - package: VirtualMachine
         product: VirtualMachineSourceNameRepository
 localPackages:

@@ -8,13 +8,11 @@ public final class VirtualMachineEditorService {
     public let isStarted: AnyPublisher<Bool, Never>
 
     private let virtualMachineFactory: VirtualMachineFactory
-    private let resourcesService: VirtualMachineResourcesService
     private var virtualMachine: VirtualMachine?
     private var runTask = CurrentValueSubject<Task<(), Error>?, Never>(nil)
 
-    public init(virtualMachineFactory: VirtualMachineFactory, resourcesService: VirtualMachineResourcesService) {
+    public init(virtualMachineFactory: VirtualMachineFactory) {
         self.virtualMachineFactory = virtualMachineFactory
-        self.resourcesService = resourcesService
         self.isStarted = runTask
             .receive(on: DispatchQueue.main)
             .map { $0 != nil }
@@ -30,8 +28,7 @@ public final class VirtualMachineEditorService {
                 defer {
                     self.runTask.value = nil
                 }
-                try await resourcesService.createResourcesIfNeeded()
-                virtualMachine = try virtualMachineFactory.makeVirtualMachine()
+                virtualMachine = await try virtualMachineFactory.makeVirtualMachine()
                 try await virtualMachine?.start()
             } onCancel: {
                 self.stop()

@@ -13,9 +13,10 @@ let package = Package(
         .library(name: "VirtualMachineFleet", targets: ["VirtualMachineFleet"]),
         .library(name: "VirtualMachineFleetFactory", targets: ["VirtualMachineFleetFactory"]),
         .library(name: "VirtualMachineFleetService", targets: ["VirtualMachineFleetService"]),
+        .library(name: "VirtualMachineResourcesCopier", targets: ["VirtualMachineResourcesCopier"]),
         .library(name: "VirtualMachineResourcesService", targets: ["VirtualMachineResourcesService"]),
         .library(name: "VirtualMachineResourcesServiceEditor", targets: ["VirtualMachineResourcesServiceEditor"]),
-        .library(name: "VirtualMachineResourcesServiceFleet", targets: ["VirtualMachineResourcesServiceFleet"]),
+        .library(name: "VirtualMachineResourcesServiceEphemeral", targets: ["VirtualMachineResourcesServiceEphemeral"]),
         .library(name: "VirtualMachineSourceNameRepository", targets: ["VirtualMachineSourceNameRepository"])
     ],
     dependencies: [
@@ -43,16 +44,22 @@ let package = Package(
             "VirtualMachineFleetFactory",
             "VirtualMachineResourcesService"
         ]),
+        .target(name: "VirtualMachineResourcesCopier", dependencies: [
+            .product(name: "FileSystem", package: "FileSystem")
+        ]),
         .target(name: "VirtualMachineResourcesService"),
         .target(name: "VirtualMachineResourcesServiceEditor", dependencies: [
+            "VirtualMachineResourcesCopier",
             "VirtualMachineResourcesService",
             .product(name: "FileSystem", package: "FileSystem")
         ], resources: [.copy("Resources")]),
-        .target(name: "VirtualMachineResourcesServiceFleet", dependencies: [
+        .target(name: "VirtualMachineResourcesServiceEphemeral", dependencies: [
+            "VirtualMachineResourcesCopier",
             "VirtualMachineResourcesService",
             .product(name: "FileSystem", package: "FileSystem"),
+            .product(name: "GitHubCredentialsStore", package: "GitHub"),
             .product(name: "GitHubService", package: "GitHub")
-        ]),
+        ], resources: [.copy("Resources")]),
         .target(name: "VirtualMachineSourceNameRepository")
     ]
 )

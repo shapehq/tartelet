@@ -37,12 +37,26 @@ public final class GitHubServiceLive: GitHubService {
         self.networkingService = networkingService
     }
 
-    public func getRunnerDownloadURL() async throws -> URL {
+    public func getAppAccessToken() async throws -> GitHubAppAccessToken {
+        let appInstallation = try await getAppInstallation()
+        let installationID = String(appInstallation.id)
+        let appID = String(appInstallation.appId)
+        let url = baseURL.appending(path: "/app/installations/\(installationID)/access_tokens")
+        guard let privateKey = await credentialsStore.privateKey else {
+            throw GitHubServiceLiveError.privateKeyUnavailable
+        }
+        let jwtToken = try GitHubJWTTokenFactory.makeJWTToken(privateKey: privateKey, appID: appID)
+        var request = URLRequest(url: url).addingBearerToken(jwtToken)
+        request.httpMethod = "POST"
+        return try await networkingService.load(IntermediateGitHubAppAccessToken.self, from: request).map { parameters in
+            GitHubAppAccessToken(parameters.value.token)
+        }
+    }
+
+    public func getRunnerDownloadURL(with appAccessToken: GitHubAppAccessToken) async throws -> URL {
         let organizationName = try await getOrganizationName()
         let url = baseURL.appending(path: "/orgs/\(organizationName)/actions/runners/downloads")
-        let appInstallation = try await getAppInstallation()
-        let token = try await getAppInstallationAccessToken(installationID: String(appInstallation.id), appID: String(appInstallation.appId))
-        let request = URLRequest(url: url).addingBearerToken(token)
+        let request = URLRequest(url: url).addingBearerToken(appAccessToken.rawValue)
         let downloads = try await networkingService.load([GitHubRunnerDownload].self, from: request).map(\.value)
         let os = "osx"
         let architecture = "arm64"
@@ -50,6 +64,16 @@ public final class GitHubServiceLive: GitHubService {
             throw GitHubServiceLiveError.downloadNotFound(os: os, architecture: architecture)
         }
         return download.downloadURL
+    }
+
+    public func getRunnerRegistrationToken(with appAccessToken: GitHubAppAccessToken) async throws -> GitHubRunnerRegistrationToken {
+        let organizationName = try await getOrganizationName()
+        let url = baseURL.appending(path: "/orgs/\(organizationName)/actions/runners/registration-token")
+        var request = URLRequest(url: url).addingBearerToken(appAccessToken.rawValue)
+        request.httpMethod = "POST"
+        return try await networkingService.load(IntermediateGitHubRunnerRegistrationToken.self, from: request).map { parameters in
+            GitHubRunnerRegistrationToken(parameters.value.token)
+        }
     }
 }
 
@@ -64,17 +88,6 @@ private extension GitHubServiceLive {
             throw GitHubServiceLiveError.appIsNotInstalled
         }
         return appInstallation
-    }
-
-    private func getAppInstallationAccessToken(installationID: String, appID: String) async throws -> String {
-        let url = baseURL.appending(path: "/app/installations/\(installationID)/access_tokens")
-        guard let privateKey = await credentialsStore.privateKey else {
-            throw GitHubServiceLiveError.privateKeyUnavailable
-        }
-        let token = try GitHubJWTTokenFactory.makeJWTToken(privateKey: privateKey, appID: appID)
-        var request = URLRequest(url: url).addingBearerToken(token)
-        request.httpMethod = "POST"
-        return try await networkingService.load(GitHubAppAccessToken.self, from: request).map(\.value.token)
     }
 
     private func getOrganizationName() async throws -> String {
