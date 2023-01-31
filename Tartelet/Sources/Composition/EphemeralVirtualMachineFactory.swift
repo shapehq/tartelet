@@ -21,20 +21,26 @@ struct EphemeralVirtualMachineFactory: VirtualMachineFactory {
     let tart: Tart
     let settingsStore: SettingsStore
     let resourcesServiceFactory: VirtualMachineResourcesServiceFactory
-    let destinationVMNameFactory: DestinationVMNameFactory
+    var preferredVirtualMachineName: String {
+        get throws {
+            guard case let .virtualMachine(vmName) = settingsStore.virtualMachine else {
+                throw EphemeralVirtualMachineFactoryError.sourceVirtualMachineNameUnavailable
+            }
+            return vmName
+        }
+    }
 
-    func makeVirtualMachine() async throws -> VirtualMachine {
+    func makeVirtualMachine(named name: String) async throws -> VirtualMachine {
         guard case let .virtualMachine(sourceVMName) = settingsStore.virtualMachine else {
             throw EphemeralVirtualMachineFactoryError.sourceVirtualMachineNameUnavailable
         }
-        let destinationVMName = await destinationVMNameFactory.destinationVMName(fromSourceName: sourceVMName)
-        let resourcesService = resourcesServiceFactory.makeService(virtualMachineName: destinationVMName)
+        let resourcesService = resourcesServiceFactory.makeService(virtualMachineName: name)
         try await resourcesService.createResourcesIfNeeded()
         // swiftlint:disable:next trailing_closure
         return EphemeralTartVirtualMachine(
             tart: tart,
             sourceVMName: sourceVMName,
-            destinationVMName: destinationVMName,
+            destinationVMName: name,
             resourcesDirectoryURL: resourcesService.directoryURL,
             onCleanup: {
                 try? resourcesService.removeResources()

@@ -12,13 +12,14 @@ public final class VirtualMachineFleet {
         self.numberOfMachines = numberOfMachines
     }
 
-    public func start() {
+    public func start() throws {
         guard !isStarted else {
             return
         }
         isStarted = true
-        for _ in 0 ..< numberOfMachines {
-            startMachine()
+        let preferredName = try virtualMachineFactory.preferredVirtualMachineName
+        for index in 0 ..< numberOfMachines {
+            startMachine(named: preferredName + "-\(index + 1)")
         }
     }
 
@@ -34,10 +35,10 @@ public final class VirtualMachineFleet {
 }
 
 private extension VirtualMachineFleet {
-    func startMachine() {
+    private func startMachine(named name: String) {
         Task {
             do {
-                let virtualMachine = try await virtualMachineFactory.makeVirtualMachine()
+                let virtualMachine = try await virtualMachineFactory.makeVirtualMachine(named: name)
                 let fleetMachine = FleetParticipatingVirtualMachine(virtualMachine: virtualMachine)
                 activeMachines.append(fleetMachine)
                 fleetMachine.delegate = self
@@ -55,7 +56,7 @@ extension VirtualMachineFleet: FleetParticipatingVirtualMachineDelegate {
     func virtualMachineDidStop(_ virtualMachine: FleetParticipatingVirtualMachine) {
         activeMachines.removeAll { $0 === virtualMachine }
         if isStarted && activeMachines.count < numberOfMachines {
-            startMachine()
+            startMachine(named: virtualMachine.name)
         }
     }
 }

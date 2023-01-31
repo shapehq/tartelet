@@ -7,6 +7,9 @@ import VirtualMachineFactory
 
 public final class EphemeralTartVirtualMachine: VirtualMachine {
     public typealias CleanupHandler = () -> Void
+    public var name: String {
+        destinationVMName
+    }
 
     private let tart: Tart
     private let sourceVMName: String

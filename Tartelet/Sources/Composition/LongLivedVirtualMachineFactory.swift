@@ -21,8 +21,16 @@ struct LongLivedVirtualMachineFactory: VirtualMachineFactory {
     let tart: Tart
     let settingsStore: SettingsStore
     let resourcesService: VirtualMachineResourcesService
+    var preferredVirtualMachineName: String {
+        get throws {
+            guard case let .virtualMachine(vmName) = settingsStore.virtualMachine else {
+                throw EphemeralVirtualMachineFactoryError.sourceVirtualMachineNameUnavailable
+            }
+            return vmName
+        }
+    }
 
-    func makeVirtualMachine() async throws -> VirtualMachine {
+    func makeVirtualMachine(named name: String) async throws -> VirtualMachine {
         guard case let .virtualMachine(vmName) = settingsStore.virtualMachine else {
             throw EphemeralVirtualMachineFactoryError.sourceVirtualMachineNameUnavailable
         }

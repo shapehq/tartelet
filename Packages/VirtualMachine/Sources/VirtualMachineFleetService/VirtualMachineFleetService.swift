@@ -21,7 +21,7 @@ public final class VirtualMachineFleetService {
         }
         try await MainActor.run {
             fleet.value = try fleetFactory.makeFleet()
-            fleet.value?.start()
+            try fleet.value?.start()
         }
     }
 

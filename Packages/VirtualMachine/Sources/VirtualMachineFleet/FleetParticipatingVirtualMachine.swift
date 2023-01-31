@@ -6,6 +6,9 @@ protocol FleetParticipatingVirtualMachineDelegate: AnyObject {
 
 final class FleetParticipatingVirtualMachine {
     weak var delegate: FleetParticipatingVirtualMachineDelegate?
+    var name: String {
+        virtualMachine.name
+    }
 
     private let virtualMachine: VirtualMachine
     private var runTask: Task<(), Error>?

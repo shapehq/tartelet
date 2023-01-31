@@ -74,16 +74,13 @@ private extension CompositionRoot {
         EphemeralVirtualMachineFactory(
             tart: tart,
             settingsStore: settingsStore,
-            resourcesServiceFactory: ephemeralVirtualMachineResourcesServiceFactory,
-            destinationVMNameFactory: destinationVMNameFactory
+            resourcesServiceFactory: ephemeralVirtualMachineResourcesServiceFactory
         )
     }
 
     private static var editorResourcesService: VirtualMachineResourcesService {
         VirtualMachineResourcesServiceEditor(fileSystem: fileSystem, resourcesCopier: virtualMachineResourcesCopier)
     }
-
-    private static let destinationVMNameFactory = DestinationVMNameFactory()
 
     private static var ephemeralVirtualMachineResourcesServiceFactory: VirtualMachineResourcesServiceFactory {
         EphemeralVirtualMachineResourcesServiceFactory(

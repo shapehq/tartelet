@@ -5,6 +5,10 @@ import TartDirectoryHelpers
 import VirtualMachine
 
 public final class TartVirtualMachine: VirtualMachine {
+    public var name: String {
+        vmName
+    }
+
     private let tart: Tart
     private let vmName: String
     private let resourcesDirectoryURL: URL
