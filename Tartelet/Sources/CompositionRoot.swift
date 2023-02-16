@@ -85,6 +85,7 @@ private extension CompositionRoot {
     private static var ephemeralVirtualMachineResourcesServiceFactory: VirtualMachineResourcesServiceFactory {
         EphemeralVirtualMachineResourcesServiceFactory(
             fileSystem: fileSystem,
+            settingsStore: settingsStore,
             gitHubService: gitHubService,
             gitHubCredentialsStore: gitHubCredentialsStore,
             resourcesCopier: virtualMachineResourcesCopier,

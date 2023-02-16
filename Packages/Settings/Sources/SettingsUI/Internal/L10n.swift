@@ -15,6 +15,8 @@ internal enum L10n {
     internal static let general = L10n.tr("Localizable", "settings.general", fallback: "General")
     /// GitHub
     internal static let github = L10n.tr("Localizable", "settings.github", fallback: "GitHub")
+    /// Runner
+    internal static let githubRunner = L10n.tr("Localizable", "settings.github_runner", fallback: "Runner")
     /// Virtual Machine
     internal static let virtualMachine = L10n.tr("Localizable", "settings.virtual_machine", fallback: "Virtual Machine")
     internal enum General {
@@ -46,6 +48,14 @@ internal enum L10n {
         internal static let scopes = L10n.tr("Localizable", "settings.github.private_key.scopes", fallback: "The private key must have these scopes set:\n✔ Self-hosted runners (Read and write)")
         /// Select File
         internal static let selectFile = L10n.tr("Localizable", "settings.github.private_key.select_file", fallback: "Select File")
+      }
+    }
+    internal enum GithubRunner {
+      /// Labels
+      internal static let labels = L10n.tr("Localizable", "settings.github_runner.labels", fallback: "Labels")
+      internal enum Labels {
+        /// Comma-separated list of labels.
+        internal static let footer = L10n.tr("Localizable", "settings.github_runner.labels.footer", fallback: "Comma-separated list of labels.")
       }
     }
     internal enum VirtualMachine {

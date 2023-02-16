@@ -13,7 +13,9 @@ struct GitHubSettingsView: View {
     var body: some View {
         Form {
             TextField(L10n.Settings.Github.organizationName, text: $viewModel.organizationName)
+                .disabled(!viewModel.isSettingsEnabled)
             TextField(L10n.Settings.Github.appId, text: $viewModel.appId)
+                .disabled(!viewModel.isSettingsEnabled)
             LabeledContent {
                 VStack {
                     HStack {
@@ -34,7 +36,7 @@ struct GitHubSettingsView: View {
                             }
                         } label: {
                             Text(L10n.Settings.Github.PrivateKey.selectFile)
-                        }
+                        }.disabled(!viewModel.isSettingsEnabled)
                     }
                     Text(L10n.Settings.Github.PrivateKey.scopes)
                         .multilineTextAlignment(.center)

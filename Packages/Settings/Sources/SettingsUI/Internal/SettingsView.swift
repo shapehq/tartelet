@@ -19,7 +19,7 @@ struct SettingsView: View {
                 viewModel: VirtualMachineSettingsViewModel(
                     settingsStore: settingsStore,
                     virtualMachinesSourceNameRepository: virtualMachinesSourceNameRepository,
-                    isVirtualMachineSettingsEnabled: isVirtualMachineSettingsEnabled
+                    isSettingsEnabled: isVirtualMachineSettingsEnabled
                 )
             ).tabItem {
                 Label(L10n.Settings.virtualMachine, systemImage: "desktopcomputer")
@@ -27,13 +27,26 @@ struct SettingsView: View {
             GitHubSettingsView(
                 viewModel: GitHubSettingsViewModel(
                     settingsStore: settingsStore,
-                    credentialsStore: gitHubCredentialsStore
+                    credentialsStore: gitHubCredentialsStore,
+                    isSettingsEnabled: isVirtualMachineSettingsEnabled
                 )
             ).tabItem {
                 Label {
                     Text(L10n.Settings.github)
                 } icon: {
                     Asset.github.swiftUIImage
+                }
+            }
+            GitHubRunnerSettingsView(
+                viewModel: GitHubRunnerSettingsViewModel(
+                    settingsStore: settingsStore,
+                    isSettingsEnabled: isVirtualMachineSettingsEnabled
+                )
+            ).tabItem {
+                Label {
+                    Text(L10n.Settings.githubRunner)
+                } icon: {
+                    Asset.githubActions.swiftUIImage
                 }
             }
         }.frame(width: 450, height: 250)

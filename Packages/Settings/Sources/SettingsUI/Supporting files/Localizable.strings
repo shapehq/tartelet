@@ -19,3 +19,7 @@
 "settings.github.private_key.placeholder" = "Select a private key (PEM)";
 "settings.github.private_key.scopes" = "The private key must have these scopes set:\n✔ Self-hosted runners (Read and write)";
 "settings.github.create_app" = "Create GitHub App";
+
+"settings.github_runner" = "Runner";
+"settings.github_runner.labels" = "Labels";
+"settings.github_runner.labels.footer" = "Comma-separated list of labels.";

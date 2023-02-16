@@ -2,12 +2,14 @@ import FileSystem
 import Foundation
 import GitHubCredentialsStore
 import GitHubService
+import SettingsStore
 import VirtualMachineResourcesCopier
 import VirtualMachineResourcesService
 import VirtualMachineResourcesServiceEphemeral
 
 struct EphemeralVirtualMachineResourcesServiceFactory: VirtualMachineResourcesServiceFactory {
     let fileSystem: FileSystem
+    let settingsStore: SettingsStore
     let gitHubService: GitHubService
     let gitHubCredentialsStore: GitHubCredentialsStore
     let resourcesCopier: VirtualMachineResourcesCopier
@@ -20,7 +22,8 @@ struct EphemeralVirtualMachineResourcesServiceFactory: VirtualMachineResourcesSe
             gitHubCredentialsStore: gitHubCredentialsStore,
             resourcesCopier: resourcesCopier,
             editorResourcesDirectoryURL: editorResourcesDirectoryURL,
-            virtualMachineName: virtualMachineName
+            virtualMachineName: virtualMachineName,
+            runnerLabels: settingsStore.gitHubRunnerLabels
         )
     }
 }

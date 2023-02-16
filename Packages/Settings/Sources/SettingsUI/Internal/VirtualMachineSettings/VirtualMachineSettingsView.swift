@@ -15,7 +15,7 @@ struct VirtualMachineSettingsView: View {
             VirtualMachinePicker(
                 selection: $settingsStore.virtualMachine,
                 virtualMachineNames: viewModel.virtualMachineNames,
-                isPickerEnabled: viewModel.isVirtualMachineSettingsEnabled,
+                isPickerEnabled: viewModel.isSettingsEnabled,
                 isRefreshing: viewModel.isRefreshingVirtualMachines
             ) {
                 Task {
@@ -23,7 +23,7 @@ struct VirtualMachineSettingsView: View {
                 }
             }
             VirtualMachineCountPicker(selection: $settingsStore.numberOfVirtualMachines)
-                .disabled(!viewModel.isVirtualMachineSettingsEnabled)
+                .disabled(!viewModel.isSettingsEnabled)
         }
         .padding()
         .task {

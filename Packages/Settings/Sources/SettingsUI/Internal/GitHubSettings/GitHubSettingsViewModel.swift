@@ -10,6 +10,7 @@ final class GitHubSettingsViewModel: ObservableObject {
     @Published var organizationName: String = ""
     @Published var appId: String = ""
     @Published private(set) var privateKeyName: String?
+    @Published private(set) var isSettingsEnabled = true
 
     private let credentialsStore: GitHubCredentialsStore
     private var cancellables: Set<AnyCancellable> = []
@@ -21,9 +22,10 @@ final class GitHubSettingsViewModel: ObservableObject {
         return url.appending(path: "/settings/apps")
     }
 
-    init(settingsStore: SettingsStore, credentialsStore: GitHubCredentialsStore) {
+    init(settingsStore: SettingsStore, credentialsStore: GitHubCredentialsStore, isSettingsEnabled: AnyPublisher<Bool, Never>) {
         self.settingsStore = settingsStore
         self.credentialsStore = credentialsStore
+        isSettingsEnabled.assign(to: \.isSettingsEnabled, on: self).store(in: &cancellables)
         $organizationName.debounce(for: 0.5, scheduler: DispatchQueue.main).nilIfEmpty().dropFirst().sink { [weak self] organizationName in
             Task {
                 await self?.credentialsStore.setOrganizationName(organizationName)

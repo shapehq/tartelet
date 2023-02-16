@@ -8,7 +8,7 @@ final class VirtualMachineSettingsViewModel: ObservableObject {
     let settingsStore: SettingsStore
 
     @Published private(set) var isRefreshingVirtualMachines = false
-    @Published private(set) var isVirtualMachineSettingsEnabled = false
+    @Published private(set) var isSettingsEnabled = false
     @Published private(set) var virtualMachineNames: [String] = []
 
     private let virtualMachinesSourceNameRepository: VirtualMachineSourceNameRepository
@@ -17,11 +17,11 @@ final class VirtualMachineSettingsViewModel: ObservableObject {
     init(
         settingsStore: SettingsStore,
         virtualMachinesSourceNameRepository: VirtualMachineSourceNameRepository,
-        isVirtualMachineSettingsEnabled: AnyPublisher<Bool, Never>
+        isSettingsEnabled: AnyPublisher<Bool, Never>
     ) {
         self.settingsStore = settingsStore
         self.virtualMachinesSourceNameRepository = virtualMachinesSourceNameRepository
-        isVirtualMachineSettingsEnabled.assign(to: \.isVirtualMachineSettingsEnabled, on: self).store(in: &cancellables)
+        isSettingsEnabled.assign(to: \.isSettingsEnabled, on: self).store(in: &cancellables)
     }
 
     @MainActor

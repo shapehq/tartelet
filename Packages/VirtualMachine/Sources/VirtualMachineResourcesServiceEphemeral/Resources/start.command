@@ -2,7 +2,6 @@
 PRE_RUN_SCRIPT="pre-run.sh"
 POST_RUN_SCRIPT="post-run.sh"
 RUNNER_GROUP=""
-LABELS="tartelet"
 ACTIONS_RUNNER_ARCHIVE=./actions-runner.tar.gz
 ACTIONS_RUNNER_DIRECTORY=~/actions-runner
 WORK_DIRECTORY=_work
@@ -10,6 +9,7 @@ RUNNER_NAME_FILE=./RUNNER_NAME
 RUNNER_URL_FILE=./RUNNER_URL
 RUNNER_TOKEN_FILE=./RUNNER_TOKEN
 RUNNER_DOWNLOAD_URL_FILE=./RUNNER_DOWNLOAD_URL
+RUNNER_LABELS_FILE=./RUNNER_LABELS
 
 # Ensure the virtual machine is restarted when a job is done.
 set -e pipefail
@@ -31,11 +31,15 @@ if [ ! -f $RUNNER_URL_FILE ]; then
   exit 1
 fi
 if [ ! -f $RUNNER_TOKEN_FILE ]; then
-  echo "The RUNNER_TOKEN_FILE file was not found"
+  echo "The RUNNER_TOKEN file was not found"
   exit 1
 fi
 if [ ! -f $RUNNER_DOWNLOAD_URL_FILE ]; then
-  echo "The RUNNER_DOWNLOAD_URL_FILE file was not found"
+  echo "The RUNNER_DOWNLOAD_URL file was not found"
+  exit 1
+fi
+if [ ! -f $RUNNER_LABELS_FILE ]; then
+  echo "The RUNNER_LABELS file was not found"
   exit 1
 fi
 
@@ -44,6 +48,7 @@ RUNNER_NAME=$(<./RUNNER_NAME)
 RUNNER_URL=$(<./RUNNER_URL)
 RUNNER_TOKEN=$(<./RUNNER_TOKEN)
 RUNNER_DOWNLOAD_URL=$(<./RUNNER_DOWNLOAD_URL)
+RUNNER_LABELS=$(<./RUNNER_LABELS)
 
 # Download the runner if the archive does not already exist
 if [ ! -f $ACTIONS_RUNNER_ARCHIVE ]; then
@@ -71,7 +76,7 @@ cd $ACTIONS_RUNNER_DIRECTORY
   --unattended \
   --ephemeral \
   --replace \
-  --labels "${LABELS}" \
+  --labels "${RUNNER_LABELS}" \
   --name "${RUNNER_NAME}" \
   --runnergroup "${RUNNER_GROUP}" \
   --work "${WORK_DIRECTORY}" \
