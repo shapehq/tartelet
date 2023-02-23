@@ -60,7 +60,7 @@ The `swiftgen.yml` file at the root of the repository describes how constants ar
 
 ### Linting the Codebase with SwiftLint
 
-We use [SwiftLint](https://github.com/realm/SwiftLint) to ensure uniformity in our code. Install SwiftLint using [Homebrew](https://brew.sh) by running the following command in your terminal.
+We use [SwiftLint](https://github.com/realm/SwiftLint) to ensure uniformity in the code. Install SwiftLint using [Homebrew](https://brew.sh) by running the following command in your terminal.
 
 ```bash
 brew install swiftlint
