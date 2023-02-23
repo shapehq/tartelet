@@ -4,9 +4,28 @@
 
 Tartelet makes it a breeze to manage run up to two GitHub Actions runners in ephemeral virtual machines on a single host machine. The benefits are that up to two GitHub Actions runners can run in parallel and each job runs in an isolated environment that is recreated after each GitHub Actions job has finished.
 
+- [🚀 Getting Started](https://github.com/shapehq/tartelet/edit/main/README.md#-getting-started)
+- [👨‍🔧 How does it work?](https://github.com/shapehq/tartelet/edit/main/README.md#-how-does-it-work)
+- [🏎 How is the performance?](https://github.com/shapehq/tartelet/edit/main/README.md#-how-is-the-performance)
+- [👩‍💻 How can I contribute?](https://github.com/shapehq/tartelet/edit/main/README.md#-how-can-i-contribute)
+- [🤨 Why is it named Tartelet?](https://github.com/shapehq/tartelet/edit/main/README.md#-why-is-it-named-tartelet)
+- [❤️ Acknowledgements](https://github.com/shapehq/tartelet/edit/main/README.md#%EF%B8%8F-acknowledgements)
+
 ## 🚀 Getting Started
 
 ## 👨‍🔧 How does it work?
+
+Tartelet uses Tart for managing the virtual machines and Tart which in turn uses Apple's [Apple's Virtualization framework](https://developer.apple.com/documentation/virtualization). The lifecycle of a GitHub Actions runner managed by Tartelet is as follows:
+
+1. Tartelet uses Tart to clone a virtual machine.
+2. The virtual machine is booted.
+3. After the machine is booted, a setup script is being run. The script downloads the newest version of [GitHub's runner application](https://docs.github.com/en/actions/hosting-your-own-runners/adding-self-hosted-runners) and registers the runner on the GitHub organization.
+4. The runner listens for a job and executes it.
+5. After executing the job, the runner automatically removes itself from the GitHub organization.
+6. The virtual machine is shutdown.
+7. Tartelet uses Tart to delete the virtual machine.
+
+After the last step the process starts over.
 
 ## 🏎 How is the performance?
 
