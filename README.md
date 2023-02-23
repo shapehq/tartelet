@@ -4,12 +4,12 @@
 
 Tartelet makes it a breeze to manage run up to two GitHub Actions runners in ephemeral virtual machines on a single host machine. The benefits are that up to two GitHub Actions runners can run in parallel and each job runs in an isolated environment that is recreated after each GitHub Actions job has finished.
 
-- [🚀 Getting Started](https://github.com/shapehq/tartelet/edit/main/README.md#-getting-started)
-- [👨‍🔧 How does it work?](https://github.com/shapehq/tartelet/edit/main/README.md#-how-does-it-work)
-- [🏎 How is the performance?](https://github.com/shapehq/tartelet/edit/main/README.md#-how-is-the-performance)
-- [👩‍💻 How can I contribute?](https://github.com/shapehq/tartelet/edit/main/README.md#-how-can-i-contribute)
-- [🤨 Why is it named Tartelet?](https://github.com/shapehq/tartelet/edit/main/README.md#-why-is-it-named-tartelet)
-- [❤️ Acknowledgements](https://github.com/shapehq/tartelet/edit/main/README.md#%EF%B8%8F-acknowledgements)
+- [🚀 Getting Started](https://github.com/shapehq/tartelet#-getting-started)
+- [👨‍🔧 How does it work?](https://github.com/shapehq/tartelet#-how-does-it-work)
+- [🏎 How is the performance?](https://github.com/shapehq/tartelet#-how-is-the-performance)
+- [👩‍💻 How can I contribute?](https://github.com/shapehq/tartelet#-how-can-i-contribute)
+- [🤨 Why is it named Tartelet?](https://github.com/shapehq/tartelet#-why-is-it-named-tartelet)
+- [❤️ Acknowledgements](https://github.com/shapehq/tartelet#%EF%B8%8F-acknowledgements)
 
 ## 🚀 Getting Started
 
