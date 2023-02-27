@@ -13,6 +13,8 @@ Tartelet makes it a breeze to manage run up to two GitHub Actions runners in eph
 
 ## 🚀 Getting Started
 
+Please refer to the [Installing Tartelet](https://github.com/shapehq/tartelet/wiki/Installing-Tartelet), [Configuring Tartelet](https://github.com/shapehq/tartelet/wiki/Configuring-Tartelet), and [Creating a Virtual Machine](https://github.com/shapehq/tartelet/wiki/Creating-a-Virtual-Machine) articles in the wiki.
+
 ## 👨‍🔧 How does it work?
 
 Tartelet uses Tart for managing the virtual machines and Tart which in turn uses Apple's [Apple's Virtualization framework](https://developer.apple.com/documentation/virtualization). The lifecycle of a GitHub Actions runner managed by Tartelet is as follows:
