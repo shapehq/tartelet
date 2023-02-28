@@ -1,4 +1,4 @@
-![Screenshot of Tartelet running two virtual machines](screenshot.png)
+![Screenshot of Tartelet running two virtual machines](screenshot.jpg)
 
 ### 👋 Welcome to Tartelet - a macOS app that launches self-hosted GitHub Actions runners in virtual machines using [Tart](https://github.com/cirruslabs/tart).
 
