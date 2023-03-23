@@ -94,4 +94,4 @@ The app is named Tartelet because it builds upon [Tart](https://tart.run), an op
 ## ❤️ Acknowledgements
 
 - [Tart](https://github.com/cirruslabs/tart) does all the heavy-lifting of creating, cloning, and running virtual machines.
-- Tartelet is heavily inspired by the [Cilicon](https://github.com/traderepublic/Cilicon).
+- Tartelet is heavily inspired by [Cilicon](https://github.com/traderepublic/Cilicon).
