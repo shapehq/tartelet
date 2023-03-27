@@ -9,7 +9,7 @@ Tartelet makes it a breeze to manage up to two GitHub Actions runners in ephemer
 - [🏎 How is the performance?](https://github.com/shapehq/tartelet#-how-is-the-performance)
 - [👩‍💻 How can I contribute?](https://github.com/shapehq/tartelet#-how-can-i-contribute)
 - [🤨 Why is it named Tartelet?](https://github.com/shapehq/tartelet#-why-is-it-named-tartelet)
-- [❤️ Acknowledgements](https://github.com/shapehq/tartelet#%EF%B8%8F-acknowledgements)
+- [🙏 Acknowledgements](https://github.com/shapehq/tartelet#%EF%B8%8F-acknowledgements)
 
 ## 🚀 Getting Started
 
@@ -95,7 +95,11 @@ brew install swiftlint
 
 The app is named Tartelet because it builds upon [Tart](https://tart.run), an open-source CLI for managing macOS virtual machines. Tartelet makes it easy to run multiple virtual machines using Tart. The Danish word for "easy" is "let". "Tart" + "e" + "le" = "Tartelet" and [a "tartelet" is a traditional Danish food.](https://www.valdemarsro.dk/tarteletter-hoens-asparges/)
 
-## ❤️ Acknowledgements
+## 🙏 Acknowledgements
 
 - [Tart](https://github.com/cirruslabs/tart) does all the heavy-lifting of creating, cloning, and running virtual machines.
 - Tartelet is heavily inspired by [Cilicon](https://github.com/traderepublic/Cilicon).
+
+---
+
+Tartelet is built with ❤️ by [Shape](https://shape.dk) in Denmark. Oh, and [we are hiring](https://careers.shape.dk) 🤗
