@@ -13,7 +13,11 @@ Tartelet makes it a breeze to manage up to two GitHub Actions runners in ephemer
 
 ## 🚀 Getting Started
 
-Please refer to the [Installing Tartelet](https://github.com/shapehq/tartelet/wiki/Installing-Tartelet), [Configuring Tartelet](https://github.com/shapehq/tartelet/wiki/Configuring-Tartelet), and [Starting the Virtual Machines](https://github.com/shapehq/tartelet/wiki/Starting-the-Virtual-Machines) articles in the wiki.
+Please refer to the following articles in [the wiki](https://github.com/shapehq/tartelet/wiki) to get started with Tartelet.
+
+- [Installing Tartelet](https://github.com/shapehq/tartelet/wiki/Installing-Tartelet)
+- [Configuring Tartelet](https://github.com/shapehq/tartelet/wiki/Configuring-Tartelet)
+- [Starting the Virtual Machines](https://github.com/shapehq/tartelet/wiki/Starting-the-Virtual-Machines)
 
 ## 👨‍🔧 How does it work?
 
