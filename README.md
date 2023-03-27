@@ -9,7 +9,7 @@ Tartelet makes it a breeze to manage up to two GitHub Actions runners in ephemer
 - [🏎 How is the performance?](https://github.com/shapehq/tartelet#-how-is-the-performance)
 - [👩‍💻 How can I contribute?](https://github.com/shapehq/tartelet#-how-can-i-contribute)
 - [🤨 Why is it named Tartelet?](https://github.com/shapehq/tartelet#-why-is-it-named-tartelet)
-- [🙏 Acknowledgements](https://github.com/shapehq/tartelet#%EF%B8%8F-acknowledgements)
+- [🙏 Acknowledgements](https://github.com/shapehq/tartelet#-acknowledgements)
 
 ## 🚀 Getting Started
 
