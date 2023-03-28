@@ -1,4 +1,4 @@
-![Screenshot of Tartelet running two virtual machines](screenshot.jpg)
+![Hero artwork](artwork.jpg)
 
 ### 👋 Welcome to Tartelet - a macOS app that launches self-hosted GitHub Actions runners in virtual machines using [Tart](https://github.com/cirruslabs/tart).
 
@@ -20,6 +20,8 @@ Please refer to the following articles in [the wiki](https://github.com/shapehq/
 - [Starting the Virtual Machines](https://github.com/shapehq/tartelet/wiki/Starting-the-Virtual-Machines)
 
 ## 👨‍🔧 How does it work?
+
+![Screenshot of Tartelet running two virtual machines](screenshot.jpg)
 
 Tartelet uses Tart for managing the virtual machines and Tart which in turn uses Apple's [Apple's Virtualization framework](https://developer.apple.com/documentation/virtualization). The lifecycle of a GitHub Actions runner managed by Tartelet is as follows:
 
