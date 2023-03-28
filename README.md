@@ -41,9 +41,9 @@ The performance depends on the hardware that the app is running on. When testing
 
 We found that our jobs run about 12% slower when running two virtual machines in parallel compared to running a single virtual machine. We find this performance cost negligible as running two virtual machines significantly increases our throughput at a low monetary cost.
 
-It takes about 25 - 30 seconds to recreate and start a virtual machine. However, Tartelet is not creating the virtual machines on demand. After a job is finished, it will start a new virtual machine and have the GitHub Actions runner ready to process a job. Unless there are more jobs queued that you have runners, the overhead of creating and booting a virtual machine becomes negligible.
+It takes about 25 - 30 seconds to recreate and start a virtual machine. However, Tartelet is not creating the virtual machines on demand. After a job is finished, it will start a new virtual machine and have the GitHub Actions runner ready to process a job. Unless there are more jobs queued than the number of runners, the overhead of creating and booting a virtual machine becomes negligible.
 
-These numbers were last updated in during January/February 2023.
+These numbers were last updated in January/February 2023.
 
 ## 👩‍💻 How can I contribute?
 
