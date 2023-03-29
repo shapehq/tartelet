@@ -41,6 +41,8 @@ The performance depends on the hardware that the app is running on. When testing
 
 We found that our jobs run about 12% slower when running two virtual machines in parallel compared to running a single virtual machine. We find this performance cost negligible as running two virtual machines significantly increases our throughput at a low monetary cost.
 
+This means that Tartelet can run two virtual machines at once. This the maximum number of virtual machines that Apple’s Virtualization framework allows us to run at once.
+
 After a job has finished, the virtual machine running the job is shut down and destroyed, and a new virtual machine is created and booted. This process takes about 25 - 30. However, that overhead is insignificant in most cases as Tartelet creates a new virtual machine after each job has finished. This means that a new virtual machine and its GitHub Actions runner are ready to process the next job. Unless there are more jobs queued on GitHub than the number of available virtual machines, the overhead of creating and booting a virtual machine becomes negligible.
 
 These numbers were last updated in January/February 2023.
