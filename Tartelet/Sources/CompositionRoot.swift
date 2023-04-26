@@ -19,8 +19,7 @@ import Tart
 import TartVirtualMachineSourceNameRepository
 import VirtualMachineEditorService
 import VirtualMachineFactory
-import VirtualMachineFleetFactory
-import VirtualMachineFleetService
+import VirtualMachineFleet
 import VirtualMachineResourcesCopier
 import VirtualMachineResourcesService
 import VirtualMachineResourcesServiceEditor
@@ -29,7 +28,7 @@ import VirtualMachineSourceNameRepository
 enum CompositionRoot {
     static let dock = Dock(showAppInDock: showAppInDockPublisher.rawValue)
 
-    static let fleetService = VirtualMachineFleetService(fleetFactory: fleetFactory)
+    static let fleet = VirtualMachineFleet(virtualMachineFactory: fleetVirtualMachineFactory)
 
     static let editorService = VirtualMachineEditorService(virtualMachineFactory: editorVirtualMachineFactory)
 
@@ -37,7 +36,7 @@ enum CompositionRoot {
         MenuBarItem(
             viewModel: MenuBarItemViewModel(
                 settingsStore: settingsStore,
-                fleetService: fleetService,
+                fleet: fleet,
                 editorService: editorService,
                 editorResourcesService: editorResourcesService
             )
@@ -49,7 +48,7 @@ enum CompositionRoot {
             settingsStore: settingsStore,
             gitHubCredentialsStore: gitHubCredentialsStore,
             sourceNameRepository: virtualMachineSourceNameRepository,
-            fleetService: fleetService,
+            fleet: fleet,
             editorService: editorService
         )
     }
@@ -57,10 +56,6 @@ enum CompositionRoot {
 
 private extension CompositionRoot {
     private static let showAppInDockPublisher = ShowAppInDockPublisher(settingsStore: settingsStore)
-
-    private static var fleetFactory: VirtualMachineFleetFactory {
-        DefaultVirtualMachineFleetFactory(settingsStore: settingsStore, virtualMachineFactory: fleetVirtualMachineFactory)
-    }
 
     private static var editorVirtualMachineFactory: VirtualMachineFactory {
         LongLivedVirtualMachineFactory(

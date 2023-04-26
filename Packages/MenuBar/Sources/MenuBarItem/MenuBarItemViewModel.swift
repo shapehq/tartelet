@@ -3,7 +3,7 @@ import Foundation
 import SettingsStore
 import SwiftUI
 import VirtualMachineEditorService
-import VirtualMachineFleetService
+import VirtualMachineFleet
 import VirtualMachineResourcesService
 
 public final class MenuBarItemViewModel: ObservableObject {
@@ -16,7 +16,7 @@ public final class MenuBarItemViewModel: ObservableObject {
         }
     }
 
-    private let fleetService: VirtualMachineFleetService
+    private let fleet: VirtualMachineFleet
     private let editorService: VirtualMachineEditorService
     private let settingsPresenter = SettingsPresenter()
     private let editorResourcesService: VirtualMachineResourcesService
@@ -24,12 +24,12 @@ public final class MenuBarItemViewModel: ObservableObject {
 
     public init(
         settingsStore: SettingsStore,
-        fleetService: VirtualMachineFleetService,
+        fleet: VirtualMachineFleet,
         editorService: VirtualMachineEditorService,
         editorResourcesService: VirtualMachineResourcesService
     ) {
         self.settingsStore = settingsStore
-        self.fleetService = fleetService
+        self.fleet = fleet
         self.editorService = editorService
         self.editorResourcesService = editorResourcesService
     }
@@ -50,7 +50,7 @@ public final class MenuBarItemViewModel: ObservableObject {
     func makeVirtualMachinesMenuContentViewModel() -> VirtualMachinesMenuContentViewModel {
         VirtualMachinesMenuContentViewModel(
             settingsStore: settingsStore,
-            fleetService: fleetService,
+            fleet: fleet,
             editorService: editorService,
             editorResourcesService: editorResourcesService,
             settingsPresenter: settingsPresenter

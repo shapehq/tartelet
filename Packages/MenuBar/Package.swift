@@ -17,7 +17,7 @@ let package = Package(
         .target(name: "MenuBarItem", dependencies: [
             .product(name: "SettingsStore", package: "Settings"),
             .product(name: "VirtualMachineEditorService", package: "VirtualMachine"),
-            .product(name: "VirtualMachineFleetService", package: "VirtualMachine")
+            .product(name: "VirtualMachineFleet", package: "VirtualMachine")
         ], resources: [.process("Supporting files/Localizable.strings")])
     ]
 )

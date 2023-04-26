@@ -3,7 +3,7 @@ import Foundation
 import SettingsStore
 import SwiftUI
 import VirtualMachineEditorService
-import VirtualMachineFleetService
+import VirtualMachineFleet
 import VirtualMachineResourcesService
 
 final class VirtualMachinesMenuContentViewModel: ObservableObject {
@@ -15,7 +15,7 @@ final class VirtualMachinesMenuContentViewModel: ObservableObject {
         return !isFleetStarted && !isEditorStarted && hasSelectedVirtualMachine
     }
 
-    private let fleetService: VirtualMachineFleetService
+    private let fleet: VirtualMachineFleet
     private let editorService: VirtualMachineEditorService
     private let editorResourcesService: VirtualMachineResourcesService
     private let settingsPresenter: SettingsPresenter
@@ -23,19 +23,19 @@ final class VirtualMachinesMenuContentViewModel: ObservableObject {
 
     init(
         settingsStore: SettingsStore,
-        fleetService: VirtualMachineFleetService,
+        fleet: VirtualMachineFleet,
         editorService: VirtualMachineEditorService,
         editorResourcesService: VirtualMachineResourcesService,
         settingsPresenter: SettingsPresenter
     ) {
         self.settingsStore = settingsStore
-        self.fleetService = fleetService
+        self.fleet = fleet
         self.editorService = editorService
         self.editorResourcesService = editorResourcesService
         self.settingsPresenter = settingsPresenter
         self.hasSelectedVirtualMachine = settingsStore.virtualMachine != .unknown
         settingsStore.onChange.map { $0.virtualMachine != .unknown }.assign(to: \.hasSelectedVirtualMachine, on: self).store(in: &cancellables)
-        fleetService.isStarted.assign(to: \.isFleetStarted, on: self).store(in: &cancellables)
+        fleet.isStarted.assign(to: \.isFleetStarted, on: self).store(in: &cancellables)
         editorService.isStarted.assign(to: \.isEditorStarted, on: self).store(in: &cancellables)
     }
 
@@ -67,23 +67,21 @@ final class VirtualMachinesMenuContentViewModel: ObservableObject {
 
 private extension VirtualMachinesMenuContentViewModel {
     private func startFleet() {
-        Task {
-            guard !isFleetStarted && hasSelectedVirtualMachine else {
-                return
-            }
-            do {
-                try await fleetService.start()
-            } catch {
-#if DEBUG
-                print(error)
-#endif
-            }
+        guard !isFleetStarted && hasSelectedVirtualMachine else {
+            return
+        }
+        do {
+            try fleet.start(numberOfMachines: settingsStore.numberOfVirtualMachines)
+        } catch {
+            #if DEBUG
+            print(error)
+            #endif
         }
     }
 
     private func stopFleet() {
         if isFleetStarted {
-            fleetService.stop()
+            fleet.stop()
         }
     }
 }

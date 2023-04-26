@@ -3,7 +3,7 @@ import GitHubCredentialsStore
 import SettingsStore
 import SwiftUI
 import VirtualMachineEditorService
-import VirtualMachineFleetService
+import VirtualMachineFleet
 import VirtualMachineSourceNameRepository
 
 public struct SettingsScene: Scene {
@@ -16,14 +16,14 @@ public struct SettingsScene: Scene {
         settingsStore: SettingsStore,
         gitHubCredentialsStore: GitHubCredentialsStore,
         sourceNameRepository: VirtualMachineSourceNameRepository,
-        fleetService: VirtualMachineFleetService,
+        fleet: VirtualMachineFleet,
         editorService: VirtualMachineEditorService
     ) {
         self.settingsStore = settingsStore
         self.gitHubCredentialsStore = gitHubCredentialsStore
         self.virtualMachinesSourceNameRepository = sourceNameRepository
         self.isVirtualMachineSettingsEnabled = Publishers.CombineLatest(
-            fleetService.isStarted,
+            fleet.isStarted,
             editorService.isStarted
         )
         .map { !$0 && !$1 }

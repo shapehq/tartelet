@@ -1,62 +1,61 @@
+import Combine
 import VirtualMachine
 import VirtualMachineFactory
 
 public final class VirtualMachineFleet {
-    private let virtualMachineFactory: VirtualMachineFactory
-    private var activeMachines: [FleetParticipatingVirtualMachine] = []
-    private var numberOfMachines: Int
-    private var isStarted = false
+    public let isStarted: AnyPublisher<Bool, Never>
 
-    public init(virtualMachineFactory: VirtualMachineFactory, numberOfMachines: Int) {
+    private let virtualMachineFactory: VirtualMachineFactory
+    private var activeTasks: [Task<(), Error>] = []
+    private let _isStarted = CurrentValueSubject<Bool, Never>(false)
+
+    public init(virtualMachineFactory: VirtualMachineFactory) {
         self.virtualMachineFactory = virtualMachineFactory
-        self.numberOfMachines = numberOfMachines
+        self.isStarted = _isStarted.eraseToAnyPublisher()
     }
 
-    public func start() throws {
-        guard !isStarted else {
+    public func start(numberOfMachines: Int) throws {
+        guard !_isStarted.value else {
             return
         }
-        isStarted = true
+        _isStarted.value = true
         let preferredName = try virtualMachineFactory.preferredVirtualMachineName
         for index in 0 ..< numberOfMachines {
-            startMachine(named: preferredName + "-\(index + 1)")
+            let name = preferredName + "-\(index + 1)"
+            startSequentiallyRunningVirtualMachines(named: name)
         }
     }
 
     public func stop() {
-        guard isStarted else {
+        guard _isStarted.value else {
             return
         }
-        isStarted = false
-        for machine in activeMachines {
-            machine.stop()
+        _isStarted.value = false
+        for task in activeTasks {
+            task.cancel()
         }
+        activeTasks = []
     }
 }
 
 private extension VirtualMachineFleet {
-    private func startMachine(named name: String) {
-        Task {
-            do {
-                let virtualMachine = try await virtualMachineFactory.makeVirtualMachine(named: name)
-                let fleetMachine = FleetParticipatingVirtualMachine(virtualMachine: virtualMachine)
-                activeMachines.append(fleetMachine)
-                fleetMachine.delegate = self
-                fleetMachine.start()
-            } catch {
-                #if DEBUG
-                print(error)
-                #endif
+    private func startSequentiallyRunningVirtualMachines(named name: String) {
+        let task = Task {
+            while !Task.isCancelled {
+                try await runVirtualMachine(named: name)
             }
         }
+        activeTasks.append(task)
     }
-}
 
-extension VirtualMachineFleet: FleetParticipatingVirtualMachineDelegate {
-    func virtualMachineDidStop(_ virtualMachine: FleetParticipatingVirtualMachine) {
-        activeMachines.removeAll { $0 === virtualMachine }
-        if isStarted && activeMachines.count < numberOfMachines {
-            startMachine(named: virtualMachine.name)
+    private func runVirtualMachine(named name: String) async throws {
+        let virtualMachine = try await virtualMachineFactory.makeVirtualMachine(named: name)
+        try await withTaskCancellationHandler {
+            try await virtualMachine.start()
+        } onCancel: {
+            Task.detached(priority: .high) {
+                try await virtualMachine.stop()
+            }
         }
     }
 }
