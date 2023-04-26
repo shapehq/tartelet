@@ -16,18 +16,6 @@ jobs:
     name: Build
     runs-on: macos-13
     steps:
-    - name: Generate SSH Key
-      run: |
-        ssh-keygen -t ed25519 -C "tartelet@shape.dk" -P "" -f "$HOME/.ssh/id_rsa"
-        SSH_PRIVATE_KEY=$(cat $HOME/.ssh/id_rsa)
-        echo "SSH_PRIVATE_KEY<<EOF" >> $GITHUB_ENV
-        echo "$SSH_PRIVATE_KEY" >> $GITHUB_ENV
-        echo "EOF" >> $GITHUB_ENV
-    - name: Setup SSH Key
-      run: |
-        ssh-keyscan github.com >> ~/.ssh/known_hosts
-        ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-        ssh-add - <<< "$SSH_PRIVATE_KEY"
     - name: Checkout
       uses: actions/checkout@v2
     - name: Install xcodegen
