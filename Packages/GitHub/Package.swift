@@ -15,7 +15,7 @@ let package = Package(
     dependencies: [
         .package(path: "../Keychain"),
         .package(path: "../Networking"),
-        .package(url: "git@github.com:Kitura/Swift-JWT.git", from: "4.0.0")
+        .package(url: "https://github.com/Kitura/Swift-JWT", from: "4.0.0")
     ],
     targets: [
         .target(name: "GitHubCredentialsStore"),
