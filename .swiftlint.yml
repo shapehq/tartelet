@@ -1,7 +1,7 @@
 excluded:
-  - Runestone/Sources/TestTreeSitterLanguages
-  - Runestone/Sources/TreeSitter
-  - Submodules
+  - Packages/MenuBar/Sources/MenuBarItem/Internal/L10n.swift
+  - Packages/Settings/Sources/SettingsUI/Internal/Assets.swift
+  - Packages/Settings/Sources/SettingsUI/Internal/L10n.swift
 disabled_rules:
   - nesting
 opt_in_rules:
