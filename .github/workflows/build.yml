@@ -18,7 +18,7 @@ jobs:
       id: generate_ssh_key
       run: |
         ssh-keygen -t ed25519 -C "tartelet@shape.dk" -P "" -f "$HOME/.ssh/id_rsa"
-        SSH_PRIVATE_KEY=$(cat $HOME/.ssh/id_rsa)
+        SSH_PRIVATE_KEY=$(awk '{printf "%s\\n", $0}' $HOME/.ssh/id_rsa)
         echo "ssh_private_key=$SSH_PRIVATE_KEY" >> "$GITHUB_OUTPUT"
     - name: Setup SSH Key
       uses: webfactory/ssh-agent@v0.7.0
