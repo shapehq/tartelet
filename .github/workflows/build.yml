@@ -14,8 +14,16 @@ jobs:
     name: Build
     runs-on: macos-13
     steps:
-    - name: Add SSH Key
-      run: ssh-keygen -t ed25519 -C "tartelet@shape.dk" -P "" -f "$HOME/.ssh/id_rsa"
+    - name: Generate SSH Key
+      id: generate_ssh_key
+      run: |
+        ssh-keygen -t ed25519 -C "tartelet@shape.dk" -P "" -f "$HOME/.ssh/id_rsa"
+        SSH_PRIVATE_KEY=$(cat $HOME/.ssh/id_rsa)
+        echo "ssh_private_key=$SSH_PRIVATE_KEY" >> "$GITHUB_OUTPUT"
+    - name: Setup SSH Key
+      uses: webfactory/ssh-agent@v0.7.0
+      with:
+        ssh-private-key: ${{ steps.generate_ssh_key.outputs.ssh_private_key }}
     - name: Checkout
       uses: actions/checkout@v2
     - name: Install xcodegen
