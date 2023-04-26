@@ -23,4 +23,4 @@ jobs:
     - name: Generate .xcodeproj
       run: xcodegen
     - name: Build
-      run: xcodebuild build -scheme Tartelet -destination 'generic/platform=macOS'
+      run: xcodebuild build-for-testing -scheme Tartelet -destination 'generic/platform=macOS'
