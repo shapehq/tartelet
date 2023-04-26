@@ -8,7 +8,7 @@ on:
       - '**/*.swift'
 jobs:
   SwiftLint:
-    runs-on: tartelet
+    runs-on: macos-13
     steps:
       - name: Checkout
         uses: actions/checkout@v2
