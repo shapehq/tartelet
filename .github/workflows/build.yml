@@ -9,6 +9,8 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
+env:
+  SSH_AUTH_SOCK: /tmp/ssh_agent.sock
 jobs:
   build:
     name: Build
@@ -22,9 +24,10 @@ jobs:
         echo "$SSH_PRIVATE_KEY" >> $GITHUB_ENV
         echo "EOF" >> $GITHUB_ENV
     - name: Setup SSH Key
-      uses: webfactory/ssh-agent@v0.7.0
-      with:
-        ssh-private-key: ${{ env.SSH_PRIVATE_KEY }}
+      run: |
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
+        ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+        ssh-add - <<< "$SSH_PRIVATE_KEY"
     - name: Checkout
       uses: actions/checkout@v2
     - name: Install xcodegen
