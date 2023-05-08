@@ -8,6 +8,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationWillTerminate(_ notification: Notification) {
         CompositionRoot.editorService.stop()
-        CompositionRoot.fleetService.stop()
+        CompositionRoot.fleet.stop()
     }
 }
