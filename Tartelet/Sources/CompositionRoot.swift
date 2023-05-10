@@ -134,7 +134,10 @@ private extension CompositionRoot {
     }
 
     private static var networkingService: NetworkingService {
-        NetworkingServiceLive(session: .shared)
+        NetworkingServiceLive(
+            logger: logger(withCategory: .networking),
+            session: .shared
+        )
     }
 
     private static let settingsStore = SettingsStore()

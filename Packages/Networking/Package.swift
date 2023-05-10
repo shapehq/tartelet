@@ -10,9 +10,13 @@ let package = Package(
         .library(name: "NetworkingService", targets: ["NetworkingService"]),
         .library(name: "NetworkingServiceLive", targets: ["NetworkingServiceLive"])
     ],
+    dependencies: [
+        .package(path: "../Logging")
+    ],
     targets: [
         .target(name: "NetworkingService"),
         .target(name: "NetworkingServiceLive", dependencies: [
+            .product(name: "LogConsumer", package: "Logging"),
             "NetworkingService"
         ])
     ]
