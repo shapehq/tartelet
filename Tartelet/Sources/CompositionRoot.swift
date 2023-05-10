@@ -8,6 +8,8 @@ import GitHubService
 import GitHubServiceLive
 import Keychain
 import KeychainLive
+import LogConsumer
+import LogConsumerOSLog
 import LogExporter
 import LogExporterLive
 import LogStore
@@ -60,6 +62,10 @@ enum CompositionRoot {
 }
 
 private extension CompositionRoot {
+    private static func logger(withCategory category: LoggerCategory) -> LogConsumer {
+        LogConsumerOSLog(category: category.rawValue)
+    }
+
     private static var logExporter: LogExporter {
         LogExporterLive(fileSystem: fileSystem, logStore: logStore)
     }
@@ -121,7 +127,10 @@ private extension CompositionRoot {
     }
 
     private static var keychain: Keychain {
-        KeychainLive(accessGroup: "566MC7D8D4.dk.shape.Tartelet")
+        KeychainLive(
+            logger: logger(withCategory: .keychain),
+            accessGroup: "566MC7D8D4.dk.shape.Tartelet"
+        )
     }
 
     private static var networkingService: NetworkingService {
