@@ -26,6 +26,7 @@ import TartVirtualMachineSourceNameRepository
 import VirtualMachineEditorService
 import VirtualMachineFactory
 import VirtualMachineFleet
+import VirtualMachineFleetLive
 import VirtualMachineResourcesCopier
 import VirtualMachineResourcesService
 import VirtualMachineResourcesServiceEditor
@@ -34,7 +35,7 @@ import VirtualMachineSourceNameRepository
 enum CompositionRoot {
     static let dock = Dock(showAppInDock: showAppInDockPublisher.rawValue)
 
-    static let fleet = VirtualMachineFleet(
+    static let fleet: VirtualMachineFleet = VirtualMachineFleetLive(
         logger: logger(withCategory: .virtualMachine),
         virtualMachineFactory: fleetVirtualMachineFactory
     )
