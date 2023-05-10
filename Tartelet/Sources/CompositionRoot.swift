@@ -23,6 +23,7 @@ import Shell
 import SwiftUI
 import Tart
 import TartVirtualMachineSourceNameRepository
+import VirtualMachineAutomaticLauncher
 import VirtualMachineEditorService
 import VirtualMachineFactory
 import VirtualMachineFleet
@@ -34,6 +35,14 @@ import VirtualMachineSourceNameRepository
 
 enum CompositionRoot {
     static let dock = Dock(showAppInDock: showAppInDockPublisher.rawValue)
+
+    static var virtualMachineAutomaticLauncher: VirtualMachineAutomaticLauncher {
+        VirtualMachineAutomaticLauncher(
+            logger: logger(withCategory: .virtualMachine),
+            settingsStore: settingsStore,
+            fleet: fleet
+        )
+    }
 
     static let fleet: VirtualMachineFleet = VirtualMachineFleetLive(
         logger: logger(withCategory: .virtualMachine),

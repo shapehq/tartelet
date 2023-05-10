@@ -6,6 +6,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         _ = CompositionRoot.dock
     }
 
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        CompositionRoot.virtualMachineAutomaticLauncher.startVirtualMachinesIfNeeded()
+    }
+
     func applicationWillTerminate(_ notification: Notification) {
         CompositionRoot.editorService.stop()
         CompositionRoot.fleet.stop()

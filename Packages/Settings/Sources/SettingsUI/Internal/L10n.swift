@@ -65,6 +65,8 @@ internal enum L10n {
       internal static let count = L10n.tr("Localizable", "settings.virtual_machine.count", fallback: "Amount of Virtual Machines")
       /// Use the Tart CLI to create a virtual machine.
       internal static let noVirtualMachinesAvailable = L10n.tr("Localizable", "settings.virtual_machine.no_virtual_machines_available", fallback: "Use the Tart CLI to create a virtual machine.")
+      /// Start Virtual Machines on App Launch
+      internal static let startVirtualMachinesOnAppLaunch = L10n.tr("Localizable", "settings.virtual_machine.start_virtual_machines_on_app_launch", fallback: "Start Virtual Machines on App Launch")
       /// Unknown
       internal static let unknown = L10n.tr("Localizable", "settings.virtual_machine.unknown", fallback: "Unknown")
       internal enum Count {
