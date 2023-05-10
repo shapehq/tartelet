@@ -22,6 +22,8 @@ internal enum L10n {
     internal enum General {
       /// Show In
       internal static let applicationUiMode = L10n.tr("Localizable", "settings.general.application_ui_mode", fallback: "Show In")
+      /// Export Logs...
+      internal static let exportLogs = L10n.tr("Localizable", "settings.general.export_logs", fallback: "Export Logs...")
       internal enum ApplicationUiMode {
         /// Dock
         internal static let dock = L10n.tr("Localizable", "settings.general.application_ui_mode.dock", fallback: "Dock")

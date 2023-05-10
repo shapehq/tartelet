@@ -1,5 +1,6 @@
 import Combine
 import GitHubCredentialsStore
+import LogExporter
 import SettingsStore
 import SwiftUI
 import VirtualMachineSourceNameRepository
@@ -8,11 +9,17 @@ struct SettingsView: View {
     let settingsStore: SettingsStore
     let gitHubCredentialsStore: GitHubCredentialsStore
     let virtualMachinesSourceNameRepository: VirtualMachineSourceNameRepository
+    let logExporter: LogExporter
     let isVirtualMachineSettingsEnabled: AnyPublisher<Bool, Never>
 
     var body: some View {
         TabView {
-            GeneralSettingsView(settingsStore: settingsStore).tabItem {
+            GeneralSettingsView(
+                viewModel: GeneralSettingsViewModel(
+                    settingsStore: settingsStore,
+                    logExporter: logExporter
+                )
+            ).tabItem {
                 Label(L10n.Settings.general, systemImage: "gear")
             }
             VirtualMachineSettingsView(
