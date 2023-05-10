@@ -24,6 +24,9 @@ struct VirtualMachineSettingsView: View {
             }
             VirtualMachineCountPicker(selection: $settingsStore.numberOfVirtualMachines)
                 .disabled(!viewModel.isSettingsEnabled)
+            Toggle(isOn: $settingsStore.startVirtualMachinesOnLaunch) {
+                Text(L10n.Settings.VirtualMachine.startVirtualMachinesOnAppLaunch)
+            }
         }
         .padding()
         .task {

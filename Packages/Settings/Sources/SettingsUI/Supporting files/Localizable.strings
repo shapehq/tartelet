@@ -11,6 +11,7 @@
 "settings.virtual_machine.count" = "Amount of Virtual Machines";
 "settings.virtual_machine.count.one" = "One";
 "settings.virtual_machine.count.two" = "Two";
+"settings.virtual_machine.start_virtual_machines_on_app_launch" = "Start Virtual Machines on App Launch";
 
 "settings.github" = "GitHub";
 "settings.github.organization_name" = "Organization Name";
