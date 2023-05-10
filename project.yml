@@ -77,6 +77,8 @@ targets:
       - package: VirtualMachine
         product: VirtualMachineFleet
       - package: VirtualMachine
+        product: VirtualMachineFleetLive
+      - package: VirtualMachine
         product: VirtualMachineEditorService
       - package: VirtualMachine
         product: VirtualMachineResourcesCopier
