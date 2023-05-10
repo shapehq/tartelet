@@ -1,15 +1,18 @@
 import Combine
+import LogConsumer
 import VirtualMachine
 import VirtualMachineFactory
 
 public final class VirtualMachineFleet {
     public let isStarted: AnyPublisher<Bool, Never>
 
+    private let logger: LogConsumer
     private let virtualMachineFactory: VirtualMachineFactory
     private var activeTasks: [Task<(), Error>] = []
     private let _isStarted = CurrentValueSubject<Bool, Never>(false)
 
-    public init(virtualMachineFactory: VirtualMachineFactory) {
+    public init(logger: LogConsumer, virtualMachineFactory: VirtualMachineFactory) {
+        self.logger = logger
         self.virtualMachineFactory = virtualMachineFactory
         self.isStarted = _isStarted.eraseToAnyPublisher()
     }
@@ -49,12 +52,31 @@ private extension VirtualMachineFleet {
     }
 
     private func runVirtualMachine(named name: String) async throws {
-        let virtualMachine = try await virtualMachineFactory.makeVirtualMachine(named: name)
+        let virtualMachine: VirtualMachine
+        do {
+            virtualMachine = try await virtualMachineFactory.makeVirtualMachine(named: name)
+        } catch {
+            logger.error("Could not create virtual machine named \"%@\": %@", name, error.localizedDescription)
+            throw error
+        }
         try await withTaskCancellationHandler {
-            try await virtualMachine.start()
+            logger.info("Start virtual machine named \"%@\"", name)
+            do {
+                try await virtualMachine.start()
+                logger.info("Did stop virtual machine named \"%@\"", name)
+            } catch {
+                logger.info("Could not start virtual machine named \"%@\": %@", name, error.localizedDescription)
+                throw error
+            }
         } onCancel: {
             Task.detached(priority: .high) {
-                try await virtualMachine.stop()
+                self.logger.info("Stop virtual machine named \"%@\"", name)
+                do {
+                    try await virtualMachine.stop()
+                } catch {
+                    self.logger.info("Could not stop virtual machine named \"%@\": %@", name, error.localizedDescription)
+                    throw error
+                }
             }
         }
     }

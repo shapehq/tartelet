@@ -19,11 +19,13 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../FileSystem"),
-        .package(path: "../GitHub")
+        .package(path: "../GitHub"),
+        .package(path: "../Logging")
     ],
     targets: [
         .target(name: "VirtualMachine"),
         .target(name: "VirtualMachineEditorService", dependencies: [
+            .product(name: "LogConsumer", package: "Logging"),
             "VirtualMachine",
             "VirtualMachineFactory",
             "VirtualMachineResourcesService"
@@ -33,10 +35,12 @@ let package = Package(
         ]),
         .target(name: "VirtualMachineFleet", dependencies: [
             "VirtualMachine",
-            "VirtualMachineFactory"
+            "VirtualMachineFactory",
+            .product(name: "LogConsumer", package: "Logging")
         ]),
         .target(name: "VirtualMachineResourcesCopier", dependencies: [
-            .product(name: "FileSystem", package: "FileSystem")
+            .product(name: "FileSystem", package: "FileSystem"),
+            .product(name: "LogConsumer", package: "Logging")
         ]),
         .target(name: "VirtualMachineResourcesService"),
         .target(name: "VirtualMachineResourcesServiceEditor", dependencies: [
