@@ -34,9 +34,15 @@ import VirtualMachineSourceNameRepository
 enum CompositionRoot {
     static let dock = Dock(showAppInDock: showAppInDockPublisher.rawValue)
 
-    static let fleet = VirtualMachineFleet(virtualMachineFactory: fleetVirtualMachineFactory)
+    static let fleet = VirtualMachineFleet(
+        logger: logger(withCategory: .virtualMachine),
+        virtualMachineFactory: fleetVirtualMachineFactory
+    )
 
-    static let editorService = VirtualMachineEditorService(virtualMachineFactory: editorVirtualMachineFactory)
+    static let editorService = VirtualMachineEditorService(
+        logger: logger(withCategory: .virtualMachine),
+        virtualMachineFactory: editorVirtualMachineFactory
+    )
 
     static var menuBarItem: some Scene {
         MenuBarItem(
@@ -78,6 +84,7 @@ private extension CompositionRoot {
 
     private static var editorVirtualMachineFactory: VirtualMachineFactory {
         LongLivedVirtualMachineFactory(
+            logger: logger(withCategory: .virtualMachine),
             tart: tart,
             settingsStore: settingsStore,
             resourcesService: editorResourcesService
@@ -86,6 +93,7 @@ private extension CompositionRoot {
 
     private static var fleetVirtualMachineFactory: VirtualMachineFactory {
         EphemeralVirtualMachineFactory(
+            logger: logger(withCategory: .virtualMachine),
             tart: tart,
             settingsStore: settingsStore,
             resourcesServiceFactory: ephemeralVirtualMachineResourcesServiceFactory
@@ -112,7 +120,10 @@ private extension CompositionRoot {
     }
 
     private static var virtualMachineResourcesCopier: VirtualMachineResourcesCopier {
-        VirtualMachineResourcesCopier(fileSystem: fileSystem)
+        VirtualMachineResourcesCopier(
+            logger: logger(withCategory: .virtualMachine),
+            fileSystem: fileSystem
+        )
     }
 
     private static var gitHubService: GitHubService {
