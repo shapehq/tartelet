@@ -40,4 +40,10 @@ public final class FileSystemDisk: FileSystem {
     public func itemExists(at directoryURL: URL) -> Bool {
         fileManager.fileExists(atPath: directoryURL.path)
     }
+
+    public func write(_ data: Data, toFileAt fileURL: URL) throws {
+        try NSFileCoordinator.coordinateWritingItem(at: fileURL, options: .forReplacing) { safeFileURL in
+            try data.write(to: safeFileURL, options: .atomic)
+        }
+    }
 }
