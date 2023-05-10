@@ -6,3 +6,4 @@ CODE_SIGN_STYLE = Automatic
 CODE_SIGN_ENTITLEMENTS = Tartelet/Supporting files/Tartelet.entitlements
 MACOSX_DEPLOYMENT_TARGET = 13.0
 ENABLE_HARDENED_RUNTIME = YES
+INFOPLIST_KEY_LSApplicationCategoryType = public.app-category.developer-tools
