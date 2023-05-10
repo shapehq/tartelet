@@ -36,6 +36,18 @@ targets:
         product: Keychain
       - package: Keychain
         product: KeychainLive
+      - package: Logging
+        product: LogConsumer
+      - package: Logging
+        product: LogConsumerOSLog
+      - package: Logging
+        product: LogExporter
+      - package: Logging
+        product: LogExporterLive
+      - package: Logging
+        product: LogStore
+      - package: Logging
+        product: LogStoreOSLog
       - package: MenuBar
         product: MenuBarItem
       - package: Networking
@@ -81,6 +93,7 @@ localPackages:
   - Packages/FileSystem
   - Packages/GitHub
   - Packages/Keychain
+  - Packages/Logging
   - Packages/MenuBar
   - Packages/Networking
   - Packages/Settings
