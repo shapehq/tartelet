@@ -90,6 +90,8 @@ targets:
         product: VirtualMachineResourcesServiceEphemeral
       - package: VirtualMachine
         product: VirtualMachineSourceNameRepository
+      - package: VirtualMachineAutomaticLauncher
+        product: VirtualMachineAutomaticLauncher
 localPackages:
   - Packages/Dock
   - Packages/FileSystem
@@ -101,5 +103,6 @@ localPackages:
   - Packages/Settings
   - Packages/Shell
   - Packages/Tart
-  - Packages/VirtualMachine
   - Packages/TartVirtualMachine
+  - Packages/VirtualMachine
+  - Packages/VirtualMachineAutomaticLauncher
