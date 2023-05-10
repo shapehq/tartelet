@@ -48,6 +48,7 @@ enum CompositionRoot {
             settingsStore: settingsStore,
             gitHubCredentialsStore: gitHubCredentialsStore,
             sourceNameRepository: virtualMachineSourceNameRepository,
+            logExporter: logExporter,
             fleet: fleet,
             editorService: editorService
         )
@@ -55,6 +56,10 @@ enum CompositionRoot {
 }
 
 private extension CompositionRoot {
+    private static var logExporter: LogExporter {
+        LogExporterLive(fileSystem: fileSystem, logStore: logStore)
+    }
+
     private static let showAppInDockPublisher = ShowAppInDockPublisher(settingsStore: settingsStore)
 
     private static var editorVirtualMachineFactory: VirtualMachineFactory {

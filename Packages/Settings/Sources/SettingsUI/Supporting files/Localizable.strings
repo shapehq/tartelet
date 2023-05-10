@@ -3,6 +3,7 @@
 "settings.general.application_ui_mode.dock" = "Dock";
 "settings.general.application_ui_mode.menu_bar" = "Menu Bar";
 "settings.general.application_ui_mode.dock_and_menu_bar" = "Dock and Menu Bar";
+"settings.general.export_logs" = "Export Logs...";
 
 "settings.virtual_machine" = "Virtual Machine";
 "settings.virtual_machine.unknown" = "Unknown";

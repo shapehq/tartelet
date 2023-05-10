@@ -13,6 +13,7 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../GitHub"),
+        .package(path: "../Logging"),
         .package(path: "../VirtualMachine")
     ],
     targets: [
@@ -22,6 +23,7 @@ let package = Package(
         ]),
         .target(name: "SettingsUI", dependencies: [
             .product(name: "GitHubCredentialsStore", package: "GitHub"),
+            .product(name: "LogExporter", package: "Logging"),
             "Settings",
             "SettingsStore",
             .product(name: "VirtualMachineEditorService", package: "VirtualMachine"),
