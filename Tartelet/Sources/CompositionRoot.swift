@@ -8,6 +8,10 @@ import GitHubService
 import GitHubServiceLive
 import Keychain
 import KeychainLive
+import LogExporter
+import LogExporterLive
+import LogStore
+import LogStoreOSLog
 import MenuBarItem
 import NetworkingService
 import NetworkingServiceLive
@@ -58,6 +62,10 @@ enum CompositionRoot {
 private extension CompositionRoot {
     private static var logExporter: LogExporter {
         LogExporterLive(fileSystem: fileSystem, logStore: logStore)
+    }
+
+    private static var logStore: LogStore {
+        LogStoreOSLog()
     }
 
     private static let showAppInDockPublisher = ShowAppInDockPublisher(settingsStore: settingsStore)
