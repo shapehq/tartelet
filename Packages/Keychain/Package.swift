@@ -11,12 +11,16 @@ let package = Package(
         .library(name: "KeychainLive", targets: ["KeychainLive"]),
         .library(name: "RSAPrivateKey", targets: ["RSAPrivateKey"])
     ],
+    dependencies: [
+        .package(path: "../Logging")
+    ],
     targets: [
         .target(name: "Keychain", dependencies: [
             "RSAPrivateKey"
         ]),
         .target(name: "KeychainLive", dependencies: [
             "Keychain",
+            .product(name: "LogConsumer", package: "Logging"),
             "RSAPrivateKey"
         ]),
         .target(name: "RSAPrivateKey")
