@@ -16,7 +16,9 @@ public struct VirtualMachineResourcesCopier {
         for sourceFileURL in sourceFileURLs {
             let destinationFileURL = destinationDirectoryURL.appending(path: sourceFileURL.lastPathComponent)
             do {
-                try fileSystem.removeItem(at: destinationFileURL)
+                if fileSystem.itemExists(at: destinationFileURL) {
+                    try fileSystem.removeItem(at: destinationFileURL)
+                }
             } catch {
                 // Log the error but don't rethrow it as it is not severe.
                 logger.info("Failed removing resources at %@: %@", destinationFileURL.absoluteString, error.localizedDescription)
