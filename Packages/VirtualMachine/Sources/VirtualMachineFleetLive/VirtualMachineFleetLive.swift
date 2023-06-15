@@ -50,6 +50,7 @@ private extension VirtualMachineFleetLive {
             } else {
                 logger.info("Task running virtual machine named \(name, privacy: .public) was cancelled.")
             }
+            logger.info("Task running virtual machine named \(name, privacy: .public) was cancelled.")
         }
         activeTasks.append(task)
     }
