@@ -1,6 +1,7 @@
 import EphemeralTartVirtualMachine
 import Foundation
-import LogConsumer
+import LogHelpers
+import OSLog
 import SettingsStore
 import Tart
 import VirtualMachine
@@ -19,7 +20,6 @@ enum EphemeralVirtualMachineFactoryError: LocalizedError {
 }
 
 struct EphemeralVirtualMachineFactory: VirtualMachineFactory {
-    let logger: LogConsumer
     let tart: Tart
     let settingsStore: SettingsStore
     let resourcesServiceFactory: VirtualMachineResourcesServiceFactory
@@ -32,6 +32,8 @@ struct EphemeralVirtualMachineFactory: VirtualMachineFactory {
         }
     }
 
+    private let logger = Logger(category: "EphemeralVirtualMachineFactory")
+
     func makeVirtualMachine(named name: String) async throws -> VirtualMachine {
         guard case let .virtualMachine(sourceVMName) = settingsStore.virtualMachine else {
             logger.error("Failed making ephemeral virtual machine as name is not available")
@@ -41,7 +43,7 @@ struct EphemeralVirtualMachineFactory: VirtualMachineFactory {
         do {
             try await resourcesService.createResourcesIfNeeded()
         } catch {
-            logger.error("Failed making ephemeral virtual machine as resources could not be created: %@", error.localizedDescription)
+            logger.error("Failed making ephemeral virtual machine as resources could not be created: \(error.localizedDescription, privacy: .public)")
             throw error
         }
         // swiftlint:disable:next trailing_closure
@@ -54,7 +56,7 @@ struct EphemeralVirtualMachineFactory: VirtualMachineFactory {
                 do {
                     try resourcesService.removeResources()
                 } catch {
-                    logger.error("Failed cleaning up resources for ephemeral virtual machine: %@", error.localizedDescription)
+                    logger.error("Failed cleaning up resources for ephemeral virtual machine: \(error.localizedDescription, privacy: .public)")
                 }
             })
     }

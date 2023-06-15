@@ -7,8 +7,7 @@ let package = Package(
     name: "Logging",
     platforms: [.macOS(.v13)],
     products: [
-        .library(name: "LogConsumer", targets: ["LogConsumer"]),
-        .library(name: "LogConsumerOSLog", targets: ["LogConsumerOSLog"]),
+        .library(name: "LogHelpers", targets: ["LogHelpers"]),
         .library(name: "LogExporter", targets: ["LogExporter"]),
         .library(name: "LogExporterLive", targets: ["LogExporterLive"]),
         .library(name: "LogStore", targets: ["LogStore"]),
@@ -18,10 +17,7 @@ let package = Package(
         .package(path: "../FileSystem")
     ],
     targets: [
-        .target(name: "LogConsumer"),
-        .target(name: "LogConsumerOSLog", dependencies: [
-            "LogConsumer"
-        ]),
+        .target(name: "LogHelpers"),
         .target(name: "LogExporter"),
         .target(name: "LogExporterLive", dependencies: [
             "FileSystem",

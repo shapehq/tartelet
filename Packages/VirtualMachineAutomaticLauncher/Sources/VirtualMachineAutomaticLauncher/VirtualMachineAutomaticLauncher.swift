@@ -1,14 +1,14 @@
-import LogConsumer
+import LogHelpers
+import OSLog
 import SettingsStore
 import VirtualMachineFleet
 
 public struct VirtualMachineAutomaticLauncher {
-    private let logger: LogConsumer
+    private let logger = Logger(category: "VirtualMachineAutomaticLauncher")
     private let settingsStore: SettingsStore
     private let fleet: VirtualMachineFleet
 
-    public init(logger: LogConsumer, settingsStore: SettingsStore, fleet: VirtualMachineFleet) {
-        self.logger = logger
+    public init(settingsStore: SettingsStore, fleet: VirtualMachineFleet) {
         self.settingsStore = settingsStore
         self.fleet = fleet
     }
@@ -20,7 +20,7 @@ public struct VirtualMachineAutomaticLauncher {
         do {
             try fleet.start(numberOfMachines: settingsStore.numberOfVirtualMachines)
         } catch {
-            logger.error("Failed starting virtual machines on launch: %@", error.localizedDescription)
+            logger.error("Failed starting virtual machines on launch: \(error.localizedDescription, privacy: .public)")
         }
     }
 }

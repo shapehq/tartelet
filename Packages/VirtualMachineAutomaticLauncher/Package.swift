@@ -16,12 +16,12 @@ let package = Package(
     ],
     targets: [
         .target(name: "VirtualMachineAutomaticLauncher", dependencies: [
-            .product(name: "LogConsumer", package: "Logging"),
+            .product(name: "LogHelpers", package: "Logging"),
             .product(name: "SettingsStore", package: "Settings"),
             .product(name: "VirtualMachineFleet", package: "VirtualMachine")
         ]),
         .testTarget(name: "VirtualMachineAutomaticLauncherTests", dependencies: [
-            .product(name: "LogConsumer", package: "Logging"),
+            .product(name: "LogHelpers", package: "Logging"),
             .product(name: "SettingsStore", package: "Settings"),
             "VirtualMachineAutomaticLauncher",
             .product(name: "VirtualMachineFleet", package: "VirtualMachine")

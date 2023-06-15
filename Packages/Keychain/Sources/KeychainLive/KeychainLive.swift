@@ -1,15 +1,15 @@
 import Foundation
 import Keychain
 import LocalAuthentication
-import LogConsumer
+import LogHelpers
+import OSLog
 import RSAPrivateKey
 
 public actor KeychainLive: Keychain {
-    private let logger: LogConsumer
+    private let logger = Logger(category: "KeychainLive")
     private let accessGroup: String?
 
-    public init(logger: LogConsumer, accessGroup: String? = nil) {
-        self.logger = logger
+    public init(accessGroup: String? = nil) {
         self.accessGroup = accessGroup
     }
 }
@@ -22,24 +22,16 @@ public extension KeychainLive {
             let updateQuery = UpdatePasswordQuery(password: password)
             let updateStatus = SecItemUpdate(findQuery.rawQuery, updateQuery.rawQuery)
             guard updateStatus == errSecSuccess else {
-                logger.error(
-                    "Failed updating password for account \"%@\" belong to service \"%@\". Received status: %d",
-                    account,
-                    service,
-                    updateStatus
-                )
+                // swiftlint:disable:next line_length
+                logger.error("Failed updating password for account \(account, privacy: .public) belong to service \(service, privacy: .public). Received status: \(updateStatus, privacy: .public)")
                 return false
             }
         } else {
             let addQuery = AddPasswordQuery(accessGroup: accessGroup, service: service, account: account, password: password)
             let addStatus = SecItemAdd(addQuery.rawQuery, nil)
             guard addStatus == errSecSuccess else {
-                logger.error(
-                    "Failed setting password for account \"%@\" belong to service \"%@\". Received status: %d",
-                    account,
-                    service,
-                    addStatus
-                )
+                // swiftlint:disable:next line_length
+                logger.error("Failed setting password for account \(account, privacy: .public) belong to service \(service, privacy: .public). Received status: \(addStatus, privacy: .public)")
                 return false
             }
         }
@@ -48,11 +40,8 @@ public extension KeychainLive {
 
     func setPassword(_ password: String, forAccount account: String, belongingToService service: String) async -> Bool {
         guard let data = password.data(using: .utf8) else {
-            logger.error(
-                "Failed setting password for account \"%@\" belong to service \"%@\" because the password could not be converted to UTF-8 data",
-                account,
-                service
-            )
+            // swiftlint:disable:next line_length
+            logger.error("Failed setting password for account \(account, privacy: .public) belong to service \(service, privacy: .public) because the password could not be converted to UTF-8 data")
             return false
         }
         return await setPassword(data, forAccount: account, belongingToService: service)
@@ -84,14 +73,15 @@ public extension KeychainLive {
         if SecItemCopyMatching(findQuery.rawQuery, nil) == errSecSuccess {
             let removeStatus = SecItemDelete(findQuery.rawQuery)
             guard removeStatus == errSecSuccess else {
-                logger.error("Failed removing existing RSA private key with tag \"%@\". Received status code: %d", tag, removeStatus)
+                // swiftlint:disable:next line_length
+                logger.error("Failed removing existing RSA private key with tag \(tag, privacy: .public). Received status code: \(removeStatus, privacy: .public)")
                 return false
             }
         }
         let addQuery = AddKeyQuery(accessGroup: accessGroup, tag: tag, key: key.rawValue)
         let addStatus = SecItemAdd(addQuery.rawQuery, nil)
         guard addStatus == errSecSuccess else {
-            logger.error("Failed storing RSA private key with tag \"%@\". Received status code: %d", tag, addStatus)
+            logger.error("Failed storing RSA private key with tag \(tag, privacy: .public). Received status code: \(addStatus, privacy: .public)")
             return false
         }
         return true
