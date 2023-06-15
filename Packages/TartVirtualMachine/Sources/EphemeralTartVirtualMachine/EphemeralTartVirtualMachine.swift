@@ -33,6 +33,9 @@ public final class EphemeralTartVirtualMachine: VirtualMachine {
     }
 
     public func start() async throws {
+        defer {
+            onCleanup()
+        }
         try await tart.clone(sourceName: sourceVMName, newName: destinationVMName)
         try await tart.run(name: destinationVMName, mounting: [.resources(at: resourcesDirectoryURL)])
         try await tart.delete(name: destinationVMName)
@@ -40,7 +43,9 @@ public final class EphemeralTartVirtualMachine: VirtualMachine {
     }
 
     public func stop() async throws {
+        defer {
+            onCleanup()
+        }
         try await tart.delete(name: destinationVMName)
-        onCleanup()
     }
 }

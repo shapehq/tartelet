@@ -85,7 +85,9 @@ public struct VirtualMachineResourcesServiceEphemeral: VirtualMachineResourcesSe
     }
 
     public func removeResources() throws {
-        try fileSystem.removeItem(at: directoryURL)
+        if fileSystem.itemExists(at: directoryURL) {
+            try fileSystem.removeItem(at: directoryURL)
+        }
     }
 }
 
