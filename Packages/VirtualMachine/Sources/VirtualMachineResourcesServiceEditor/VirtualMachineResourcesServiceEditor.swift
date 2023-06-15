@@ -26,6 +26,8 @@ public struct VirtualMachineResourcesServiceEditor: VirtualMachineResourcesServi
     }
 
     public func removeResources() throws {
-        try fileSystem.removeItem(at: directoryURL)
+        if fileSystem.itemExists(at: directoryURL) {
+            try fileSystem.removeItem(at: directoryURL)
+        }
     }
 }
