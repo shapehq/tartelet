@@ -16,11 +16,17 @@ public struct MenuBarItem: Scene {
         MenuBarExtra(isInserted: $isInserted) {
             VirtualMachinesMenuContent(viewModel: viewModel.makeVirtualMachinesMenuContentViewModel())
             Divider()
-            Button {
-                viewModel.presentSettings()
-            } label: {
-                Text(L10n.MenuBarItem.settings)
-            }.keyboardShortcut(",", modifiers: .command)
+            if #available(macOS 14, *) {
+                SettingsLink {
+                    Text(L10n.MenuBarItem.settings)
+                }.keyboardShortcut(",", modifiers: .command)
+            } else {
+                Button {
+                    viewModel.presentSettings()
+                } label: {
+                    Text(L10n.MenuBarItem.settings)
+                }.keyboardShortcut(",", modifiers: .command)
+            }
             Button {
                 viewModel.presentAbout()
             } label: {
