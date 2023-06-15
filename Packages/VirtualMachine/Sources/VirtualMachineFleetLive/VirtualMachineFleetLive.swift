@@ -10,7 +10,7 @@ public final class VirtualMachineFleetLive: VirtualMachineFleet {
 
     private let logger = Logger(category: "VirtualMachineFleetLive")
     private let virtualMachineFactory: VirtualMachineFactory
-    private var activeTasks: [Task<(), Error>] = []
+    private var activeTasks: [Task<(), Never>] = []
     private let _isStarted = CurrentValueSubject<Bool, Never>(false)
 
     public init(virtualMachineFactory: VirtualMachineFactory) {
@@ -45,10 +45,15 @@ public final class VirtualMachineFleetLive: VirtualMachineFleet {
 private extension VirtualMachineFleetLive {
     private func startSequentiallyRunningVirtualMachines(named name: String) {
         let task = Task {
-            if !Task.isCancelled {
-                try await runVirtualMachine(named: name)
-            } else {
-                logger.info("Task running virtual machine named \(name, privacy: .public) was cancelled.")
+            while !Task.isCancelled {
+                do {
+                    try await runVirtualMachine(named: name)
+                } catch {
+                    // Ignore the error and try again until the task is cancelled.
+                    // The error should have been logged using OSLog so we know what is going on in case we need to debug.
+                    // However, the actual error is not important at this point so we ignore it and let the loop run again,
+                    // thus giving us another chance to start the virtual machine.
+                }
             }
         }
         activeTasks.append(task)
