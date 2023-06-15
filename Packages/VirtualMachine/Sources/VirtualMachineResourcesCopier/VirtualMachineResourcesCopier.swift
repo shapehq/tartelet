@@ -1,13 +1,13 @@
 import FileSystem
 import Foundation
-import LogConsumer
+import LogHelpers
+import OSLog
 
 public struct VirtualMachineResourcesCopier {
-    private let logger: LogConsumer
+    private let logger = Logger(category: "VirtualMachineResourcesCopier")
     private let fileSystem: FileSystem
 
-    public init(logger: LogConsumer, fileSystem: FileSystem) {
-        self.logger = logger
+    public init(fileSystem: FileSystem) {
         self.fileSystem = fileSystem
     }
 
@@ -19,17 +19,14 @@ public struct VirtualMachineResourcesCopier {
                 try fileSystem.removeItem(at: destinationFileURL)
             } catch {
                 // Log the error but don't rethrow it as it is not severe.
-                logger.info("Failed removing resources at %@: %@", destinationFileURL.absoluteString, error.localizedDescription)
+                // swiftlint:disable:next line_length
+                logger.info("Failed removing resources at \(destinationFileURL.absoluteString, privacy: .public): \(error.localizedDescription, privacy: .public)")
             }
             do {
                 try fileSystem.copyItem(from: sourceFileURL, to: destinationFileURL)
             } catch {
-                logger.info(
-                    "Failed copying resources from %@ to %@: %@",
-                    sourceFileURL.absoluteString,
-                    destinationFileURL.absoluteString,
-                    error.localizedDescription
-                )
+                // swiftlint:disable:next line_length
+                logger.info("Failed copying resources from \(sourceFileURL.absoluteString, privacy: .public) to \(destinationFileURL.absoluteString, privacy: .public): \(error.localizedDescription, privacy: .public)")
                 throw error
             }
         }

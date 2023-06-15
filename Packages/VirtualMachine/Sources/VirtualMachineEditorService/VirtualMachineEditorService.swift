@@ -1,6 +1,7 @@
 import Combine
 import Foundation
-import LogConsumer
+import LogHelpers
+import OSLog
 import VirtualMachine
 import VirtualMachineFactory
 import VirtualMachineResourcesService
@@ -8,13 +9,12 @@ import VirtualMachineResourcesService
 public final class VirtualMachineEditorService {
     public let isStarted: AnyPublisher<Bool, Never>
 
-    private let logger: LogConsumer
+    private let logger = Logger(category: "VirtualMachineEditorService")
     private let virtualMachineFactory: VirtualMachineFactory
     private var virtualMachine: VirtualMachine?
     private var runTask = CurrentValueSubject<Task<(), Error>?, Never>(nil)
 
-    public init(logger: LogConsumer, virtualMachineFactory: VirtualMachineFactory) {
-        self.logger = logger
+    public init(virtualMachineFactory: VirtualMachineFactory) {
         self.virtualMachineFactory = virtualMachineFactory
         self.isStarted = runTask
             .receive(on: DispatchQueue.main)
