@@ -39,25 +39,25 @@ struct EphemeralVirtualMachineFactory: VirtualMachineFactory {
             logger.error("Failed making ephemeral virtual machine as name is not available")
             throw EphemeralVirtualMachineFactoryError.sourceVirtualMachineNameUnavailable
         }
-        let resourcesService = resourcesServiceFactory.makeService(virtualMachineName: name)
         do {
+            let resourcesService = resourcesServiceFactory.makeService(virtualMachineName: name)
             try await resourcesService.createResourcesIfNeeded()
+            // swiftlint:disable:next trailing_closure
+            return EphemeralTartVirtualMachine(
+                tart: tart,
+                sourceVMName: sourceVMName,
+                destinationVMName: name,
+                resourcesDirectoryURL: resourcesService.directoryURL,
+                onCleanup: {
+                    do {
+                        try resourcesService.removeResources()
+                    } catch {
+                        logger.error("Failed cleaning up resources for ephemeral virtual machine: \(error.localizedDescription, privacy: .public)")
+                    }
+                })
         } catch {
             logger.error("Failed making ephemeral virtual machine as resources could not be created: \(error.localizedDescription, privacy: .public)")
             throw error
         }
-        // swiftlint:disable:next trailing_closure
-        return EphemeralTartVirtualMachine(
-            tart: tart,
-            sourceVMName: sourceVMName,
-            destinationVMName: name,
-            resourcesDirectoryURL: resourcesService.directoryURL,
-            onCleanup: {
-                do {
-                    try resourcesService.removeResources()
-                } catch {
-                    logger.error("Failed cleaning up resources for ephemeral virtual machine: \(error.localizedDescription, privacy: .public)")
-                }
-            })
     }
 }

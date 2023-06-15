@@ -51,7 +51,9 @@ public final class EphemeralTartVirtualMachine: VirtualMachine {
     }
 
     public func stop() async throws {
+        defer {
+            onCleanup()
+        }
         try await tart.delete(name: destinationVMName)
-        onCleanup()
     }
 }
