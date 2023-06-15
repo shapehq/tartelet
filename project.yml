@@ -37,9 +37,7 @@ targets:
       - package: Keychain
         product: KeychainLive
       - package: Logging
-        product: LogConsumer
-      - package: Logging
-        product: LogConsumerOSLog
+        product: LogHelpers
       - package: Logging
         product: LogExporter
       - package: Logging

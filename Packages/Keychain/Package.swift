@@ -20,7 +20,7 @@ let package = Package(
         ]),
         .target(name: "KeychainLive", dependencies: [
             "Keychain",
-            .product(name: "LogConsumer", package: "Logging"),
+            .product(name: "LogHelpers", package: "Logging"),
             "RSAPrivateKey"
         ]),
         .target(name: "RSAPrivateKey")

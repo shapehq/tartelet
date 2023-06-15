@@ -8,8 +8,6 @@ import GitHubService
 import GitHubServiceLive
 import Keychain
 import KeychainLive
-import LogConsumer
-import LogConsumerOSLog
 import LogExporter
 import LogExporterLive
 import LogStore
@@ -38,19 +36,16 @@ enum CompositionRoot {
 
     static var virtualMachineAutomaticLauncher: VirtualMachineAutomaticLauncher {
         VirtualMachineAutomaticLauncher(
-            logger: logger(withCategory: .virtualMachine),
             settingsStore: settingsStore,
             fleet: fleet
         )
     }
 
     static let fleet: VirtualMachineFleet = VirtualMachineFleetLive(
-        logger: logger(withCategory: .virtualMachine),
         virtualMachineFactory: fleetVirtualMachineFactory
     )
 
     static let editorService = VirtualMachineEditorService(
-        logger: logger(withCategory: .virtualMachine),
         virtualMachineFactory: editorVirtualMachineFactory
     )
 
@@ -78,10 +73,6 @@ enum CompositionRoot {
 }
 
 private extension CompositionRoot {
-    private static func logger(withCategory category: LoggerCategory) -> LogConsumer {
-        LogConsumerOSLog(category: category.rawValue)
-    }
-
     private static var logExporter: LogExporter {
         LogExporterLive(fileSystem: fileSystem, logStore: logStore)
     }
@@ -94,7 +85,6 @@ private extension CompositionRoot {
 
     private static var editorVirtualMachineFactory: VirtualMachineFactory {
         LongLivedVirtualMachineFactory(
-            logger: logger(withCategory: .virtualMachine),
             tart: tart,
             settingsStore: settingsStore,
             resourcesService: editorResourcesService
@@ -103,7 +93,6 @@ private extension CompositionRoot {
 
     private static var fleetVirtualMachineFactory: VirtualMachineFactory {
         EphemeralVirtualMachineFactory(
-            logger: logger(withCategory: .virtualMachine),
             tart: tart,
             settingsStore: settingsStore,
             resourcesServiceFactory: ephemeralVirtualMachineResourcesServiceFactory
@@ -131,7 +120,6 @@ private extension CompositionRoot {
 
     private static var virtualMachineResourcesCopier: VirtualMachineResourcesCopier {
         VirtualMachineResourcesCopier(
-            logger: logger(withCategory: .virtualMachine),
             fileSystem: fileSystem
         )
     }
@@ -149,14 +137,12 @@ private extension CompositionRoot {
 
     private static var keychain: Keychain {
         KeychainLive(
-            logger: logger(withCategory: .keychain),
             accessGroup: "566MC7D8D4.dk.shape.Tartelet"
         )
     }
 
     private static var networkingService: NetworkingService {
         NetworkingServiceLive(
-            logger: logger(withCategory: .networking),
             session: .shared
         )
     }

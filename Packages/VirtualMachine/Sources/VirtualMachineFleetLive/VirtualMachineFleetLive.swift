@@ -1,5 +1,6 @@
 import Combine
-import LogConsumer
+import LogHelpers
+import OSLog
 import VirtualMachine
 import VirtualMachineFactory
 import VirtualMachineFleet
@@ -7,13 +8,12 @@ import VirtualMachineFleet
 public final class VirtualMachineFleetLive: VirtualMachineFleet {
     public let isStarted: AnyPublisher<Bool, Never>
 
-    private let logger: LogConsumer
+    private let logger = Logger(category: "VirtualMachineFleetLive")
     private let virtualMachineFactory: VirtualMachineFactory
     private var activeTasks: [Task<(), Error>] = []
     private let _isStarted = CurrentValueSubject<Bool, Never>(false)
 
-    public init(logger: LogConsumer, virtualMachineFactory: VirtualMachineFactory) {
-        self.logger = logger
+    public init(virtualMachineFactory: VirtualMachineFactory) {
         self.virtualMachineFactory = virtualMachineFactory
         self.isStarted = _isStarted.eraseToAnyPublisher()
     }
@@ -45,8 +45,10 @@ public final class VirtualMachineFleetLive: VirtualMachineFleet {
 private extension VirtualMachineFleetLive {
     private func startSequentiallyRunningVirtualMachines(named name: String) {
         let task = Task {
-            while !Task.isCancelled {
+            if !Task.isCancelled {
                 try await runVirtualMachine(named: name)
+            } else {
+                logger.info("Task running virtual machine named \(name, privacy: .public) was cancelled.")
             }
         }
         activeTasks.append(task)
@@ -57,25 +59,26 @@ private extension VirtualMachineFleetLive {
         do {
             virtualMachine = try await virtualMachineFactory.makeVirtualMachine(named: name)
         } catch {
-            logger.error("Could not create virtual machine named \"%@\": %@", name, error.localizedDescription)
+            logger.error("Could not create virtual machine named \(name, privacy: .public): \(error.localizedDescription, privacy: .public)")
             throw error
         }
         try await withTaskCancellationHandler {
-            logger.info("Start virtual machine named \"%@\"", name)
+            logger.info("Start virtual machine named \(name, privacy: .public)")
             do {
                 try await virtualMachine.start()
-                logger.info("Did stop virtual machine named \"%@\"", name)
+                logger.info("Did stop virtual machine named \(name, privacy: .public)")
             } catch {
-                logger.info("Could not start virtual machine named \"%@\": %@", name, error.localizedDescription)
+                logger.info("Virtual machine named \(name, privacy: .public) stopped with message: \(error.localizedDescription, privacy: .public)")
                 throw error
             }
         } onCancel: {
             Task.detached(priority: .high) {
-                self.logger.info("Stop virtual machine named \"%@\"", name)
+                self.logger.info("Stop virtual machine named \(name, privacy: .public)")
                 do {
                     try await virtualMachine.stop()
                 } catch {
-                    self.logger.info("Could not stop virtual machine named \"%@\": %@", name, error.localizedDescription)
+                    // swiftlint:disable:next line_length
+                    self.logger.info("Could not stop virtual machine named \(name, privacy: .public): \(error.localizedDescription, privacy: .public)")
                     throw error
                 }
             }

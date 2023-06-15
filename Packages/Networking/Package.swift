@@ -16,7 +16,7 @@ let package = Package(
     targets: [
         .target(name: "NetworkingService"),
         .target(name: "NetworkingServiceLive", dependencies: [
-            .product(name: "LogConsumer", package: "Logging"),
+            .product(name: "LogHelpers", package: "Logging"),
             "NetworkingService"
         ])
     ]

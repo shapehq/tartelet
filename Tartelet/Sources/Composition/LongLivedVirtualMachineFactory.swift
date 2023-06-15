@@ -1,5 +1,6 @@
 import Foundation
-import LogConsumer
+import LogHelpers
+import OSLog
 import SettingsStore
 import Tart
 import TartVirtualMachine
@@ -19,7 +20,6 @@ enum LongLivedVirtualMachineFactoryError: LocalizedError {
 }
 
 struct LongLivedVirtualMachineFactory: VirtualMachineFactory {
-    let logger: LogConsumer
     let tart: Tart
     let settingsStore: SettingsStore
     let resourcesService: VirtualMachineResourcesService
@@ -32,6 +32,8 @@ struct LongLivedVirtualMachineFactory: VirtualMachineFactory {
         }
     }
 
+    let logger = Logger(category: "LongLivedVirtualMachineFactory")
+
     func makeVirtualMachine(named name: String) async throws -> VirtualMachine {
         guard case let .virtualMachine(vmName) = settingsStore.virtualMachine else {
             logger.error("Failed making long-lived virtual machine as name is not available")
@@ -40,7 +42,8 @@ struct LongLivedVirtualMachineFactory: VirtualMachineFactory {
         do {
             try await resourcesService.createResourcesIfNeeded()
         } catch {
-            logger.error("Failed making long-lived virtual machine as resources could not be created: %@", error.localizedDescription)
+            // swiftlint:disable:next line_length
+            logger.error("Failed making long-lived virtual machine as resources could not be created: \(error.localizedDescription, privacy: .public)")
             throw error
         }
         return TartVirtualMachine(

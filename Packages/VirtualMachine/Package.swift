@@ -26,7 +26,7 @@ let package = Package(
     targets: [
         .target(name: "VirtualMachine"),
         .target(name: "VirtualMachineEditorService", dependencies: [
-            .product(name: "LogConsumer", package: "Logging"),
+            .product(name: "LogHelpers", package: "Logging"),
             "VirtualMachine",
             "VirtualMachineFactory",
             "VirtualMachineResourcesService"
@@ -39,11 +39,11 @@ let package = Package(
             "VirtualMachine",
             "VirtualMachineFactory",
             "VirtualMachineFleet",
-            .product(name: "LogConsumer", package: "Logging")
+            .product(name: "LogHelpers", package: "Logging")
         ]),
         .target(name: "VirtualMachineResourcesCopier", dependencies: [
             .product(name: "FileSystem", package: "FileSystem"),
-            .product(name: "LogConsumer", package: "Logging")
+            .product(name: "LogHelpers", package: "Logging")
         ]),
         .target(name: "VirtualMachineResourcesService"),
         .target(name: "VirtualMachineResourcesServiceEditor", dependencies: [
