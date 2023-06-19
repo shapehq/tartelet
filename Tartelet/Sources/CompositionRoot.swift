@@ -150,7 +150,11 @@ private extension CompositionRoot {
     private static let settingsStore = SettingsStore()
 
     private static var tart: Tart {
-        Tart(shell: shell)
+        Tart(homeProvider: tartHomeProvider, shell: shell)
+    }
+
+    private static var tartHomeProvider: TartHomeProvider {
+        SettingsTartHomeProvider(settingsStore: settingsStore)
     }
 
     private static var shell: Shell {

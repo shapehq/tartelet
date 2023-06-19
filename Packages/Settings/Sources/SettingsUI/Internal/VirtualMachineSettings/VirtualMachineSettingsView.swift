@@ -12,6 +12,13 @@ struct VirtualMachineSettingsView: View {
 
     var body: some View {
         Form {
+            TartHomeFolderPicker(
+                folderURL: $settingsStore.tartHomeFolderURL,
+                isEnabled: viewModel.isSettingsEnabled
+            )
+            Spacer().frame(height: 20)
+            Divider()
+            Spacer().frame(height: 20)
             VirtualMachinePicker(
                 selection: $settingsStore.virtualMachine,
                 virtualMachineNames: viewModel.virtualMachineNames,
@@ -31,6 +38,11 @@ struct VirtualMachineSettingsView: View {
         .padding()
         .task {
             await viewModel.refreshVirtualMachines()
+        }
+        .onChange(of: settingsStore.tartHomeFolderURL) { _ in
+            Task {
+                await viewModel.refreshVirtualMachines()
+            }
         }
     }
 }

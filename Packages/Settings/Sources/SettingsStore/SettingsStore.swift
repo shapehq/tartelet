@@ -5,6 +5,7 @@ import SwiftUI
 public final class SettingsStore: ObservableObject {
     private enum AppStorageKey {
         static let applicationUIMode = "applicationUIMode"
+        static let tartHomeFolderURL = "tartHomeFolderURL"
         static let virtualMachine = "virtualMachine"
         static let numberOfVirtualMachines = "numberOfVirtualMachines"
         static let startVirtualMachinesOnLaunch = "startVirtualMachinesOnLaunch"
@@ -14,6 +15,8 @@ public final class SettingsStore: ObservableObject {
 
     @AppStorage(AppStorageKey.applicationUIMode)
     public var applicationUIMode: ApplicationUIMode = .dockAndMenuBar
+    @AppStorage(AppStorageKey.tartHomeFolderURL)
+    public var tartHomeFolderURL: URL?
     @AppStorage(AppStorageKey.virtualMachine)
     public var virtualMachine: VirtualMachine = .unknown
     @AppStorage(AppStorageKey.numberOfVirtualMachines)

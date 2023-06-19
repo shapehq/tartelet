@@ -56,6 +56,7 @@ struct SettingsView: View {
                     Asset.githubActions.swiftUIImage
                 }
             }
-        }.frame(width: 450, height: 250)
+        }
+        .frame(minWidth: 450, maxWidth: 550, minHeight: 250, maxHeight: 300)
     }
 }
