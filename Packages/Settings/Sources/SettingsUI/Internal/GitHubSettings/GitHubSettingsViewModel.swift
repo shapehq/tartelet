@@ -9,7 +9,7 @@ final class GitHubSettingsViewModel: ObservableObject {
     let settingsStore: SettingsStore
     @Published var organizationName: String = ""
     @Published var appId: String = ""
-    @Published private(set) var privateKeyName: String?
+    @Published var privateKeyName = ""
     @Published private(set) var isSettingsEnabled = true
 
     private let credentialsStore: GitHubCredentialsStore
@@ -48,7 +48,7 @@ final class GitHubSettingsViewModel: ObservableObject {
             await credentialsStore.setPrivateKey(data)
             let didStorePrivateKey = await credentialsStore.privateKey != nil
             settingsStore.gitHubPrivateKeyName = didStorePrivateKey ? fileURL.lastPathComponent : nil
-            privateKeyName = settingsStore.gitHubPrivateKeyName
+            privateKeyName = settingsStore.gitHubPrivateKeyName ?? ""
         } catch {
             #if DEBUG
             print(error)
@@ -60,7 +60,7 @@ final class GitHubSettingsViewModel: ObservableObject {
         organizationName = await credentialsStore.organizationName ?? ""
         appId = await credentialsStore.appId ?? ""
         let privateKey = await credentialsStore.privateKey
-        privateKeyName = privateKey != nil ? settingsStore.gitHubPrivateKeyName : nil
+        privateKeyName = privateKey != nil ? settingsStore.gitHubPrivateKeyName ?? "" : ""
     }
 }
 
