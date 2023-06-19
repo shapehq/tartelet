@@ -16,7 +16,11 @@ public struct Shell {
     public init() {}
 
     @discardableResult
-    public func runExecutable(atPath executablePath: String, withArguments arguments: [String]) async throws -> String {
+    public func runExecutable(
+        atPath executablePath: String,
+        withArguments arguments: [String],
+        environment: [String: String]? = nil
+    ) async throws -> String {
         let process = Process()
         let sendableProcess = SendableProcess(process)
         return try await withTaskCancellationHandler {
@@ -25,6 +29,7 @@ public struct Shell {
             process.arguments = arguments
             process.launchPath = executablePath
             process.standardInput = nil
+            process.environment = environment
             process.launch()
             let data = pipe.fileHandleForReading.readDataToEndOfFile()
             process.waitUntilExit()

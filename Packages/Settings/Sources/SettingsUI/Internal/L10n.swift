@@ -61,12 +61,14 @@ internal enum L10n {
       }
     }
     internal enum VirtualMachine {
-      /// Amount of Virtual Machines
-      internal static let count = L10n.tr("Localizable", "settings.virtual_machine.count", fallback: "Amount of Virtual Machines")
+      /// Amount
+      internal static let count = L10n.tr("Localizable", "settings.virtual_machine.count", fallback: "Amount")
       /// Use the Tart CLI to create a virtual machine.
       internal static let noVirtualMachinesAvailable = L10n.tr("Localizable", "settings.virtual_machine.no_virtual_machines_available", fallback: "Use the Tart CLI to create a virtual machine.")
       /// Start Virtual Machines on App Launch
       internal static let startVirtualMachinesOnAppLaunch = L10n.tr("Localizable", "settings.virtual_machine.start_virtual_machines_on_app_launch", fallback: "Start Virtual Machines on App Launch")
+      /// Tart Home
+      internal static let tartHomeFolder = L10n.tr("Localizable", "settings.virtual_machine.tart_home_folder", fallback: "Tart Home")
       /// Unknown
       internal static let unknown = L10n.tr("Localizable", "settings.virtual_machine.unknown", fallback: "Unknown")
       internal enum Count {
@@ -74,6 +76,16 @@ internal enum L10n {
         internal static let one = L10n.tr("Localizable", "settings.virtual_machine.count.one", fallback: "One")
         /// Two
         internal static let two = L10n.tr("Localizable", "settings.virtual_machine.count.two", fallback: "Two")
+      }
+      internal enum TartHomeFolder {
+        /// Value of the TART_HOME environment variable.
+        internal static let footer = L10n.tr("Localizable", "settings.virtual_machine.tart_home_folder.footer", fallback: "Value of the TART_HOME environment variable.")
+        /// ~/.tart
+        internal static let placeholder = L10n.tr("Localizable", "settings.virtual_machine.tart_home_folder.placeholder", fallback: "~/.tart")
+        /// Reset to Default
+        internal static let resetToDefault = L10n.tr("Localizable", "settings.virtual_machine.tart_home_folder.reset_to_default", fallback: "Reset to Default")
+        /// Select Folder
+        internal static let selectFolder = L10n.tr("Localizable", "settings.virtual_machine.tart_home_folder.select_folder", fallback: "Select Folder")
       }
     }
   }

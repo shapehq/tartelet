@@ -1,9 +1,17 @@
 import Shell
 
 public struct Tart {
+    private let homeProvider: TartHomeProvider
     private let shell: Shell
+    private var environment: [String: String]? {
+        guard let homeFolderURL = homeProvider.homeFolderURL else {
+            return nil
+        }
+        return ["TART_HOME": homeFolderURL.absoluteString]
+    }
 
-    public init(shell: Shell) {
+    public init(homeProvider: TartHomeProvider, shell: Shell) {
+        self.homeProvider = homeProvider
         self.shell = shell
     }
 
@@ -32,6 +40,6 @@ private extension Tart {
     private func executeCommand(withArguments arguments: [String]) async throws -> String {
         let locator = TartLocator(shell: shell)
         let filePath = try locator.locate()
-        return try await shell.runExecutable(atPath: filePath, withArguments: arguments)
+        return try await shell.runExecutable(atPath: filePath, withArguments: arguments, environment: environment)
     }
 }
