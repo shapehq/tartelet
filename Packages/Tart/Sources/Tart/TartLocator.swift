@@ -15,10 +15,6 @@ enum TartLocatorError: LocalizedError {
 struct TartLocator {
     let shell: Shell
 
-    init(shell: Shell) {
-        self.shell = shell
-    }
-
     func locate() throws -> String {
         let candidates = ["/opt/homebrew/bin/tart"]
         let fileManager: FileManager = .default
