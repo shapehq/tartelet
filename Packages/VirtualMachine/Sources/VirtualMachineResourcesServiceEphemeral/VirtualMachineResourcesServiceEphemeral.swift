@@ -31,7 +31,7 @@ public struct VirtualMachineResourcesServiceEphemeral: VirtualMachineResourcesSe
     public var directoryURL: URL {
         fileSystem
             .applicationSupportDirectoryURL
-            .appending(path: virtualMachineName, directoryHint: .isDirectory)
+            .appending(path: virtualMachineName.replacingOccurrences(of: ":", with: "_"), directoryHint: .isDirectory)
     }
 
     private let fileSystem: FileSystem
