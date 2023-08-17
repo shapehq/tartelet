@@ -30,3 +30,5 @@
 "settings.github_runner" = "Runner";
 "settings.github_runner.labels" = "Labels";
 "settings.github_runner.labels.footer" = "Comma-separated list of labels.";
+"settings.github_runner.group" = "Group";
+"settings.github_runner.group.footer" = "Name of the runner group.";

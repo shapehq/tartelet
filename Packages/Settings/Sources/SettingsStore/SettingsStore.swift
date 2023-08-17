@@ -11,6 +11,7 @@ public final class SettingsStore: ObservableObject {
         static let startVirtualMachinesOnLaunch = "startVirtualMachinesOnLaunch"
         static let gitHubPrivateKeyName = "gitHubPrivateKeyName"
         static let gitHubRunnerLabels = "gitHubRunnerLabels"
+        static let gitHubRunnerGroup = "gitHubRunnerGroup"
     }
 
     @AppStorage(AppStorageKey.applicationUIMode)
@@ -27,6 +28,8 @@ public final class SettingsStore: ObservableObject {
     public var gitHubPrivateKeyName: String?
     @AppStorage(AppStorageKey.gitHubRunnerLabels)
     public var gitHubRunnerLabels = "tartelet"
+    @AppStorage(AppStorageKey.gitHubRunnerGroup)
+    public var gitHubRunnerGroup = ""
 
     public init() {}
 

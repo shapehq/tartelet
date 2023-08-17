@@ -18,6 +18,13 @@ struct GitHubRunnerSettingsView: View {
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity)
                 .foregroundColor(.secondary)
+
+            TextField(L10n.Settings.GithubRunner.group, text: $viewModel.group)
+                .disabled(!viewModel.isSettingsEnabled)
+            Text(L10n.Settings.GithubRunner.Group.footer)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity)
+                .foregroundColor(.secondary)
         }
         .padding()
     }

@@ -23,7 +23,8 @@ struct EphemeralVirtualMachineResourcesServiceFactory: VirtualMachineResourcesSe
             resourcesCopier: resourcesCopier,
             editorResourcesDirectoryURL: editorResourcesDirectoryURL,
             virtualMachineName: virtualMachineName,
-            runnerLabels: settingsStore.gitHubRunnerLabels
+            runnerLabels: settingsStore.gitHubRunnerLabels,
+            runnerGroup: settingsStore.gitHubRunnerGroup
         )
     }
 }
