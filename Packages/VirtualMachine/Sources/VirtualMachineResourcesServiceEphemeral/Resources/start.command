@@ -1,7 +1,6 @@
 #!/bin/zsh
 PRE_RUN_SCRIPT="pre-run.sh"
 POST_RUN_SCRIPT="post-run.sh"
-RUNNER_GROUP=""
 ACTIONS_RUNNER_ARCHIVE=./actions-runner.tar.gz
 ACTIONS_RUNNER_DIRECTORY=~/actions-runner
 WORK_DIRECTORY=_work
@@ -10,6 +9,7 @@ RUNNER_URL_FILE=./RUNNER_URL
 RUNNER_TOKEN_FILE=./RUNNER_TOKEN
 RUNNER_DOWNLOAD_URL_FILE=./RUNNER_DOWNLOAD_URL
 RUNNER_LABELS_FILE=./RUNNER_LABELS
+RUNNER_GROUP_FILE=./RUNNER_GROUP
 
 # Ensure the virtual machine is restarted when a job is done.
 set -e pipefail
@@ -42,6 +42,10 @@ if [ ! -f $RUNNER_LABELS_FILE ]; then
   echo "The RUNNER_LABELS file was not found"
   exit 1
 fi
+if [ ! -f $RUNNER_GROUP_FILE ]; then
+  echo "The RUNNER_GROUP file was not found"
+  exit 1
+fi
 
 # Read constants from files
 RUNNER_NAME=$(<./RUNNER_NAME)
@@ -49,6 +53,7 @@ RUNNER_URL=$(<./RUNNER_URL)
 RUNNER_TOKEN=$(<./RUNNER_TOKEN)
 RUNNER_DOWNLOAD_URL=$(<./RUNNER_DOWNLOAD_URL)
 RUNNER_LABELS=$(<./RUNNER_LABELS)
+RUNNER_GROUP=$(<./RUNNER_GROUP)
 
 # Download the runner if the archive does not already exist
 if [ ! -f $ACTIONS_RUNNER_ARCHIVE ]; then
