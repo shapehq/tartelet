@@ -20,6 +20,7 @@ struct EphemeralVirtualMachineResourcesServiceFactory: VirtualMachineResourcesSe
             fileSystem: fileSystem,
             gitHubService: gitHubService,
             gitHubCredentialsStore: gitHubCredentialsStore,
+            runnerScope: settingsStore.githubRunnerScope,
             resourcesCopier: resourcesCopier,
             editorResourcesDirectoryURL: editorResourcesDirectoryURL,
             virtualMachineName: virtualMachineName,

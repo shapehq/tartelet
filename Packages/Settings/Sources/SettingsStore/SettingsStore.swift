@@ -1,4 +1,5 @@
 import Combine
+import GitHubService
 import Settings
 import SwiftUI
 
@@ -12,6 +13,7 @@ public final class SettingsStore: ObservableObject {
         static let gitHubPrivateKeyName = "gitHubPrivateKeyName"
         static let gitHubRunnerLabels = "gitHubRunnerLabels"
         static let gitHubRunnerGroup = "gitHubRunnerGroup"
+        static let githubRunnerScope = "githubRunnerScope"
     }
 
     @AppStorage(AppStorageKey.applicationUIMode)
@@ -30,6 +32,8 @@ public final class SettingsStore: ObservableObject {
     public var gitHubRunnerLabels = "tartelet"
     @AppStorage(AppStorageKey.gitHubRunnerGroup)
     public var gitHubRunnerGroup = ""
+    @AppStorage(AppStorageKey.githubRunnerScope)
+    public var githubRunnerScope: GitHubRunnerScope = .organization
 
     public init() {}
 

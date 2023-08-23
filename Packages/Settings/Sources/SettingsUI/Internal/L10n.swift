@@ -40,8 +40,14 @@ internal enum L10n {
       internal static let createApp = L10n.tr("Localizable", "settings.github.create_app", fallback: "Create GitHub App")
       /// Organization Name
       internal static let organizationName = L10n.tr("Localizable", "settings.github.organization_name", fallback: "Organization Name")
+      /// Owner name
+      internal static let ownerName = L10n.tr("Localizable", "settings.github.owner_name", fallback: "Owner name")
       /// Private Key (PEM)
       internal static let privateKey = L10n.tr("Localizable", "settings.github.private_key", fallback: "Private Key (PEM)")
+      /// Repository name
+      internal static let repositoryName = L10n.tr("Localizable", "settings.github.repository_name", fallback: "Repository name")
+      /// Runner scope
+      internal static let runnerScope = L10n.tr("Localizable", "settings.github.runner_scope", fallback: "Runner scope")
       internal enum PrivateKey {
         /// Select a private key (PEM)
         internal static let placeholder = L10n.tr("Localizable", "settings.github.private_key.placeholder", fallback: "Select a private key (PEM)")
