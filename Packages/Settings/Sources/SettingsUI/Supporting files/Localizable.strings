@@ -20,9 +20,12 @@
 
 "settings.github" = "GitHub";
 "settings.github.organization_name" = "Organization Name";
+"settings.github.organization_name.prompt" = "Acme Coorporation";
 "settings.github.runner_scope" = "Runner Scope";
 "settings.github.owner_name" = "Owner Name";
+"settings.github.owner_name.prompt" = "johnappleseed";
 "settings.github.repository_name" = "Repository Name";
+"settings.github.repository_name.prompt" = "hello-world";
 "settings.github.app_id" = "App ID";
 "settings.github.private_key" = "Private Key (PEM)";
 "settings.github.private_key.select_file" = "Select File";

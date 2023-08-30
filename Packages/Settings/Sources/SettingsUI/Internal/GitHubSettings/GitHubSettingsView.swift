@@ -19,16 +19,27 @@ struct GitHubSettingsView: View {
                     }
                 }
                 .pickerStyle(.segmented)
-
                 switch viewModel.runnerScope {
                 case .organization:
-                    TextField(L10n.Settings.Github.organizationName, text: $viewModel.organizationName)
-                        .disabled(!viewModel.isSettingsEnabled)
+                    TextField(
+                        L10n.Settings.Github.organizationName,
+                        text: $viewModel.organizationName,
+                        prompt: Text(L10n.Settings.Github.OrganizationName.prompt)
+                    )
+                    .disabled(!viewModel.isSettingsEnabled)
                 case .repo:
-                    TextField(L10n.Settings.Github.ownerName, text: $viewModel.ownerName)
-                        .disabled(!viewModel.isSettingsEnabled)
-                    TextField(L10n.Settings.Github.repositoryName, text: $viewModel.repositoryName)
-                        .disabled(!viewModel.isSettingsEnabled)
+                    TextField(
+                        L10n.Settings.Github.ownerName,
+                        text: $viewModel.ownerName,
+                        prompt: Text(L10n.Settings.Github.OwnerName.prompt)
+                    )
+                    .disabled(!viewModel.isSettingsEnabled)
+                    TextField(
+                        L10n.Settings.Github.repositoryName,
+                        text: $viewModel.repositoryName,
+                        prompt: Text(L10n.Settings.Github.RepositoryName.prompt)
+                    )
+                    .disabled(!viewModel.isSettingsEnabled)
                 }
             }
             Section {
