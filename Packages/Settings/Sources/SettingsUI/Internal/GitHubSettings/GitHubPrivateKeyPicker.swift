@@ -12,37 +12,40 @@ struct GitHubPrivateKeyPicker: View {
     }
 
     var body: some View {
-        LabeledContent {
-            VStack {
-                HStack {
-                    TextField(
-                        L10n.Settings.Github.privateKey,
-                        text: $filename,
-                        prompt: Text(L10n.Settings.Github.PrivateKey.placeholder)
-                    )
-                    .labelsHidden()
-                    .disabled(true)
-                    Button {
-                        if let fileURL = presentOpenPanel() {
-                            onSelectFile(fileURL)
-                        }
-                    } label: {
-                        Text(L10n.Settings.Github.PrivateKey.selectFile)
-                    }.disabled(!isEnabled)
-                }
-                Text(L10n.Settings.Github.PrivateKey.scopes)
-                    .multilineTextAlignment(.center)
-                    .lineSpacing(4)
-                    .padding(8)
-                    .frame(maxWidth: .infinity)
-                    .foregroundColor(.secondary)
-                    .background {
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(.separator, lineWidth: 1)
+        VStack(spacing: 16) {
+            LabeledContent {
+                VStack {
+                    HStack {
+                        TextField(
+                            L10n.Settings.Github.privateKey,
+                            text: $filename,
+                            prompt: Text(L10n.Settings.Github.PrivateKey.placeholder)
+                        )
+                        .labelsHidden()
+                        .disabled(true)
+                        Button {
+                            if let fileURL = presentOpenPanel() {
+                                onSelectFile(fileURL)
+                            }
+                        } label: {
+                            Text(L10n.Settings.Github.PrivateKey.selectFile)
+                        }.disabled(!isEnabled)
                     }
+                }
+            } label: {
+                Text(L10n.Settings.Github.privateKey)
             }
-        } label: {
-            Text(L10n.Settings.Github.privateKey)
+
+            Text(L10n.Settings.Github.PrivateKey.scopes)
+                .multilineTextAlignment(.center)
+                .lineSpacing(4)
+                .padding(8)
+                .frame(maxWidth: .infinity)
+                .foregroundColor(.secondary)
+                .background {
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(.separator, lineWidth: 1)
+                }
         }
     }
 }

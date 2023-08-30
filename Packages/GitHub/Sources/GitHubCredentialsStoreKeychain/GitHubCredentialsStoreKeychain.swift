@@ -6,6 +6,8 @@ import RSAPrivateKey
 public final actor GitHubCredentialsStoreKeychain: GitHubCredentialsStore {
     private enum PasswordAccount {
         static let organizationName = "github.credentials.organizationName"
+        static let repositoryName = "github.credentials.repositoryName"
+        static let ownerName = "github.credentials.ownerName"
         static let appId = "github.credentials.appId"
     }
 
@@ -16,6 +18,16 @@ public final actor GitHubCredentialsStoreKeychain: GitHubCredentialsStore {
     public var organizationName: String? {
         get async {
             return await keychain.password(forAccount: PasswordAccount.organizationName, belongingToService: serviceName)
+        }
+    }
+    public var repositoryName: String? {
+        get async {
+            return await keychain.password(forAccount: PasswordAccount.repositoryName, belongingToService: serviceName)
+        }
+    }
+    public var ownerName: String? {
+        get async {
+            return await keychain.password(forAccount: PasswordAccount.ownerName, belongingToService: serviceName)
         }
     }
     public var appId: String? {
@@ -42,6 +54,18 @@ public final actor GitHubCredentialsStoreKeychain: GitHubCredentialsStore {
             _ = await keychain.setPassword(organizationName, forAccount: PasswordAccount.organizationName, belongingToService: serviceName)
         } else {
             await keychain.removePassword(forAccount: PasswordAccount.organizationName, belongingToService: serviceName)
+        }
+    }
+    public func setRepository(_ repositoryName: String?, withOwner ownerName: String?) async {
+        if let repositoryName {
+            _ = await keychain.setPassword(repositoryName, forAccount: PasswordAccount.repositoryName, belongingToService: serviceName)
+        } else {
+            await keychain.removePassword(forAccount: PasswordAccount.repositoryName, belongingToService: serviceName)
+        }
+        if let ownerName {
+            _ = await keychain.setPassword(ownerName, forAccount: PasswordAccount.ownerName, belongingToService: serviceName)
+        } else {
+            await keychain.removePassword(forAccount: PasswordAccount.ownerName, belongingToService: serviceName)
         }
     }
 

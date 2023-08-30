@@ -38,6 +38,7 @@ public struct VirtualMachineResourcesServiceEphemeral: VirtualMachineResourcesSe
     private let fileSystem: FileSystem
     private let gitHubService: GitHubService
     private let gitHubCredentialsStore: GitHubCredentialsStore
+    private let runnerScope: GitHubRunnerScope
     private let resourcesCopier: VirtualMachineResourcesCopier
     private let editorResourcesDirectoryURL: URL
     private let virtualMachineName: String
@@ -48,6 +49,7 @@ public struct VirtualMachineResourcesServiceEphemeral: VirtualMachineResourcesSe
         fileSystem: FileSystem,
         gitHubService: GitHubService,
         gitHubCredentialsStore: GitHubCredentialsStore,
+        runnerScope: GitHubRunnerScope,
         resourcesCopier: VirtualMachineResourcesCopier,
         editorResourcesDirectoryURL: URL,
         virtualMachineName: String,
@@ -57,6 +59,7 @@ public struct VirtualMachineResourcesServiceEphemeral: VirtualMachineResourcesSe
         self.fileSystem = fileSystem
         self.gitHubService = gitHubService
         self.gitHubCredentialsStore = gitHubCredentialsStore
+        self.runnerScope = runnerScope
         self.resourcesCopier = resourcesCopier
         self.editorResourcesDirectoryURL = editorResourcesDirectoryURL
         self.virtualMachineName = virtualMachineName
@@ -66,9 +69,9 @@ public struct VirtualMachineResourcesServiceEphemeral: VirtualMachineResourcesSe
 
     public func createResourcesIfNeeded() async throws {
         let runnerURL = try await getRunnerURL()
-        let appAccessToken = try await gitHubService.getAppAccessToken()
-        let runnerToken = try await gitHubService.getRunnerRegistrationToken(with: appAccessToken)
-        let runnerDownloadURL = try await gitHubService.getRunnerDownloadURL(with: appAccessToken)
+        let appAccessToken = try await gitHubService.getAppAccessToken(runnerScope: runnerScope)
+        let runnerToken = try await gitHubService.getRunnerRegistrationToken(with: appAccessToken, runnerScope: runnerScope)
+        let runnerDownloadURL = try await gitHubService.getRunnerDownloadURL(with: appAccessToken, runnerScope: runnerScope)
         try fileSystem.createDirectoryIfNeeded(at: directoryURL)
         if fileSystem.itemExists(at: directoryURL) {
             try resourcesCopier.copyResources(from: editorResourcesDirectoryURL, to: directoryURL)
@@ -99,11 +102,23 @@ public struct VirtualMachineResourcesServiceEphemeral: VirtualMachineResourcesSe
 
 private extension VirtualMachineResourcesServiceEphemeral {
     private func getRunnerURL() async throws -> URL {
-        let organizationName = try await getOrganizationName()
-        guard let runnerURL = URL(string: "https://github.com/" + organizationName) else {
-            throw VirtualMachineResourcesServiceEphemeralError.invalidRunnerURL
+        switch runnerScope {
+        case .organization:
+            let organizationName = try await getOrganizationName()
+            guard let runnerURL = URL(string: "https://github.com/" + organizationName) else {
+                throw VirtualMachineResourcesServiceEphemeralError.invalidRunnerURL
+            }
+            return runnerURL
+        case .repo:
+            guard
+                let ownerName = await gitHubCredentialsStore.ownerName,
+                let repositoryName = await gitHubCredentialsStore.repositoryName,
+                let runnerURL = URL(string: "https://github.com/\(ownerName)/\(repositoryName)")
+            else {
+                throw VirtualMachineResourcesServiceEphemeralError.invalidRunnerURL
+            }
+            return runnerURL
         }
-        return runnerURL
     }
 
     private func getOrganizationName() async throws -> String {

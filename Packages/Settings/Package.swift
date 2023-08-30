@@ -19,10 +19,12 @@ let package = Package(
     targets: [
         .target(name: "Settings"),
         .target(name: "SettingsStore", dependencies: [
+            .product(name: "GitHubService", package: "GitHub"),
             "Settings"
         ]),
         .target(name: "SettingsUI", dependencies: [
             .product(name: "GitHubCredentialsStore", package: "GitHub"),
+            .product(name: "GitHubService", package: "GitHub"),
             .product(name: "LogExporter", package: "Logging"),
             "Settings",
             "SettingsStore",
