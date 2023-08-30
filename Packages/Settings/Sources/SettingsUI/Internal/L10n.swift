@@ -40,22 +40,40 @@ internal enum L10n {
       internal static let createApp = L10n.tr("Localizable", "settings.github.create_app", fallback: "Create GitHub App")
       /// Organization Name
       internal static let organizationName = L10n.tr("Localizable", "settings.github.organization_name", fallback: "Organization Name")
-      /// Owner name
-      internal static let ownerName = L10n.tr("Localizable", "settings.github.owner_name", fallback: "Owner name")
+      /// Owner Name
+      internal static let ownerName = L10n.tr("Localizable", "settings.github.owner_name", fallback: "Owner Name")
       /// Private Key (PEM)
       internal static let privateKey = L10n.tr("Localizable", "settings.github.private_key", fallback: "Private Key (PEM)")
-      /// Repository name
-      internal static let repositoryName = L10n.tr("Localizable", "settings.github.repository_name", fallback: "Repository name")
-      /// Runner scope
-      internal static let runnerScope = L10n.tr("Localizable", "settings.github.runner_scope", fallback: "Runner scope")
+      /// Repository Name
+      internal static let repositoryName = L10n.tr("Localizable", "settings.github.repository_name", fallback: "Repository Name")
+      /// Runner Scope
+      internal static let runnerScope = L10n.tr("Localizable", "settings.github.runner_scope", fallback: "Runner Scope")
+      internal enum OrganizationName {
+        /// Acme Coorporation
+        internal static let prompt = L10n.tr("Localizable", "settings.github.organization_name.prompt", fallback: "Acme Coorporation")
+      }
+      internal enum OwnerName {
+        /// johnappleseed
+        internal static let prompt = L10n.tr("Localizable", "settings.github.owner_name.prompt", fallback: "johnappleseed")
+      }
       internal enum PrivateKey {
         /// Select a private key (PEM)
         internal static let placeholder = L10n.tr("Localizable", "settings.github.private_key.placeholder", fallback: "Select a private key (PEM)")
-        /// The private key must have these scopes set:
-        /// ✔ Self-hosted runners (Read and write)
-        internal static let scopes = L10n.tr("Localizable", "settings.github.private_key.scopes", fallback: "The private key must have these scopes set:\n✔ Self-hosted runners (Read and write)")
         /// Select File
         internal static let selectFile = L10n.tr("Localizable", "settings.github.private_key.select_file", fallback: "Select File")
+        internal enum Scopes {
+          /// The private key must have these scopes set:
+          /// ✔ Organization: Self-hosted runners (Read and write)
+          internal static let organization = L10n.tr("Localizable", "settings.github.private_key.scopes.organization", fallback: "The private key must have these scopes set:\n✔ Organization: Self-hosted runners (Read and write)")
+          /// The private key must have these scopes set:
+          /// ✔ Repository: Administration (Read and write)
+          /// ✔ Repository: Metadata (Read-only)
+          internal static let repository = L10n.tr("Localizable", "settings.github.private_key.scopes.repository", fallback: "The private key must have these scopes set:\n✔ Repository: Administration (Read and write)\n✔ Repository: Metadata (Read-only)")
+        }
+      }
+      internal enum RepositoryName {
+        /// hello-world
+        internal static let prompt = L10n.tr("Localizable", "settings.github.repository_name.prompt", fallback: "hello-world")
       }
     }
     internal enum GithubRunner {
