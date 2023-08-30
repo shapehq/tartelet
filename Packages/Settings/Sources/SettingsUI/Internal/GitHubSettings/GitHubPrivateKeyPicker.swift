@@ -1,12 +1,23 @@
+import GitHubService
 import SwiftUI
 
 struct GitHubPrivateKeyPicker: View {
     @Binding private var filename: String
+    private let scope: GitHubRunnerScope
     private let isEnabled: Bool
     private let onSelectFile: (URL) -> Void
+    private var scopesText: String {
+        switch scope {
+        case .organization:
+            L10n.Settings.Github.PrivateKey.Scopes.organization
+        case .repo:
+            L10n.Settings.Github.PrivateKey.Scopes.repository
+        }
+    }
 
-    init(filename: Binding<String>, isEnabled: Bool, onSelectFile: @escaping (URL) -> Void) {
+    init(filename: Binding<String>, scope: GitHubRunnerScope, isEnabled: Bool, onSelectFile: @escaping (URL) -> Void) {
         self._filename = filename
+        self.scope = scope
         self.isEnabled = isEnabled
         self.onSelectFile = onSelectFile
     }
@@ -35,8 +46,7 @@ struct GitHubPrivateKeyPicker: View {
             } label: {
                 Text(L10n.Settings.Github.privateKey)
             }
-
-            Text(L10n.Settings.Github.PrivateKey.scopes)
+            Text(scopesText)
                 .multilineTextAlignment(.center)
                 .lineSpacing(4)
                 .padding(8)

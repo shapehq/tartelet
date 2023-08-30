@@ -27,7 +27,8 @@
 "settings.github.private_key" = "Private Key (PEM)";
 "settings.github.private_key.select_file" = "Select File";
 "settings.github.private_key.placeholder" = "Select a private key (PEM)";
-"settings.github.private_key.scopes" = "The private key must have these scopes set:\n✔ Self-hosted runners (Read and write)";
+"settings.github.private_key.scopes.organization" = "The private key must have these scopes set:\n✔ Organization: Self-hosted runners (Read and write)";
+"settings.github.private_key.scopes.repository" = "The private key must have these scopes set:\n✔ Repository: Administration (Read and write)\n✔ Repository: Metadata (Read-only)";
 "settings.github.create_app" = "Create GitHub App";
 
 "settings.github_runner" = "Runner";

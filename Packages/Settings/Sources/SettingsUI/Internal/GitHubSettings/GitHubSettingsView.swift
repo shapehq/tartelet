@@ -34,7 +34,11 @@ struct GitHubSettingsView: View {
             Section {
                 TextField(L10n.Settings.Github.appId, text: $viewModel.appId)
                     .disabled(!viewModel.isSettingsEnabled)
-                GitHubPrivateKeyPicker(filename: $viewModel.privateKeyName, isEnabled: viewModel.isSettingsEnabled) { fileURL in
+                GitHubPrivateKeyPicker(
+                    filename: $viewModel.privateKeyName,
+                    scope: viewModel.runnerScope,
+                    isEnabled: viewModel.isSettingsEnabled
+                ) { fileURL in
                     Task {
                         await viewModel.storePrivateKey(at: fileURL)
                     }
