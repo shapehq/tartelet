@@ -57,6 +57,6 @@ struct SettingsView: View {
                 }
             }
         }
-        .frame(minWidth: 450, maxWidth: 550, minHeight: 250, maxHeight: 300)
+        .frame(minWidth: 450, maxWidth: 650, minHeight: 250, maxHeight: 450)
     }
 }

@@ -1,5 +1,5 @@
 "settings.general" = "General";
-"settings.general.application_ui_mode" = "Show In";
+"settings.general.application_ui_mode" = "Show App In";
 "settings.general.application_ui_mode.dock" = "Dock";
 "settings.general.application_ui_mode.menu_bar" = "Menu Bar";
 "settings.general.application_ui_mode.dock_and_menu_bar" = "Dock and Menu Bar";
@@ -13,25 +13,33 @@
 "settings.virtual_machine" = "Virtual Machine";
 "settings.virtual_machine.unknown" = "Unknown";
 "settings.virtual_machine.no_virtual_machines_available" = "Use the Tart CLI to create a virtual machine.";
-"settings.virtual_machine.count" = "Amount";
+"settings.virtual_machine.count" = "Number of Machines";
 "settings.virtual_machine.count.one" = "One";
 "settings.virtual_machine.count.two" = "Two";
 "settings.virtual_machine.start_virtual_machines_on_app_launch" = "Start Virtual Machines on App Launch";
 
 "settings.github" = "GitHub";
 "settings.github.organization_name" = "Organization Name";
-"settings.github.runner_scope" = "Runner scope";
-"settings.github.owner_name" = "Owner name";
-"settings.github.repository_name" = "Repository name";
+"settings.github.organization_name.prompt" = "Acme Coorporation";
+"settings.github.runner_scope" = "Runner Scope";
+"settings.github.owner_name" = "Owner Name";
+"settings.github.owner_name.prompt" = "johnappleseed";
+"settings.github.repository_name" = "Repository Name";
+"settings.github.repository_name.prompt" = "hello-world";
 "settings.github.app_id" = "App ID";
 "settings.github.private_key" = "Private Key (PEM)";
 "settings.github.private_key.select_file" = "Select File";
 "settings.github.private_key.placeholder" = "Select a private key (PEM)";
-"settings.github.private_key.scopes" = "The private key must have these scopes set:\n✔ Self-hosted runners (Read and write)";
+"settings.github.private_key.scopes.organization" = "The private key must have these scopes set:\n✔ Organization: Self-hosted runners (Read and write)";
+"settings.github.private_key.scopes.repository" = "The private key must have these scopes set:\n✔ Repository: Administration (Read and write)\n✔ Repository: Metadata (Read-only)";
 "settings.github.create_app" = "Create GitHub App";
 
 "settings.github_runner" = "Runner";
 "settings.github_runner.labels" = "Labels";
+"settings.github_runner.labels.prompt" = "comma,separated,list";
 "settings.github_runner.labels.footer" = "Comma-separated list of labels.";
 "settings.github_runner.group" = "Group";
-"settings.github_runner.group.footer" = "Name of the runner group.";
+"settings.github_runner.group.prompt" = "acme";
+
+"settings.runner_scope.organization" = "Organization";
+"settings.runner_scope.repository" = "Repository";
