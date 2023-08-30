@@ -82,12 +82,14 @@ internal enum L10n {
       /// Labels
       internal static let labels = L10n.tr("Localizable", "settings.github_runner.labels", fallback: "Labels")
       internal enum Group {
-        /// Name of the runner group.
-        internal static let footer = L10n.tr("Localizable", "settings.github_runner.group.footer", fallback: "Name of the runner group.")
+        /// acme
+        internal static let prompt = L10n.tr("Localizable", "settings.github_runner.group.prompt", fallback: "acme")
       }
       internal enum Labels {
         /// Comma-separated list of labels.
         internal static let footer = L10n.tr("Localizable", "settings.github_runner.labels.footer", fallback: "Comma-separated list of labels.")
+        /// comma,separated,list
+        internal static let prompt = L10n.tr("Localizable", "settings.github_runner.labels.prompt", fallback: "comma,separated,list")
       }
     }
     internal enum VirtualMachine {

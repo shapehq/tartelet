@@ -12,20 +12,28 @@ struct GitHubRunnerSettingsView: View {
 
     var body: some View {
         Form {
-            TextField(L10n.Settings.GithubRunner.labels, text: $viewModel.labels)
+            Section {
+                TextField(
+                    L10n.Settings.GithubRunner.labels,
+                    text: $viewModel.labels,
+                    prompt: Text(L10n.Settings.GithubRunner.Labels.prompt)
+                )
                 .disabled(!viewModel.isSettingsEnabled)
-            Text(L10n.Settings.GithubRunner.Labels.footer)
-                .multilineTextAlignment(.center)
-                .frame(maxWidth: .infinity)
-                .foregroundColor(.secondary)
-
-            TextField(L10n.Settings.GithubRunner.group, text: $viewModel.group)
+            } footer: {
+                Text(L10n.Settings.GithubRunner.Labels.footer)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity)
+                    .foregroundColor(.secondary)
+            }
+            Section {
+                TextField(
+                    L10n.Settings.GithubRunner.group,
+                    text: $viewModel.group,
+                    prompt: Text(L10n.Settings.GithubRunner.Group.prompt)
+                )
                 .disabled(!viewModel.isSettingsEnabled)
-            Text(L10n.Settings.GithubRunner.Group.footer)
-                .multilineTextAlignment(.center)
-                .frame(maxWidth: .infinity)
-                .foregroundColor(.secondary)
+            }
         }
-        .padding()
+        .formStyle(.grouped)
     }
 }
