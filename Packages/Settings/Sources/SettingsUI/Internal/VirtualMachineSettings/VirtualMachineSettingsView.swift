@@ -12,30 +12,36 @@ struct VirtualMachineSettingsView: View {
 
     var body: some View {
         Form {
-            TartHomeFolderPicker(
-                folderURL: $settingsStore.tartHomeFolderURL,
-                isEnabled: viewModel.isSettingsEnabled
-            )
-            Spacer().frame(height: 20)
-            Divider()
-            Spacer().frame(height: 20)
-            VirtualMachinePicker(
-                selection: $settingsStore.virtualMachine,
-                virtualMachineNames: viewModel.virtualMachineNames,
-                isPickerEnabled: viewModel.isSettingsEnabled,
-                isRefreshing: viewModel.isRefreshingVirtualMachines
-            ) {
-                Task {
-                    await viewModel.refreshVirtualMachines()
+            Section {
+                TartHomeFolderPicker(
+                    folderURL: $settingsStore.tartHomeFolderURL,
+                    isEnabled: viewModel.isSettingsEnabled
+                )
+            } footer: {
+                Text(L10n.Settings.VirtualMachine.TartHomeFolder.footer)
+                    .foregroundColor(.secondary)
+            }
+            Section {
+                VirtualMachinePicker(
+                    selection: $settingsStore.virtualMachine,
+                    virtualMachineNames: viewModel.virtualMachineNames,
+                    isPickerEnabled: viewModel.isSettingsEnabled,
+                    isRefreshing: viewModel.isRefreshingVirtualMachines
+                ) {
+                    Task {
+                        await viewModel.refreshVirtualMachines()
+                    }
+                }
+                VirtualMachineCountPicker(selection: $settingsStore.numberOfVirtualMachines)
+                    .disabled(!viewModel.isSettingsEnabled)
+            }
+            Section {
+                Toggle(isOn: $settingsStore.startVirtualMachinesOnLaunch) {
+                    Text(L10n.Settings.VirtualMachine.startVirtualMachinesOnAppLaunch)
                 }
             }
-            VirtualMachineCountPicker(selection: $settingsStore.numberOfVirtualMachines)
-                .disabled(!viewModel.isSettingsEnabled)
-            Toggle(isOn: $settingsStore.startVirtualMachinesOnLaunch) {
-                Text(L10n.Settings.VirtualMachine.startVirtualMachinesOnAppLaunch)
-            }
         }
-        .padding()
+        .formStyle(.grouped)
         .task {
             await viewModel.refreshVirtualMachines()
         }

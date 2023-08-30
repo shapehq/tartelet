@@ -1,5 +1,5 @@
 "settings.general" = "General";
-"settings.general.application_ui_mode" = "Show In";
+"settings.general.application_ui_mode" = "Show App In";
 "settings.general.application_ui_mode.dock" = "Dock";
 "settings.general.application_ui_mode.menu_bar" = "Menu Bar";
 "settings.general.application_ui_mode.dock_and_menu_bar" = "Dock and Menu Bar";
@@ -13,7 +13,7 @@
 "settings.virtual_machine" = "Virtual Machine";
 "settings.virtual_machine.unknown" = "Unknown";
 "settings.virtual_machine.no_virtual_machines_available" = "Use the Tart CLI to create a virtual machine.";
-"settings.virtual_machine.count" = "Amount";
+"settings.virtual_machine.count" = "Number of Machines";
 "settings.virtual_machine.count.one" = "One";
 "settings.virtual_machine.count.two" = "Two";
 "settings.virtual_machine.start_virtual_machines_on_app_launch" = "Start Virtual Machines on App Launch";
@@ -40,3 +40,6 @@
 "settings.github_runner.labels.footer" = "Comma-separated list of labels.";
 "settings.github_runner.group" = "Group";
 "settings.github_runner.group.prompt" = "acme";
+
+"settings.runner_scope.organization" = "Organization";
+"settings.runner_scope.repository" = "Repository";

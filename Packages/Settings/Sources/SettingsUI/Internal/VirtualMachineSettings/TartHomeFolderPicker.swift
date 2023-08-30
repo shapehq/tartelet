@@ -13,33 +13,33 @@ struct TartHomeFolderPicker: View {
 
     var body: some View {
         LabeledContent {
-            VStack(alignment: .leading) {
-                HStack {
-                    TextField(
-                        L10n.Settings.VirtualMachine.tartHomeFolder,
-                        text: $folderPath,
-                        prompt: Text(L10n.Settings.VirtualMachine.TartHomeFolder.placeholder)
-                    )
-                    .labelsHidden()
-                    .disabled(true)
-                    Button {
-                        folderURL = nil
-                    } label: {
-                        Text(L10n.Settings.VirtualMachine.TartHomeFolder.resetToDefault)
-                    }.disabled(!isEnabled)
-                    Button {
-                        if let selectedFolderURL = presentOpenPanel() {
-                            Task {
-                                folderURL = selectedFolderURL
-                            }
+            HStack {
+                TextField(
+                    L10n.Settings.VirtualMachine.tartHomeFolder,
+                    text: $folderPath,
+                    prompt: Text(L10n.Settings.VirtualMachine.TartHomeFolder.placeholder)
+                )
+                .labelsHidden()
+                .fixedSize()
+                .disabled(true)
+                Button {
+                    if let selectedFolderURL = presentOpenPanel() {
+                        Task {
+                            folderURL = selectedFolderURL
                         }
-                    } label: {
-                        Text(L10n.Settings.VirtualMachine.TartHomeFolder.selectFolder)
-                    }.disabled(!isEnabled)
+                    }
+                } label: {
+                    Text(L10n.Settings.VirtualMachine.TartHomeFolder.selectFolder)
+                        .fixedSize()
                 }
-                Text(L10n.Settings.VirtualMachine.TartHomeFolder.footer)
-                    .multilineTextAlignment(.leading)
-                    .foregroundColor(.secondary)
+                .disabled(!isEnabled)
+                Button {
+                    folderURL = nil
+                } label: {
+                    Text(L10n.Settings.VirtualMachine.TartHomeFolder.resetToDefault)
+                        .fixedSize()
+                }
+                .disabled(!isEnabled)
             }
         } label: {
             Text(L10n.Settings.VirtualMachine.tartHomeFolder)

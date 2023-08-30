@@ -14,14 +14,13 @@ struct GeneralSettingsView: View {
 
     var body: some View {
         Form {
-            Spacer()
             Picker(L10n.Settings.General.applicationUiMode, selection: $settingsStore.applicationUIMode) {
                 ForEach(ApplicationUIMode.allCases) { mode in
                     Text(mode.title)
                 }
             }
-            Spacer()
         }
+        .formStyle(.grouped)
         .overlay(alignment: .bottomTrailing) {
             HStack {
                 ProgressView()

@@ -1,3 +1,4 @@
+import GitHubService
 import SettingsStore
 import SwiftUI
 
@@ -14,8 +15,8 @@ struct GitHubSettingsView: View {
         Form {
             Section {
                 Picker(L10n.Settings.Github.runnerScope, selection: $viewModel.runnerScope) {
-                    ForEach(RunnerScope.allCases, id: \.self) { scope in
-                        Text(scope.rawValue.capitalized)
+                    ForEach(GitHubRunnerScope.allCases, id: \.self) { scope in
+                        Text(scope.title)
                     }
                 }
                 .pickerStyle(.segmented)
@@ -65,6 +66,17 @@ struct GitHubSettingsView: View {
         .formStyle(.grouped)
         .task {
             await viewModel.loadCredentials()
+        }
+    }
+}
+
+private extension GitHubRunnerScope {
+    var title: String {
+        switch self {
+        case .organization:
+            L10n.Settings.RunnerScope.organization
+        case .repo:
+            L10n.Settings.RunnerScope.repository
         }
     }
 }

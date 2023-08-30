@@ -20,8 +20,8 @@ internal enum L10n {
     /// Virtual Machine
     internal static let virtualMachine = L10n.tr("Localizable", "settings.virtual_machine", fallback: "Virtual Machine")
     internal enum General {
-      /// Show In
-      internal static let applicationUiMode = L10n.tr("Localizable", "settings.general.application_ui_mode", fallback: "Show In")
+      /// Show App In
+      internal static let applicationUiMode = L10n.tr("Localizable", "settings.general.application_ui_mode", fallback: "Show App In")
       /// Export Logs...
       internal static let exportLogs = L10n.tr("Localizable", "settings.general.export_logs", fallback: "Export Logs...")
       internal enum ApplicationUiMode {
@@ -92,9 +92,15 @@ internal enum L10n {
         internal static let prompt = L10n.tr("Localizable", "settings.github_runner.labels.prompt", fallback: "comma,separated,list")
       }
     }
+    internal enum RunnerScope {
+      /// Organization
+      internal static let organization = L10n.tr("Localizable", "settings.runner_scope.organization", fallback: "Organization")
+      /// Repository
+      internal static let repository = L10n.tr("Localizable", "settings.runner_scope.repository", fallback: "Repository")
+    }
     internal enum VirtualMachine {
-      /// Amount
-      internal static let count = L10n.tr("Localizable", "settings.virtual_machine.count", fallback: "Amount")
+      /// Number of Machines
+      internal static let count = L10n.tr("Localizable", "settings.virtual_machine.count", fallback: "Number of Machines")
       /// Use the Tart CLI to create a virtual machine.
       internal static let noVirtualMachinesAvailable = L10n.tr("Localizable", "settings.virtual_machine.no_virtual_machines_available", fallback: "Use the Tart CLI to create a virtual machine.")
       /// Start Virtual Machines on App Launch

@@ -21,8 +21,6 @@ struct GitHubRunnerSettingsView: View {
                 .disabled(!viewModel.isSettingsEnabled)
             } footer: {
                 Text(L10n.Settings.GithubRunner.Labels.footer)
-                    .multilineTextAlignment(.center)
-                    .frame(maxWidth: .infinity)
                     .foregroundColor(.secondary)
             }
             Section {

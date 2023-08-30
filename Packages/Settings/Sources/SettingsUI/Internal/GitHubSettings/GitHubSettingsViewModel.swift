@@ -89,8 +89,6 @@ final class GitHubSettingsViewModel: ObservableObject {
     }
 }
 
-typealias RunnerScope = GitHubRunnerScope
-
 private extension Publisher where Output == String {
     func nilIfEmpty() -> AnyPublisher<String?, Failure> {
         map { !$0.isEmpty ? $0 : nil }.eraseToAnyPublisher()
