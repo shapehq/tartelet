@@ -20,9 +20,9 @@
 
 "settings.github" = "GitHub";
 "settings.github.organization_name" = "Organization Name";
-"settings.github.runner_scope" = "Runner scope";
-"settings.github.owner_name" = "Owner name";
-"settings.github.repository_name" = "Repository name";
+"settings.github.runner_scope" = "Runner Scope";
+"settings.github.owner_name" = "Owner Name";
+"settings.github.repository_name" = "Repository Name";
 "settings.github.app_id" = "App ID";
 "settings.github.private_key" = "Private Key (PEM)";
 "settings.github.private_key.select_file" = "Select File";
