@@ -11,8 +11,7 @@ public final class VirtualMachineFleetLive: VirtualMachineFleet {
 
     private let logger = Logger(category: "VirtualMachineFleetLive")
     private let virtualMachineFactory: VirtualMachineFactory
-    private var activeTasks: [Task<(), Never>] = []
-    private var activeMachineNames: Set<String> = []
+    private var activeTasks: [String: Task<(), Never>] = [:]
     private let _isStarted = CurrentValueSubject<Bool, Never>(false)
     private let _isStopping = CurrentValueSubject<Bool, Never>(false)
 
@@ -37,10 +36,10 @@ public final class VirtualMachineFleetLive: VirtualMachineFleet {
     public func stopImmediately() {
         _isStarted.value = false
         _isStopping.value = false
-        for task in activeTasks {
+        for (_, task) in activeTasks {
             task.cancel()
         }
-        activeTasks = []
+        activeTasks = [:]
     }
 
     public func stop() {
@@ -51,10 +50,12 @@ public final class VirtualMachineFleetLive: VirtualMachineFleet {
 private extension VirtualMachineFleetLive {
     private func startSequentiallyRunningVirtualMachines(named name: String) {
         let task = Task {
-            while !Task.isCancelled && !_isStopping.value {
+            while !Task.isCancelled {
                 do {
-                    activeMachineNames.insert(name)
                     try await runVirtualMachine(named: name)
+                    if _isStopping.value {
+                        activeTasks[name]?.cancel()
+                    }
                 } catch {
                     // Ignore the error and try again until the task is cancelled.
                     // The error should have been logged using OSLog so we know what is going on in case we need to debug.
@@ -63,12 +64,12 @@ private extension VirtualMachineFleetLive {
                 }
             }
             logger.info("Task running virtual machine named \(name, privacy: .public) was cancelled.")
-            activeMachineNames.remove(name)
-            if activeMachineNames.isEmpty {
+            activeTasks.removeValue(forKey: name)
+            if activeTasks.isEmpty {
                 stopImmediately()
             }
         }
-        activeTasks.append(task)
+        activeTasks[name] = task
     }
 
     private func runVirtualMachine(named name: String) async throws {
