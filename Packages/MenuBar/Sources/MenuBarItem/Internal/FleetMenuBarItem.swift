@@ -13,19 +13,25 @@ struct FleetMenuBarItem: View {
     let onSelect: (Action) -> Void
 
     var body: some View {
-        if isFleetStarted {
+        if isStoppingFleet {
+            Button {} label: {
+                HStack {
+                    Image(systemName: "stop.fill")
+                    Text(L10n.MenuBarItem.VirtualMachines.stopping)
+                }
+            }.disabled(true)
+            Button {} label: {
+                Text(L10n.MenuBarItem.VirtualMachines.stoppingInfo)
+            }.disabled(true)
+        } else if isFleetStarted {
             Button {
                 onSelect(.stop)
             } label: {
                 HStack {
                     Image(systemName: "stop.fill")
-                    if isStoppingFleet {
-                        Text(L10n.MenuBarItem.VirtualMachines.stopping)
-                    } else {
-                        Text(L10n.MenuBarItem.VirtualMachines.stop)
-                    }
+                    Text(L10n.MenuBarItem.VirtualMachines.stop)
                 }
-            }.disabled(isStoppingFleet)
+            }
         } else if hasSelectedVirtualMachine {
             Button {
                 onSelect(.start)
