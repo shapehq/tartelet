@@ -1,23 +1,30 @@
-import SettingsStore
 import SwiftUI
 
 struct VirtualMachinesMenuContent: View {
     @StateObject private var viewModel: VirtualMachinesMenuContentViewModel
-    @ObservedObject private var settingsStore: SettingsStore
 
     init(viewModel: VirtualMachinesMenuContentViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
-        _settingsStore = ObservedObject(wrappedValue: viewModel.settingsStore)
     }
 
     var body: some View {
         FleetMenuBarItem(
             hasSelectedVirtualMachine: viewModel.hasSelectedVirtualMachine,
             isFleetStarted: viewModel.isFleetStarted,
-            isEditorStarted: viewModel.isEditorStarted,
-            startsSingleVirtualMachine: settingsStore.numberOfVirtualMachines == 1,
-            onSelect: viewModel.presentFleet
-        )
+            isStoppingFleet: viewModel.isStoppingFleet,
+            isEditorStarted: viewModel.isEditorStarted
+        ) { action in
+            switch action {
+            case .start:
+                if viewModel.hasSelectedVirtualMachine {
+                    viewModel.startFleet()
+                } else {
+                    viewModel.presentSettings()
+                }
+            case .stop:
+                viewModel.stopFleet()
+            }
+        }
         Divider()
         EditorMenuBarItem(
             isEditorStarted: viewModel.isEditorStarted,

@@ -7,15 +7,19 @@ import VirtualMachineFleet
 
 public final class VirtualMachineFleetLive: VirtualMachineFleet {
     public let isStarted: AnyPublisher<Bool, Never>
+    public let isStopping: AnyPublisher<Bool, Never>
 
     private let logger = Logger(category: "VirtualMachineFleetLive")
     private let virtualMachineFactory: VirtualMachineFactory
     private var activeTasks: [Task<(), Never>] = []
+    private var activeMachineNames: Set<String> = []
     private let _isStarted = CurrentValueSubject<Bool, Never>(false)
+    private let _isStopping = CurrentValueSubject<Bool, Never>(false)
 
     public init(virtualMachineFactory: VirtualMachineFactory) {
         self.virtualMachineFactory = virtualMachineFactory
         self.isStarted = _isStarted.eraseToAnyPublisher()
+        self.isStopping = _isStopping.eraseToAnyPublisher()
     }
 
     public func start(numberOfMachines: Int) throws {
@@ -30,23 +34,26 @@ public final class VirtualMachineFleetLive: VirtualMachineFleet {
         }
     }
 
-    public func stop() {
-        guard _isStarted.value else {
-            return
-        }
+    public func stopImmediately() {
         _isStarted.value = false
+        _isStopping.value = false
         for task in activeTasks {
             task.cancel()
         }
         activeTasks = []
+    }
+
+    public func stop() {
+        _isStopping.value = true
     }
 }
 
 private extension VirtualMachineFleetLive {
     private func startSequentiallyRunningVirtualMachines(named name: String) {
         let task = Task {
-            while !Task.isCancelled {
+            while !Task.isCancelled && !_isStopping.value {
                 do {
+                    activeMachineNames.insert(name)
                     try await runVirtualMachine(named: name)
                 } catch {
                     // Ignore the error and try again until the task is cancelled.
@@ -56,6 +63,10 @@ private extension VirtualMachineFleetLive {
                 }
             }
             logger.info("Task running virtual machine named \(name, privacy: .public) was cancelled.")
+            activeMachineNames.remove(name)
+            if activeMachineNames.isEmpty {
+                stopImmediately()
+            }
         }
         activeTasks.append(task)
     }

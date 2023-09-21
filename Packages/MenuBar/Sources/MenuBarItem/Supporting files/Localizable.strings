@@ -1,7 +1,6 @@
-"menu_bar_item.virtual_machines.start.singularis" = "Start";
-"menu_bar_item.virtual_machines.start.pluralis" = "Start";
-"menu_bar_item.virtual_machines.stop.singularis" = "Stop";
-"menu_bar_item.virtual_machines.stop.pluralis" = "Stop";
+"menu_bar_item.virtual_machines.start" = "Start";
+"menu_bar_item.virtual_machines.stop" = "Stop";
+"menu_bar_item.virtual_machines.stopping" = "Stopping...";
 "menu_bar_item.virtual_machines.unavailable" = "Select Virtual Machine...";
 "menu_bar_item.editor.edit_virtual_machine.start" = "Edit Virtual Machine";
 "menu_bar_item.editor.edit_virtual_machine.editing" = "Editing...";
