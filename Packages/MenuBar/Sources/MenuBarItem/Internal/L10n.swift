@@ -36,20 +36,16 @@ internal enum L10n {
       }
     }
     internal enum VirtualMachines {
+      /// Start
+      internal static let start = L10n.tr("Localizable", "menu_bar_item.virtual_machines.start", fallback: "Start")
+      /// Stop
+      internal static let stop = L10n.tr("Localizable", "menu_bar_item.virtual_machines.stop", fallback: "Stop")
+      /// Stopping...
+      internal static let stopping = L10n.tr("Localizable", "menu_bar_item.virtual_machines.stopping", fallback: "Stopping...")
+      /// Stops when virtual machines have terminated.
+      internal static let stoppingInfo = L10n.tr("Localizable", "menu_bar_item.virtual_machines.stopping_info", fallback: "Stops when virtual machines have terminated.")
       /// Select Virtual Machine...
       internal static let unavailable = L10n.tr("Localizable", "menu_bar_item.virtual_machines.unavailable", fallback: "Select Virtual Machine...")
-      internal enum Start {
-        /// Start
-        internal static let pluralis = L10n.tr("Localizable", "menu_bar_item.virtual_machines.start.pluralis", fallback: "Start")
-        /// Start
-        internal static let singularis = L10n.tr("Localizable", "menu_bar_item.virtual_machines.start.singularis", fallback: "Start")
-      }
-      internal enum Stop {
-        /// Stop
-        internal static let pluralis = L10n.tr("Localizable", "menu_bar_item.virtual_machines.stop.pluralis", fallback: "Stop")
-        /// Stop
-        internal static let singularis = L10n.tr("Localizable", "menu_bar_item.virtual_machines.stop.singularis", fallback: "Stop")
-      }
     }
   }
 }

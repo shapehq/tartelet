@@ -10,6 +10,7 @@ final class VirtualMachinesMenuContentViewModel: ObservableObject {
     let settingsStore: SettingsStore
     @Published private(set) var hasSelectedVirtualMachine: Bool
     @Published private(set) var isFleetStarted = false
+    @Published private(set) var isStoppingFleet = false
     @Published private(set) var isEditorStarted = false
     var isEditorMenuBarItemEnabled: Bool {
         return !isFleetStarted && !isEditorStarted && hasSelectedVirtualMachine
@@ -35,18 +36,32 @@ final class VirtualMachinesMenuContentViewModel: ObservableObject {
         self.settingsPresenter = settingsPresenter
         self.hasSelectedVirtualMachine = settingsStore.virtualMachine != .unknown
         settingsStore.onChange.map { $0.virtualMachine != .unknown }.assign(to: \.hasSelectedVirtualMachine, on: self).store(in: &cancellables)
-        fleet.isStarted.assign(to: \.isFleetStarted, on: self).store(in: &cancellables)
+        fleet.isStarted.receive(on: DispatchQueue.main).assign(to: \.isFleetStarted, on: self).store(in: &cancellables)
+        fleet.isStopping.receive(on: DispatchQueue.main).assign(to: \.isStoppingFleet, on: self).store(in: &cancellables)
         editorService.isStarted.assign(to: \.isEditorStarted, on: self).store(in: &cancellables)
     }
 
-    func presentFleet() {
-        if isFleetStarted {
-            stopFleet()
-        } else if hasSelectedVirtualMachine {
-            startFleet()
-        } else {
-            settingsPresenter.presentSettings()
+    func startFleet() {
+        guard !isFleetStarted && hasSelectedVirtualMachine else {
+            return
         }
+        do {
+            try fleet.start(numberOfMachines: settingsStore.numberOfVirtualMachines)
+        } catch {
+            #if DEBUG
+            print(error)
+            #endif
+        }
+    }
+
+    func stopFleet() {
+        if isFleetStarted {
+            fleet.stop()
+        }
+    }
+
+    func presentSettings() {
+        settingsPresenter.presentSettings()
     }
 
     func startEditor() {
@@ -61,27 +76,6 @@ final class VirtualMachinesMenuContentViewModel: ObservableObject {
                 try await editorResourcesService.createResourcesIfNeeded()
                 try editorResourcesService.openDirectory()
             } catch {}
-        }
-    }
-}
-
-private extension VirtualMachinesMenuContentViewModel {
-    private func startFleet() {
-        guard !isFleetStarted && hasSelectedVirtualMachine else {
-            return
-        }
-        do {
-            try fleet.start(numberOfMachines: settingsStore.numberOfVirtualMachines)
-        } catch {
-            #if DEBUG
-            print(error)
-            #endif
-        }
-    }
-
-    private func stopFleet() {
-        if isFleetStarted {
-            fleet.stop()
         }
     }
 }

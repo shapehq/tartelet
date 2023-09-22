@@ -1,42 +1,49 @@
 import SwiftUI
 
 struct FleetMenuBarItem: View {
+    enum Action {
+        case start
+        case stop
+    }
+
     let hasSelectedVirtualMachine: Bool
     let isFleetStarted: Bool
+    let isStoppingFleet: Bool
     let isEditorStarted: Bool
-    let startsSingleVirtualMachine: Bool
-    let onSelect: () -> Void
+    let onSelect: (Action) -> Void
 
     var body: some View {
-        if isFleetStarted {
+        if isStoppingFleet {
+            Button {} label: {
+                HStack {
+                    Image(systemName: "stop.fill")
+                    Text(L10n.MenuBarItem.VirtualMachines.stopping)
+                }
+            }.disabled(true)
+            Button {} label: {
+                Text(L10n.MenuBarItem.VirtualMachines.stoppingInfo)
+            }.disabled(true)
+        } else if isFleetStarted {
             Button {
-                onSelect()
+                onSelect(.stop)
             } label: {
                 HStack {
                     Image(systemName: "stop.fill")
-                    if startsSingleVirtualMachine {
-                        Text(L10n.MenuBarItem.VirtualMachines.Stop.singularis)
-                    } else {
-                        Text(L10n.MenuBarItem.VirtualMachines.Stop.pluralis)
-                    }
+                    Text(L10n.MenuBarItem.VirtualMachines.stop)
                 }
             }
         } else if hasSelectedVirtualMachine {
             Button {
-                onSelect()
+                onSelect(.start)
             } label: {
                 HStack {
                     Image(systemName: "play.fill")
-                    if startsSingleVirtualMachine {
-                        Text(L10n.MenuBarItem.VirtualMachines.Start.singularis)
-                    } else {
-                        Text(L10n.MenuBarItem.VirtualMachines.Start.pluralis)
-                    }
+                    Text(L10n.MenuBarItem.VirtualMachines.start)
                 }
             }.disabled(isEditorStarted)
         } else {
             Button {
-                onSelect()
+                onSelect(.start)
             } label: {
                 HStack {
                     Image(systemName: "desktopcomputer")
