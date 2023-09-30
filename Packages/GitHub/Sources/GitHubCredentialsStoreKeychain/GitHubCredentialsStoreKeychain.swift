@@ -5,6 +5,7 @@ import RSAPrivateKey
 
 public final actor GitHubCredentialsStoreKeychain: GitHubCredentialsStore {
     private enum PasswordAccount {
+        static let selfHostedURL = "github.credentials.selfHostedURL"
         static let organizationName = "github.credentials.organizationName"
         static let repositoryName = "github.credentials.repositoryName"
         static let ownerName = "github.credentials.ownerName"
@@ -15,6 +16,12 @@ public final actor GitHubCredentialsStoreKeychain: GitHubCredentialsStore {
         static let privateKey = "github.credentials.privateKey"
     }
 
+    public var selfHostedURL: URL? {
+        get async {
+            return await keychain.password(forAccount: PasswordAccount.selfHostedURL, belongingToService: serviceName)
+                .flatMap(URL.init(string:))
+        }
+    }
     public var organizationName: String? {
         get async {
             return await keychain.password(forAccount: PasswordAccount.organizationName, belongingToService: serviceName)
@@ -47,6 +54,14 @@ public final actor GitHubCredentialsStoreKeychain: GitHubCredentialsStore {
     public init(keychain: Keychain, serviceName: String) {
         self.keychain = keychain
         self.serviceName = serviceName
+    }
+
+    public func setSelfHostedURL(_ selfHostedURL: URL?) async {
+        if let selfHostedURL {
+            _ = await keychain.setPassword(selfHostedURL.absoluteString, forAccount: PasswordAccount.selfHostedURL, belongingToService: serviceName)
+        } else {
+            await keychain.removePassword(forAccount: PasswordAccount.selfHostedURL, belongingToService: serviceName)
+        }
     }
 
     public func setOrganizationName(_ organizationName: String?) async {

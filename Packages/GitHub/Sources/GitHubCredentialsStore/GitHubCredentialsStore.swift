@@ -1,6 +1,7 @@
 import Foundation
 
 public protocol GitHubCredentialsStore: AnyObject {
+    var selfHostedURL: URL? { get async }
     var organizationName: String? { get async }
     var repositoryName: String? { get async }
     var ownerName: String? { get async }
