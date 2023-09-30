@@ -34,7 +34,11 @@ private enum GitHubServiceLiveError: LocalizedError {
 }
 
 public final class GitHubServiceLive: GitHubService {
-    private let baseURL = URL(string: "https://api.github.com")!
+    private var baseURL: URL {
+        get async {
+            await credentialsStore.selfHostedURL ?? .gitHub
+        }
+    }
     private let credentialsStore: GitHubCredentialsStore
     private let networkingService: NetworkingService
 
@@ -47,7 +51,7 @@ public final class GitHubServiceLive: GitHubService {
         let appInstallation = try await getAppInstallation(runnerScope: runnerScope)
         let installationID = String(appInstallation.id)
         let appID = String(appInstallation.appId)
-        let url = baseURL.appending(path: "/app/installations/\(installationID)/access_tokens")
+        let url = await baseURL.appending(path: "/app/installations/\(installationID)/access_tokens")
         guard let privateKey = await credentialsStore.privateKey else {
             throw GitHubServiceLiveError.privateKeyUnavailable
         }
@@ -86,7 +90,7 @@ public final class GitHubServiceLive: GitHubService {
 
 private extension GitHubServiceLive {
     private func getAppInstallation(runnerScope: GitHubRunnerScope) async throws -> GitHubAppInstallation {
-        let url = baseURL.appending(path: "/app/installations")
+        let url = await baseURL.appending(path: "/app/installations")
         let token = try await getAppJWTToken()
         let request = URLRequest(url: url).addingBearerToken(token)
         let appInstallations = try await networkingService.load([GitHubAppInstallation].self, from: request).map(\.value)
@@ -106,6 +110,10 @@ private extension GitHubServiceLive {
         }
         return try GitHubJWTTokenFactory.makeJWTToken(privateKey: privateKey, appID: appID)
     }
+}
+
+private extension URL {
+    static let gitHub = URL(string: "https://api.github.com")!
 }
 
 private extension URLRequest {
