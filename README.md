@@ -87,6 +87,9 @@ swiftgen
 
 The `swiftgen.yml` file at the root of the repository describes how constants are generated.
 
+### Configuring the project to run on your machine
+To run your project locally it is necessary to update the `Tartelet.entitlements` file, updating its `Keychain Access Groups` value to one you control. Then in the `CompositionRoot.swift` file you can update the `KeychainLive` definition with the same value. If you don't do this, the project will not be able to save preference values to the keychain.
+
 ### Linting the Codebase with SwiftLint
 
 We use [SwiftLint](https://github.com/realm/SwiftLint) to ensure uniformity in the code. Install SwiftLint using [Homebrew](https://brew.sh) by running the following command in your terminal.
