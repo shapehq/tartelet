@@ -1,7 +1,7 @@
 import Foundation
 import GitHubService
 
-public struct GitHubRunnerDownload: Codable, GitHubRunnerDownloadURL {
+public struct GitHubRunnerDownload: Codable {
     private enum CodingKeys: String, CodingKey {
         case os
         case architecture

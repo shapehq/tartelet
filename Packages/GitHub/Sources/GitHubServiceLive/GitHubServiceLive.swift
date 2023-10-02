@@ -1,3 +1,4 @@
+import FileSystem
 import Foundation
 import GitHubCredentialsStore
 import GitHubJWTTokenFactory
@@ -37,10 +38,16 @@ public final class GitHubServiceLive: GitHubService {
     private let baseURL = URL(string: "https://api.github.com")!
     private let credentialsStore: GitHubCredentialsStore
     private let networkingService: NetworkingService
+    private let fileSystem: FileSystem
 
-    public init(credentialsStore: GitHubCredentialsStore, networkingService: NetworkingService) {
+    public init(
+        credentialsStore: GitHubCredentialsStore,
+        networkingService: NetworkingService,
+        fileSystem: FileSystem
+    ) {
         self.credentialsStore = credentialsStore
         self.networkingService = networkingService
+        self.fileSystem = fileSystem
     }
 
     public func getAppAccessToken(runnerScope: GitHubRunnerScope) async throws -> GitHubAppAccessToken {
@@ -59,21 +66,6 @@ public final class GitHubServiceLive: GitHubService {
         }
     }
 
-    public func getRunnerDownloadURL(
-        with appAccessToken: GitHubAppAccessToken,
-        runnerScope: GitHubRunnerScope
-    ) async throws -> GitHubRunnerDownloadURL {
-        let url = try await baseURL.appending(path: runnerScope.runnerDownloadPath(using: credentialsStore))
-        let request = URLRequest(url: url).addingBearerToken(appAccessToken.rawValue)
-        let downloads = try await networkingService.load([GitHubRunnerDownload].self, from: request).map(\.value)
-        let os = "osx"
-        let architecture = "arm64"
-        guard let download = downloads.first(where: { $0.os == os && $0.architecture == architecture }) else {
-            throw GitHubServiceLiveError.downloadNotFound(os: os, architecture: architecture)
-        }
-        return download
-    }
-
     public func getRunnerRegistrationToken(
       with appAccessToken: GitHubAppAccessToken,
       runnerScope: GitHubRunnerScope
@@ -86,8 +78,21 @@ public final class GitHubServiceLive: GitHubService {
         }
     }
 
-    public func downloadRunner(_ runner: GitHubRunnerDownloadURL) async throws -> Data {
-        try await networkingService.data(from: URLRequest(url: runner.downloadURL)).map(\.value)
+    public func downloadRunner(
+        with appAccessToken: GitHubAppAccessToken,
+        runnerScope: GitHubRunnerScope,
+        toDirectory cacheDirectoryURL: URL
+    ) async throws -> URL {
+        let runnerDownload = try await getRunnerDownload(with: appAccessToken, runnerScope: runnerScope)
+
+        let runnerCacheFileURL = cacheDirectoryURL.appending(path: runnerDownload.filename)
+        if !fileSystem.itemExists(at: runnerCacheFileURL) {
+            try? fileSystem.removeItem(at: cacheDirectoryURL)
+            try fileSystem.createDirectoryIfNeeded(at: cacheDirectoryURL)
+            let runnerApplication = try await networkingService.data(from: URLRequest(url: runnerDownload.downloadURL)).map(\.value)
+            try runnerApplication.write(to: runnerCacheFileURL)
+        }
+        return runnerCacheFileURL
     }
 }
 
@@ -112,6 +117,21 @@ private extension GitHubServiceLive {
             throw GitHubServiceLiveError.appIDUnavailable
         }
         return try GitHubJWTTokenFactory.makeJWTToken(privateKey: privateKey, appID: appID)
+    }
+
+    private func getRunnerDownload(
+        with appAccessToken: GitHubAppAccessToken,
+        runnerScope: GitHubRunnerScope
+    ) async throws -> GitHubRunnerDownload {
+        let url = try await baseURL.appending(path: runnerScope.runnerDownloadPath(using: credentialsStore))
+        let request = URLRequest(url: url).addingBearerToken(appAccessToken.rawValue)
+        let downloads = try await networkingService.load([GitHubRunnerDownload].self, from: request).map(\.value)
+        let os = "osx"
+        let architecture = "arm64"
+        guard let download = downloads.first(where: { $0.os == os && $0.architecture == architecture }) else {
+            throw GitHubServiceLiveError.downloadNotFound(os: os, architecture: architecture)
+        }
+        return download
     }
 }
 

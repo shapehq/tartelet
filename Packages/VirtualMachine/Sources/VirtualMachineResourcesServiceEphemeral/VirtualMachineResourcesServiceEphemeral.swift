@@ -78,15 +78,11 @@ public struct VirtualMachineResourcesServiceEphemeral: VirtualMachineResourcesSe
         let runnerURL = try await getRunnerURL()
         let appAccessToken = try await gitHubService.getAppAccessToken(runnerScope: runnerScope)
         let runnerToken = try await gitHubService.getRunnerRegistrationToken(with: appAccessToken, runnerScope: runnerScope)
-        let runnerDownloadURL = try await gitHubService.getRunnerDownloadURL(with: appAccessToken, runnerScope: runnerScope)
-
-        let runnerCacheFileURL = runnerCacheDirectoryURL.appending(path: runnerDownloadURL.filename)
-        if !fileSystem.itemExists(at: runnerCacheFileURL) {
-            try? fileSystem.removeItem(at: runnerCacheDirectoryURL)
-            try fileSystem.createDirectoryIfNeeded(at: runnerCacheDirectoryURL)
-            let runnerApplication = try await gitHubService.downloadRunner(runnerDownloadURL)
-            try runnerApplication.write(to: runnerCacheFileURL)
-        }
+        let runnerCacheFileURL = try await gitHubService.downloadRunner(
+            with: appAccessToken,
+            runnerScope: runnerScope,
+            toDirectory: runnerCacheDirectoryURL
+        )
 
         try fileSystem.createDirectoryIfNeeded(at: directoryURL)
         if fileSystem.itemExists(at: directoryURL) {

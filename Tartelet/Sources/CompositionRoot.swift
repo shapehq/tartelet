@@ -127,7 +127,8 @@ private extension CompositionRoot {
     private static var gitHubService: GitHubService {
         GitHubServiceLive(
             credentialsStore: gitHubCredentialsStore,
-            networkingService: networkingService
+            networkingService: networkingService,
+            fileSystem: fileSystem
         )
     }
 
