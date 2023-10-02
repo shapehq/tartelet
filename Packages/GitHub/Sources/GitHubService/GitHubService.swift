@@ -6,5 +6,11 @@ public protocol GitHubService {
       with appAccessToken: GitHubAppAccessToken,
       runnerScope: GitHubRunnerScope
     ) async throws -> GitHubRunnerRegistrationToken
-    func getRunnerDownloadURL(with appAccessToken: GitHubAppAccessToken, runnerScope: GitHubRunnerScope) async throws -> URL
+    func getRunnerDownloadURL(with appAccessToken: GitHubAppAccessToken, runnerScope: GitHubRunnerScope) async throws -> GitHubRunnerDownloadURL
+    func downloadRunner(_ url: GitHubRunnerDownloadURL) async throws -> Data
+}
+
+public protocol GitHubRunnerDownloadURL {
+    var downloadURL: URL { get }
+    var filename: String { get }
 }

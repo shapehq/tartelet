@@ -59,7 +59,10 @@ public final class GitHubServiceLive: GitHubService {
         }
     }
 
-    public func getRunnerDownloadURL(with appAccessToken: GitHubAppAccessToken, runnerScope: GitHubRunnerScope) async throws -> URL {
+    public func getRunnerDownloadURL(
+        with appAccessToken: GitHubAppAccessToken,
+        runnerScope: GitHubRunnerScope
+    ) async throws -> GitHubRunnerDownloadURL {
         let url = try await baseURL.appending(path: runnerScope.runnerDownloadPath(using: credentialsStore))
         let request = URLRequest(url: url).addingBearerToken(appAccessToken.rawValue)
         let downloads = try await networkingService.load([GitHubRunnerDownload].self, from: request).map(\.value)
@@ -68,7 +71,7 @@ public final class GitHubServiceLive: GitHubService {
         guard let download = downloads.first(where: { $0.os == os && $0.architecture == architecture }) else {
             throw GitHubServiceLiveError.downloadNotFound(os: os, architecture: architecture)
         }
-        return download.downloadURL
+        return download
     }
 
     public func getRunnerRegistrationToken(
@@ -81,6 +84,10 @@ public final class GitHubServiceLive: GitHubService {
         return try await networkingService.load(IntermediateGitHubRunnerRegistrationToken.self, from: request).map { parameters in
             GitHubRunnerRegistrationToken(parameters.value.token)
         }
+    }
+
+    public func downloadRunner(_ runner: GitHubRunnerDownloadURL) async throws -> Data {
+        try await networkingService.data(from: URLRequest(url: runner.downloadURL)).map(\.value)
     }
 }
 

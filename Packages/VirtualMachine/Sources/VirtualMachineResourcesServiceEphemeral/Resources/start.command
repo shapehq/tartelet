@@ -7,7 +7,6 @@ WORK_DIRECTORY=_work
 RUNNER_NAME_FILE=./RUNNER_NAME
 RUNNER_URL_FILE=./RUNNER_URL
 RUNNER_TOKEN_FILE=./RUNNER_TOKEN
-RUNNER_DOWNLOAD_URL_FILE=./RUNNER_DOWNLOAD_URL
 RUNNER_LABELS_FILE=./RUNNER_LABELS
 RUNNER_GROUP_FILE=./RUNNER_GROUP
 
@@ -34,10 +33,6 @@ if [ ! -f $RUNNER_TOKEN_FILE ]; then
   echo "The RUNNER_TOKEN file was not found"
   exit 1
 fi
-if [ ! -f $RUNNER_DOWNLOAD_URL_FILE ]; then
-  echo "The RUNNER_DOWNLOAD_URL file was not found"
-  exit 1
-fi
 if [ ! -f $RUNNER_LABELS_FILE ]; then
   echo "The RUNNER_LABELS file was not found"
   exit 1
@@ -51,13 +46,13 @@ fi
 RUNNER_NAME=$(<./RUNNER_NAME)
 RUNNER_URL=$(<./RUNNER_URL)
 RUNNER_TOKEN=$(<./RUNNER_TOKEN)
-RUNNER_DOWNLOAD_URL=$(<./RUNNER_DOWNLOAD_URL)
 RUNNER_LABELS=$(<./RUNNER_LABELS)
 RUNNER_GROUP=$(<./RUNNER_GROUP)
 
 # Download the runner if the archive does not already exist
 if [ ! -f $ACTIONS_RUNNER_ARCHIVE ]; then
-  curl -o $ACTIONS_RUNNER_ARCHIVE -L $RUNNER_DOWNLOAD_URL
+  echo "The ACTIONS_RUNNER_ARCHIVE file was not found"
+  exit 1
 fi
 
 # Unarchive the runner
