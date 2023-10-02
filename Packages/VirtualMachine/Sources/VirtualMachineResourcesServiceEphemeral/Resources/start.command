@@ -41,6 +41,10 @@ if [ ! -f $RUNNER_GROUP_FILE ]; then
   echo "The RUNNER_GROUP file was not found"
   exit 1
 fi
+if [ ! -f $ACTIONS_RUNNER_ARCHIVE ]; then
+  echo "The ACTIONS_RUNNER_ARCHIVE file was not found"
+  exit 1
+fi
 
 # Read constants from files
 RUNNER_NAME=$(<./RUNNER_NAME)
@@ -48,12 +52,6 @@ RUNNER_URL=$(<./RUNNER_URL)
 RUNNER_TOKEN=$(<./RUNNER_TOKEN)
 RUNNER_LABELS=$(<./RUNNER_LABELS)
 RUNNER_GROUP=$(<./RUNNER_GROUP)
-
-# Download the runner if the archive does not already exist
-if [ ! -f $ACTIONS_RUNNER_ARCHIVE ]; then
-  echo "The ACTIONS_RUNNER_ARCHIVE file was not found"
-  exit 1
-fi
 
 # Unarchive the runner
 mkdir $ACTIONS_RUNNER_DIRECTORY
