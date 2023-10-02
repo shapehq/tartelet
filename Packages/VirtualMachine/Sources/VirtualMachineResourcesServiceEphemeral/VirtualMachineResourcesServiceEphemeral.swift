@@ -26,8 +26,8 @@ public struct VirtualMachineResourcesServiceEphemeral: VirtualMachineResourcesSe
         static let runnerToken = "RUNNER_TOKEN"
         static let runnerLabels = "RUNNER_LABELS"
         static let runnerGroup = "RUNNER_GROUP"
-		static let runnerApplication = "actions-runner.tar.gz"
-		static let runnerVersion = "RUNNER_VERSION"
+        static let runnerApplication = "actions-runner.tar.gz"
+        static let runnerVersion = "RUNNER_VERSION"
     }
 
     public var directoryURL: URL {
