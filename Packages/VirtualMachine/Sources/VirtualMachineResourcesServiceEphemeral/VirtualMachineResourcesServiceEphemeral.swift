@@ -91,11 +91,7 @@ public struct VirtualMachineResourcesServiceEphemeral: VirtualMachineResourcesSe
         try fileSystem.createDirectoryIfNeeded(at: directoryURL)
         if fileSystem.itemExists(at: directoryURL) {
             try resourcesCopier.copyResources(from: editorResourcesDirectoryURL, to: directoryURL)
-            let runnerApplicationFileURL = directoryURL.appending(path: ResourceFilename.runnerApplication)
-            if fileSystem.itemExists(at: runnerApplicationFileURL) {
-                try fileSystem.removeItem(at: runnerApplicationFileURL)
-            }
-            try fileSystem.copyItem(from: runnerCacheFileURL, to: runnerApplicationFileURL)
+            try resourcesCopier.copySingleResource(from: runnerCacheFileURL, to: directoryURL.appending(path: ResourceFilename.runnerApplication))
         }
         let runnerNameFileURL = directoryURL.appending(path: ResourceFilename.runnerName)
         let runnerURLFileURL = directoryURL.appending(path: ResourceFilename.runnerURL)
