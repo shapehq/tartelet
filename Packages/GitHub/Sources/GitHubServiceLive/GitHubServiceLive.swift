@@ -8,6 +8,7 @@ private enum GitHubServiceLiveError: LocalizedError {
     case organizationNameUnavailable
     case repositoryNameUnavailable
     case repositoryOwnerNameUnavailable
+    case enterpriseNameUnavailable
     case appIDUnavailable
     case privateKeyUnavailable
     case appIsNotInstalled
@@ -21,6 +22,8 @@ private enum GitHubServiceLiveError: LocalizedError {
             return "The repository name is not available"
         case .repositoryOwnerNameUnavailable:
             return "The repository owner name is not available"
+        case .enterpriseNameUnavailable:
+            return "The enterprise name is not available"
         case .appIDUnavailable:
             return "The app ID is not available"
         case .privateKeyUnavailable:
@@ -141,6 +144,11 @@ private extension GitHubRunnerScope {
             }
 
             return "/repos/\(ownerName)/\(repositoryName)/actions/runners/registration-token"
+        case .enterpriseServer:
+          guard let enterpriseName = await credentialsStore.enterpriseName else {
+              throw GitHubServiceLiveError.enterpriseNameUnavailable
+          }
+          return "/enterprises/\(enterpriseName)/actions/runners/registration-token"
         }
     }
 
@@ -160,6 +168,11 @@ private extension GitHubRunnerScope {
             }
 
             return "/repos/\(ownerName)/\(repositoryName)/actions/runners/downloads"
+        case .enterpriseServer:
+            guard let enterpriseName = await credentialsStore.enterpriseName else {
+                throw GitHubServiceLiveError.enterpriseNameUnavailable
+            }
+            return "/enterprises/\(enterpriseName)/actions/runners/downloads"
         }
     }
 
@@ -169,6 +182,8 @@ private extension GitHubRunnerScope {
         return await credentialsStore.organizationName
       case .repo:
         return await credentialsStore.ownerName
+      case .enterpriseServer:
+          return await credentialsStore.enterpriseName
       }
     }
 }

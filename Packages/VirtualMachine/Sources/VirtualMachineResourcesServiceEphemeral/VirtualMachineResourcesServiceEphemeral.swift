@@ -102,22 +102,25 @@ public struct VirtualMachineResourcesServiceEphemeral: VirtualMachineResourcesSe
 
 private extension VirtualMachineResourcesServiceEphemeral {
     private func getRunnerURL() async throws -> URL {
+        let baseURL = await gitHubCredentialsStore.selfHostedURL ?? .gitHub
         switch runnerScope {
         case .organization:
             let organizationName = try await getOrganizationName()
-            guard let runnerURL = URL(string: "https://github.com/" + organizationName) else {
-                throw VirtualMachineResourcesServiceEphemeralError.invalidRunnerURL
-            }
-            return runnerURL
+            return baseURL.appending(path: organizationName, directoryHint: .notDirectory)
         case .repo:
             guard
                 let ownerName = await gitHubCredentialsStore.ownerName,
-                let repositoryName = await gitHubCredentialsStore.repositoryName,
-                let runnerURL = URL(string: "https://github.com/\(ownerName)/\(repositoryName)")
+                let repositoryName = await gitHubCredentialsStore.repositoryName
             else {
                 throw VirtualMachineResourcesServiceEphemeralError.invalidRunnerURL
             }
-            return runnerURL
+            return baseURL.appending(path: "\(ownerName)/\(repositoryName)", directoryHint: .notDirectory)
+        case .enterpriseServer:
+            guard let enterpriseName = await gitHubCredentialsStore.enterpriseName else {
+                throw VirtualMachineResourcesServiceEphemeralError.invalidRunnerURL
+            }
+//            SEE https://docs.github.com/en/enterprise-server@3.10/rest/actions/self-hosted-runners?apiVersion=2022-11-28#create-a-registration-token-for-an-enterprise
+            return baseURL.appending(path: enterpriseName, directoryHint: .notDirectory)
         }
     }
 
@@ -128,4 +131,8 @@ private extension VirtualMachineResourcesServiceEphemeral {
             throw VirtualMachineResourcesServiceEphemeralError.organizationNameUnavailable
         }
     }
+}
+
+private extension URL {
+    static let gitHub = URL(string: "https://github.com/")!
 }

@@ -56,6 +56,13 @@ struct GitHubSettingsView: View {
                         prompt: Text(L10n.Settings.Github.RepositoryName.prompt)
                     )
                     .disabled(!viewModel.isSettingsEnabled)
+                case .enterpriseServer:
+                    TextField(
+                        "Enterprise name",
+                        text: $viewModel.enterpriseName,
+                        prompt: Text("Acme Enterprise")
+                    )
+                    .disabled(!viewModel.isSettingsEnabled)
                 }
             }
             Section {
@@ -92,6 +99,8 @@ private extension GitHubRunnerScope {
             L10n.Settings.RunnerScope.organization
         case .repo:
             L10n.Settings.RunnerScope.repository
+        case .enterpriseServer:
+            "Enterprise"
         }
     }
 }
