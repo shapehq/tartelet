@@ -7,6 +7,8 @@ import Tart
 import VirtualMachine
 import VirtualMachineFactory
 import VirtualMachineResourcesService
+import GitHubService
+import GitHubCredentialsStore
 
 enum EphemeralVirtualMachineFactoryError: LocalizedError {
     case sourceVirtualMachineNameUnavailable
@@ -23,6 +25,9 @@ struct EphemeralVirtualMachineFactory: VirtualMachineFactory {
     let tart: Tart
     let settingsStore: SettingsStore
     let resourcesServiceFactory: VirtualMachineResourcesServiceFactory
+    let gitHubService: GitHubService
+    let gitHubCredentialsStore: GitHubCredentialsStore
+    
     var preferredVirtualMachineName: String {
         get throws {
             guard case let .virtualMachine(vmName) = settingsStore.virtualMachine else {
@@ -42,12 +47,15 @@ struct EphemeralVirtualMachineFactory: VirtualMachineFactory {
         do {
             let resourcesService = resourcesServiceFactory.makeService(virtualMachineName: name)
             try await resourcesService.createResourcesIfNeeded()
+            let accessToken = try await gitHubService.getAppAccessToken(runnerScope: settingsStore.githubRunnerScope)
+            let runnerApplicationURL = try await gitHubService.getRunnerDownloadURL(with: accessToken, runnerScope: settingsStore.githubRunnerScope)
             // swiftlint:disable:next trailing_closure
             return EphemeralTartVirtualMachine(
                 tart: tart,
                 sourceVMName: sourceVMName,
                 destinationVMName: name,
                 resourcesDirectoryURL: resourcesService.directoryURL,
+                runnerApplicationURL: runnerApplicationURL,
                 onCleanup: {
                     do {
                         try resourcesService.removeResources()

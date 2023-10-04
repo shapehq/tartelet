@@ -95,7 +95,9 @@ private extension CompositionRoot {
         EphemeralVirtualMachineFactory(
             tart: tart,
             settingsStore: settingsStore,
-            resourcesServiceFactory: ephemeralVirtualMachineResourcesServiceFactory
+            resourcesServiceFactory: ephemeralVirtualMachineResourcesServiceFactory,
+            gitHubService: gitHubService,
+            gitHubCredentialsStore: gitHubCredentialsStore
         )
     }
 

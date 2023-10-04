@@ -17,6 +17,7 @@ public final class EphemeralTartVirtualMachine: VirtualMachine {
     private let sourceVMName: String
     private let destinationVMName: String
     private let resourcesDirectoryURL: URL
+    private let runnerApplicationURL: URL
     private let onCleanup: CleanupHandler
     private var runTask: Task<(), Error>?
     private let logger = Logger(category: "EphemeralTartVirtualMachine")
@@ -26,12 +27,14 @@ public final class EphemeralTartVirtualMachine: VirtualMachine {
         sourceVMName: String,
         destinationVMName: String,
         resourcesDirectoryURL: URL,
+        runnerApplicationURL: URL,
         onCleanup: @escaping CleanupHandler
     ) {
         self.tart = tart
         self.sourceVMName = sourceVMName
         self.destinationVMName = destinationVMName
         self.resourcesDirectoryURL = resourcesDirectoryURL
+        self.runnerApplicationURL = runnerApplicationURL
         self.onCleanup = onCleanup
     }
 
@@ -44,7 +47,7 @@ public final class EphemeralTartVirtualMachine: VirtualMachine {
         logger.info("Clone Tart image named \(sourceVMName, privacy: .public) to \(destinationVMName, privacy: .public)...")
         try await tart.clone(sourceName: sourceVMName, newName: destinationVMName)
         logger.info("Run Tart image named \(destinationVMName, privacy: .public)...")
-        try await tart.run(name: destinationVMName, mounting: [.resources(at: resourcesDirectoryURL)])
+        try await tart.run(name: destinationVMName, mounting: [.resources(at: resourcesDirectoryURL), .init(name: "ghar", directoryURL: runnerApplicationURL)])
         logger.info("Delete Tart image named \(destinationVMName, privacy: .public)...")
         try await tart.delete(name: destinationVMName)
         onCleanup()
