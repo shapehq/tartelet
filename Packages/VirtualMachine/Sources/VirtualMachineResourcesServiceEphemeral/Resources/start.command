@@ -59,7 +59,7 @@ if [ -f $POST_RUN_SCRIPT ]; then
 fi
 
 # Configure and run the runner
-cd $ACTIONS_RUNNER_DIRECTORY
+cd "$ACTIONS_RUNNER_DIRECTORY"
 ./config.sh \
   --url "${RUNNER_URL}" \
   --unattended \
