@@ -3,11 +3,19 @@ import Foundation
 public extension Tart {
     struct Directory {
         public let name: String
-        public let directoryURL: URL
+        private let url: URL
 
-        public init(name: String, directoryURL: URL) {
+        public init(name: String, url: URL) {
             self.name = name
-            self.directoryURL = directoryURL
+            self.url = url
+        }
+
+        public var pathOrURL: String {
+            if url.isFileURL {
+                url.path
+            } else {
+                url.absoluteString
+            }
         }
     }
 }

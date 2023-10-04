@@ -1,5 +1,7 @@
 import EphemeralTartVirtualMachine
 import Foundation
+import GitHubCredentialsStore
+import GitHubService
 import LogHelpers
 import OSLog
 import SettingsStore
@@ -7,8 +9,6 @@ import Tart
 import VirtualMachine
 import VirtualMachineFactory
 import VirtualMachineResourcesService
-import GitHubService
-import GitHubCredentialsStore
 
 enum EphemeralVirtualMachineFactoryError: LocalizedError {
     case sourceVirtualMachineNameUnavailable
@@ -27,7 +27,7 @@ struct EphemeralVirtualMachineFactory: VirtualMachineFactory {
     let resourcesServiceFactory: VirtualMachineResourcesServiceFactory
     let gitHubService: GitHubService
     let gitHubCredentialsStore: GitHubCredentialsStore
-    
+
     var preferredVirtualMachineName: String {
         get throws {
             guard case let .virtualMachine(vmName) = settingsStore.virtualMachine else {

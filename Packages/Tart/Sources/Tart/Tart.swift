@@ -1,13 +1,16 @@
+import Foundation
 import Shell
 
 public struct Tart {
     private let homeProvider: TartHomeProvider
     private let shell: Shell
     private var environment: [String: String]? {
-        guard let homeFolderURL = homeProvider.homeFolderURL else {
-            return nil
+        var env = [String: String]()
+        env["PATH"] = ProcessInfo.processInfo.environment["PATH"]
+        if let homeFolderURL = homeProvider.homeFolderURL {
+            env["TART_HOME"] = homeFolderURL.absoluteString
         }
-        return ["TART_HOME": homeFolderURL.absoluteString]
+        return env
     }
 
     public init(homeProvider: TartHomeProvider, shell: Shell) {
@@ -20,7 +23,7 @@ public struct Tart {
     }
 
     public func run(name: String, mounting directories: [Directory] = []) async throws {
-        let mountArgs = directories.map { "--dir=\($0.name):\($0.directoryURL.path)" }
+        let mountArgs = directories.map { "--dir=\($0.name):\($0.pathOrURL)" }
         let args = ["run"] + mountArgs + [name]
         try await executeCommand(withArguments: args)
     }

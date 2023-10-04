@@ -47,7 +47,7 @@ public final class EphemeralTartVirtualMachine: VirtualMachine {
         logger.info("Clone Tart image named \(sourceVMName, privacy: .public) to \(destinationVMName, privacy: .public)...")
         try await tart.clone(sourceName: sourceVMName, newName: destinationVMName)
         logger.info("Run Tart image named \(destinationVMName, privacy: .public)...")
-        try await tart.run(name: destinationVMName, mounting: [.resources(at: resourcesDirectoryURL), .init(name: "ghar", directoryURL: runnerApplicationURL)])
+        try await tart.run(name: destinationVMName, mounting: [.resources(at: resourcesDirectoryURL), .init(name: "ghar", url: runnerApplicationURL)])
         logger.info("Delete Tart image named \(destinationVMName, privacy: .public)...")
         try await tart.delete(name: destinationVMName)
         onCleanup()

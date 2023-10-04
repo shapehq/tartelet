@@ -1,13 +1,11 @@
 #!/bin/zsh
 PRE_RUN_SCRIPT="pre-run.sh"
 POST_RUN_SCRIPT="post-run.sh"
-ACTIONS_RUNNER_ARCHIVE=./actions-runner.tar.gz
-ACTIONS_RUNNER_DIRECTORY=~/actions-runner
+ACTIONS_RUNNER_DIRECTORY="/Volumes/My Shared Files/ghar"
 WORK_DIRECTORY=_work
 RUNNER_NAME_FILE=./RUNNER_NAME
 RUNNER_URL_FILE=./RUNNER_URL
 RUNNER_TOKEN_FILE=./RUNNER_TOKEN
-RUNNER_DOWNLOAD_URL_FILE=./RUNNER_DOWNLOAD_URL
 RUNNER_LABELS_FILE=./RUNNER_LABELS
 RUNNER_GROUP_FILE=./RUNNER_GROUP
 
@@ -18,7 +16,7 @@ function onexit {
 }
 trap onexit EXIT
 
-# Run the script from the Resources folder
+# Read the values from the Resources folder
 cd "/Volumes/My Shared Files/Resources"
 
 # Check if files with constants exist
@@ -34,10 +32,6 @@ if [ ! -f $RUNNER_TOKEN_FILE ]; then
   echo "The RUNNER_TOKEN file was not found"
   exit 1
 fi
-if [ ! -f $RUNNER_DOWNLOAD_URL_FILE ]; then
-  echo "The RUNNER_DOWNLOAD_URL file was not found"
-  exit 1
-fi
 if [ ! -f $RUNNER_LABELS_FILE ]; then
   echo "The RUNNER_LABELS file was not found"
   exit 1
@@ -51,18 +45,8 @@ fi
 RUNNER_NAME=$(<./RUNNER_NAME)
 RUNNER_URL=$(<./RUNNER_URL)
 RUNNER_TOKEN=$(<./RUNNER_TOKEN)
-RUNNER_DOWNLOAD_URL=$(<./RUNNER_DOWNLOAD_URL)
 RUNNER_LABELS=$(<./RUNNER_LABELS)
 RUNNER_GROUP=$(<./RUNNER_GROUP)
-
-# Download the runner if the archive does not already exist
-if [ ! -f $ACTIONS_RUNNER_ARCHIVE ]; then
-  curl -o $ACTIONS_RUNNER_ARCHIVE -L $RUNNER_DOWNLOAD_URL
-fi
-
-# Unarchive the runner
-mkdir $ACTIONS_RUNNER_DIRECTORY
-tar xzf $ACTIONS_RUNNER_ARCHIVE --directory $ACTIONS_RUNNER_DIRECTORY
 
 # Setup the pre- and post-job scripts if needed
 if [ -f $PRE_RUN_SCRIPT ]; then
