@@ -7,6 +7,7 @@ public protocol GitHubCredentialsStore: AnyObject {
     var ownerName: String? { get async }
     var appId: String? { get async }
     var privateKey: Data? { get async }
+    func setSelfHostedURL(_ selfHostedURL: URL?) async
     func setOrganizationName(_ organizationName: String?) async
     func setRepository(_ repositoryName: String?, withOwner ownerName: String?) async
     func setAppID(_ appID: String?) async

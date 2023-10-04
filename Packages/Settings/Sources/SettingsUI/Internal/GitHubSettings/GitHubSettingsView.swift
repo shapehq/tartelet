@@ -14,6 +14,21 @@ struct GitHubSettingsView: View {
     var body: some View {
         Form {
             Section {
+                Picker("Version", selection: $viewModel.version) {
+                    ForEach(GitHubServiceVersion.Kind.allCases, id: \.self) { scope in
+                        Text(scope.title)
+                    }
+                }
+
+                if viewModel.version == .enterprise {
+                    TextField(
+                        "Self hosted URL",
+                        text: $viewModel.selfHostedRaw,
+                        prompt: Text("Github Service raw value")
+                    )
+                    .disabled(!viewModel.isSettingsEnabled)
+                }
+
                 Picker(L10n.Settings.Github.runnerScope, selection: $viewModel.runnerScope) {
                     ForEach(GitHubRunnerScope.allCases, id: \.self) { scope in
                         Text(scope.title)
@@ -77,6 +92,17 @@ private extension GitHubRunnerScope {
             L10n.Settings.RunnerScope.organization
         case .repo:
             L10n.Settings.RunnerScope.repository
+        }
+    }
+}
+
+private extension GitHubServiceVersion.Kind {
+    var title: String {
+        switch self {
+        case .dotCom:
+            return "github.com"
+        case .enterprise:
+            return "github self hosted"
         }
     }
 }

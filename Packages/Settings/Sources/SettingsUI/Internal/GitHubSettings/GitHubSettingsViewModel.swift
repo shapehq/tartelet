@@ -13,6 +13,8 @@ final class GitHubSettingsViewModel: ObservableObject {
     @Published var ownerName: String = ""
     @Published var appId: String = ""
     @Published var privateKeyName = ""
+    @Published var version: GitHubServiceVersion.Kind
+    @Published var selfHostedRaw: String = ""
     @Published var runnerScope: GitHubRunnerScope
     @Published private(set) var isSettingsEnabled = true
 
@@ -29,6 +31,7 @@ final class GitHubSettingsViewModel: ObservableObject {
     init(settingsStore: SettingsStore, credentialsStore: GitHubCredentialsStore, isSettingsEnabled: AnyPublisher<Bool, Never>) {
         self.settingsStore = settingsStore
         self.credentialsStore = credentialsStore
+        self.version = settingsStore.githubServiceVersion
         self.runnerScope = settingsStore.githubRunnerScope
         isSettingsEnabled.assign(to: \.isSettingsEnabled, on: self).store(in: &cancellables)
         $appId.debounce(for: 0.5, scheduler: DispatchQueue.main).nilIfEmpty().dropFirst().sink { [weak self] appId in
@@ -36,6 +39,26 @@ final class GitHubSettingsViewModel: ObservableObject {
                 await self?.credentialsStore.setAppID(appId)
             }
         }.store(in: &cancellables)
+
+        $version
+            .combineLatest($selfHostedRaw)
+            .debounce(for: 0.5, scheduler: DispatchQueue.main)
+            .dropFirst()
+            .sink { [weak self] version, value in
+                self?.settingsStore.githubServiceVersion = version
+                switch version {
+                case .dotCom:
+                    Task {
+                        await self?.credentialsStore.setSelfHostedURL(nil)
+                    }
+                case .enterprise:
+                    Task {
+                        await self?.credentialsStore.setSelfHostedURL(URL(string: value))
+                    }
+                }
+            }
+            .store(in: &cancellables)
+
         $runnerScope
             .combineLatest(
                 $organizationName.nilIfEmpty(),
@@ -80,6 +103,13 @@ final class GitHubSettingsViewModel: ObservableObject {
     }
 
     func loadCredentials() async {
+        if let selfHostedURL = await credentialsStore.selfHostedURL {
+            selfHostedRaw = selfHostedURL.absoluteString
+            version = .enterprise
+        } else {
+            selfHostedRaw = ""
+            version = .dotCom
+        }
         organizationName = await credentialsStore.organizationName ?? ""
         repositoryName = await credentialsStore.repositoryName ?? ""
         ownerName = await credentialsStore.ownerName ?? ""
