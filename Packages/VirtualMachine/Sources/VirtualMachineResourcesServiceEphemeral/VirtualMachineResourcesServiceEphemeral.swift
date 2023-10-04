@@ -24,7 +24,6 @@ public struct VirtualMachineResourcesServiceEphemeral: VirtualMachineResourcesSe
         static let runnerName = "RUNNER_NAME"
         static let runnerURL = "RUNNER_URL"
         static let runnerToken = "RUNNER_TOKEN"
-        static let runnerDownloadURL = "RUNNER_DOWNLOAD_URL"
         static let runnerLabels = "RUNNER_LABELS"
         static let runnerGroup = "RUNNER_GROUP"
     }
@@ -71,7 +70,6 @@ public struct VirtualMachineResourcesServiceEphemeral: VirtualMachineResourcesSe
         let runnerURL = try await getRunnerURL()
         let appAccessToken = try await gitHubService.getAppAccessToken(runnerScope: runnerScope)
         let runnerToken = try await gitHubService.getRunnerRegistrationToken(with: appAccessToken, runnerScope: runnerScope)
-        let runnerDownloadURL = try await gitHubService.getRunnerDownloadURL(with: appAccessToken, runnerScope: runnerScope)
         try fileSystem.createDirectoryIfNeeded(at: directoryURL)
         if fileSystem.itemExists(at: directoryURL) {
             try resourcesCopier.copyResources(from: editorResourcesDirectoryURL, to: directoryURL)
@@ -79,13 +77,11 @@ public struct VirtualMachineResourcesServiceEphemeral: VirtualMachineResourcesSe
         let runnerNameFileURL = directoryURL.appending(path: ResourceFilename.runnerName)
         let runnerURLFileURL = directoryURL.appending(path: ResourceFilename.runnerURL)
         let runnerTokenFileURL = directoryURL.appending(path: ResourceFilename.runnerToken)
-        let runnerDownloadURLFileURL = directoryURL.appending(path: ResourceFilename.runnerDownloadURL)
         let runnerLabelsFileURL = directoryURL.appending(path: ResourceFilename.runnerLabels)
         let runnerGroupFileURL = directoryURL.appending(path: ResourceFilename.runnerGroup)
         try virtualMachineName.write(to: runnerNameFileURL, atomically: true, encoding: .utf8)
         try runnerURL.absoluteString.write(to: runnerURLFileURL, atomically: true, encoding: .utf8)
         try runnerToken.rawValue.write(to: runnerTokenFileURL, atomically: true, encoding: .utf8)
-        try runnerDownloadURL.absoluteString.write(to: runnerDownloadURLFileURL, atomically: true, encoding: .utf8)
         try runnerLabels.write(to: runnerLabelsFileURL, atomically: true, encoding: .utf8)
         try runnerGroup.write(to: runnerGroupFileURL, atomically: true, encoding: .utf8)
         if let resourcesDirectoryURL = Bundle.module.resourceURL?.appending(path: "Resources") {
