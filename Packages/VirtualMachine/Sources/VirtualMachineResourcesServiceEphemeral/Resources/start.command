@@ -55,6 +55,9 @@ RUNNER_DOWNLOAD_URL=$(<./RUNNER_DOWNLOAD_URL)
 RUNNER_LABELS=$(<./RUNNER_LABELS)
 RUNNER_GROUP=$(<./RUNNER_GROUP)
 
+# Wait until we can connect to GitHub
+until ping -c1 github.com &>/dev/null; do :; done
+
 # Download the runner if the archive does not already exist
 if [ ! -f $ACTIONS_RUNNER_ARCHIVE ]; then
   curl -o $ACTIONS_RUNNER_ARCHIVE -L $RUNNER_DOWNLOAD_URL
