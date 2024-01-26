@@ -3,3 +3,5 @@
 .swiftpm
 xcuserdata
 Tartelet.xcodeproj
+build/
+Package.resolved

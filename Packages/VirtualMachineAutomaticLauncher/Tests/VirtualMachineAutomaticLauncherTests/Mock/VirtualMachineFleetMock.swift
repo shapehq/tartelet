@@ -15,6 +15,7 @@ enum VirtualMachineFleetMockError: LocalizedError {
 
 final class VirtualMachineFleetMock: VirtualMachineFleet {
     let isStarted: AnyPublisher<Bool, Never> = CurrentValueSubject(false).eraseToAnyPublisher()
+    var isStopping: AnyPublisher<Bool, Never> = CurrentValueSubject(false).eraseToAnyPublisher()
     private(set) var didStartVirtualMachines = false
 
     private let shouldFailStarting: Bool
@@ -31,5 +32,6 @@ final class VirtualMachineFleetMock: VirtualMachineFleet {
         }
     }
 
+    func stopImmediately() {}
     func stop() {}
 }
