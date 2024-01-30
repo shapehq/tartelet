@@ -8,6 +8,7 @@ private enum GitHubServiceLiveError: LocalizedError {
     case organizationNameUnavailable
     case repositoryNameUnavailable
     case repositoryOwnerNameUnavailable
+    case enterpriseNameUnavailable
     case appIDUnavailable
     case privateKeyUnavailable
     case appIsNotInstalled
@@ -21,6 +22,8 @@ private enum GitHubServiceLiveError: LocalizedError {
             return "The repository name is not available"
         case .repositoryOwnerNameUnavailable:
             return "The repository owner name is not available"
+        case .enterpriseNameUnavailable:
+            return "The enterprise name is not available"
         case .appIDUnavailable:
             return "The app ID is not available"
         case .privateKeyUnavailable:
@@ -34,7 +37,11 @@ private enum GitHubServiceLiveError: LocalizedError {
 }
 
 public final class GitHubServiceLive: GitHubService {
-    private let baseURL = URL(string: "https://api.github.com")!
+    private var baseURL: URL {
+        get async {
+            await credentialsStore.selfHostedURL ?? .gitHub
+        }
+    }
     private let credentialsStore: GitHubCredentialsStore
     private let networkingService: NetworkingService
 
@@ -47,7 +54,7 @@ public final class GitHubServiceLive: GitHubService {
         let appInstallation = try await getAppInstallation(runnerScope: runnerScope)
         let installationID = String(appInstallation.id)
         let appID = String(appInstallation.appId)
-        let url = baseURL.appending(path: "/app/installations/\(installationID)/access_tokens")
+        let url = await baseURL.appending(path: "/app/installations/\(installationID)/access_tokens")
         guard let privateKey = await credentialsStore.privateKey else {
             throw GitHubServiceLiveError.privateKeyUnavailable
         }
@@ -86,7 +93,7 @@ public final class GitHubServiceLive: GitHubService {
 
 private extension GitHubServiceLive {
     private func getAppInstallation(runnerScope: GitHubRunnerScope) async throws -> GitHubAppInstallation {
-        let url = baseURL.appending(path: "/app/installations")
+        let url = await baseURL.appending(path: "/app/installations")
         let token = try await getAppJWTToken()
         let request = URLRequest(url: url).addingBearerToken(token)
         let appInstallations = try await networkingService.load([GitHubAppInstallation].self, from: request).map(\.value)
@@ -106,6 +113,10 @@ private extension GitHubServiceLive {
         }
         return try GitHubJWTTokenFactory.makeJWTToken(privateKey: privateKey, appID: appID)
     }
+}
+
+private extension URL {
+    static let gitHub = URL(string: "https://api.github.com")!
 }
 
 private extension URLRequest {
@@ -133,6 +144,11 @@ private extension GitHubRunnerScope {
             }
 
             return "/repos/\(ownerName)/\(repositoryName)/actions/runners/registration-token"
+        case .enterpriseServer:
+          guard let enterpriseName = await credentialsStore.enterpriseName else {
+              throw GitHubServiceLiveError.enterpriseNameUnavailable
+          }
+          return "/enterprises/\(enterpriseName)/actions/runners/registration-token"
         }
     }
 
@@ -152,6 +168,11 @@ private extension GitHubRunnerScope {
             }
 
             return "/repos/\(ownerName)/\(repositoryName)/actions/runners/downloads"
+        case .enterpriseServer:
+            guard let enterpriseName = await credentialsStore.enterpriseName else {
+                throw GitHubServiceLiveError.enterpriseNameUnavailable
+            }
+            return "/enterprises/\(enterpriseName)/actions/runners/downloads"
         }
     }
 
@@ -161,6 +182,8 @@ private extension GitHubRunnerScope {
         return await credentialsStore.organizationName
       case .repo:
         return await credentialsStore.ownerName
+      case .enterpriseServer:
+          return await credentialsStore.enterpriseName
       }
     }
 }

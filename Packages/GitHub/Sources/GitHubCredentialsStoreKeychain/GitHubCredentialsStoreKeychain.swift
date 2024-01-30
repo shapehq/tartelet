@@ -5,9 +5,11 @@ import RSAPrivateKey
 
 public final actor GitHubCredentialsStoreKeychain: GitHubCredentialsStore {
     private enum PasswordAccount {
+        static let selfHostedURL = "github.credentials.selfHostedURL"
         static let organizationName = "github.credentials.organizationName"
         static let repositoryName = "github.credentials.repositoryName"
         static let ownerName = "github.credentials.ownerName"
+        static let enterpriseName = "github.credentials.enterpriseName"
         static let appId = "github.credentials.appId"
     }
 
@@ -15,6 +17,12 @@ public final actor GitHubCredentialsStoreKeychain: GitHubCredentialsStore {
         static let privateKey = "github.credentials.privateKey"
     }
 
+    public var selfHostedURL: URL? {
+        get async {
+            return await keychain.password(forAccount: PasswordAccount.selfHostedURL, belongingToService: serviceName)
+                .flatMap(URL.init(string:))
+        }
+    }
     public var organizationName: String? {
         get async {
             return await keychain.password(forAccount: PasswordAccount.organizationName, belongingToService: serviceName)
@@ -28,6 +36,11 @@ public final actor GitHubCredentialsStoreKeychain: GitHubCredentialsStore {
     public var ownerName: String? {
         get async {
             return await keychain.password(forAccount: PasswordAccount.ownerName, belongingToService: serviceName)
+        }
+    }
+    public var enterpriseName: String? {
+        get async {
+            return await keychain.password(forAccount: PasswordAccount.enterpriseName, belongingToService: serviceName)
         }
     }
     public var appId: String? {
@@ -49,6 +62,14 @@ public final actor GitHubCredentialsStoreKeychain: GitHubCredentialsStore {
         self.serviceName = serviceName
     }
 
+    public func setSelfHostedURL(_ selfHostedURL: URL?) async {
+        if let selfHostedURL {
+            _ = await keychain.setPassword(selfHostedURL.absoluteString, forAccount: PasswordAccount.selfHostedURL, belongingToService: serviceName)
+        } else {
+            await keychain.removePassword(forAccount: PasswordAccount.selfHostedURL, belongingToService: serviceName)
+        }
+    }
+
     public func setOrganizationName(_ organizationName: String?) async {
         if let organizationName {
             _ = await keychain.setPassword(organizationName, forAccount: PasswordAccount.organizationName, belongingToService: serviceName)
@@ -66,6 +87,14 @@ public final actor GitHubCredentialsStoreKeychain: GitHubCredentialsStore {
             _ = await keychain.setPassword(ownerName, forAccount: PasswordAccount.ownerName, belongingToService: serviceName)
         } else {
             await keychain.removePassword(forAccount: PasswordAccount.ownerName, belongingToService: serviceName)
+        }
+    }
+
+    public func setEnterpriseName(_ enterpriseName: String?) async {
+        if let enterpriseName {
+            _ = await keychain.setPassword(enterpriseName, forAccount: PasswordAccount.enterpriseName, belongingToService: serviceName)
+        } else {
+            await keychain.removePassword(forAccount: PasswordAccount.enterpriseName, belongingToService: serviceName)
         }
     }
 

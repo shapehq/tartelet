@@ -14,6 +14,7 @@ public final class SettingsStore: ObservableObject {
         static let gitHubRunnerLabels = "gitHubRunnerLabels"
         static let gitHubRunnerGroup = "gitHubRunnerGroup"
         static let githubRunnerScope = "githubRunnerScope"
+        static let githubServiceVersion = "githubServiceVersion"
     }
 
     @AppStorage(AppStorageKey.applicationUIMode)
@@ -34,6 +35,8 @@ public final class SettingsStore: ObservableObject {
     public var gitHubRunnerGroup = ""
     @AppStorage(AppStorageKey.githubRunnerScope)
     public var githubRunnerScope: GitHubRunnerScope = .organization
+    @AppStorage(AppStorageKey.githubServiceVersion)
+    public var githubServiceVersion: GitHubServiceVersion.Kind = .dotCom
 
     public init() {}
 

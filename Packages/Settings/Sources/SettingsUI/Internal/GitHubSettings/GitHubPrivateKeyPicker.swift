@@ -12,6 +12,8 @@ struct GitHubPrivateKeyPicker: View {
             L10n.Settings.Github.PrivateKey.Scopes.organization
         case .repo:
             L10n.Settings.Github.PrivateKey.Scopes.repository
+        case .enterpriseServer:
+            "Check permissions: `manage_runners:enterprise`"
         }
     }
 
