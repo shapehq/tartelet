@@ -1,26 +1,24 @@
 import Combine
-import GitHubCredentialsStore
-import LogExporter
-import SettingsStore
+import GitHubDomain
+import LoggingDomain
+import SettingsDomain
 import SwiftUI
-import VirtualMachineEditorService
-import VirtualMachineFleet
-import VirtualMachineSourceNameRepository
+import VirtualMachineDomain
 
-public struct SettingsScene: Scene {
-    private let settingsStore: SettingsStore
+public struct SettingsScene<SettingsStoreType: SettingsStore>: Scene {
+    private let settingsStore: SettingsStoreType
     private let gitHubCredentialsStore: GitHubCredentialsStore
     private let virtualMachinesSourceNameRepository: VirtualMachineSourceNameRepository
     private let logExporter: LogExporter
     private let isVirtualMachineSettingsEnabled: AnyPublisher<Bool, Never>
 
     public init(
-        settingsStore: SettingsStore,
+        settingsStore: SettingsStoreType,
         gitHubCredentialsStore: GitHubCredentialsStore,
         sourceNameRepository: VirtualMachineSourceNameRepository,
         logExporter: LogExporter,
         fleet: VirtualMachineFleet,
-        editorService: VirtualMachineEditorService
+        editor: VirtualMachineEditor
     ) {
         self.settingsStore = settingsStore
         self.gitHubCredentialsStore = gitHubCredentialsStore
@@ -28,7 +26,7 @@ public struct SettingsScene: Scene {
         self.logExporter = logExporter
         self.isVirtualMachineSettingsEnabled = Publishers.CombineLatest(
             fleet.isStarted,
-            editorService.isStarted
+            editor.isStarted
         )
         .map { !$0 && !$1 }
         .eraseToAnyPublisher()

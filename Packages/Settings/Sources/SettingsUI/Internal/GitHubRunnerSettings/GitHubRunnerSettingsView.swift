@@ -1,11 +1,11 @@
-import SettingsStore
+import SettingsDomain
 import SwiftUI
 
-struct GitHubRunnerSettingsView: View {
-    @StateObject private var viewModel: GitHubRunnerSettingsViewModel
-    @ObservedObject private var settingsStore: SettingsStore
+struct GitHubRunnerSettingsView<SettingsStoreType: SettingsStore>: View {
+    @StateObject private var viewModel: GitHubRunnerSettingsViewModel<SettingsStoreType>
+    @ObservedObject private var settingsStore: SettingsStoreType
 
-    init(viewModel: GitHubRunnerSettingsViewModel) {
+    init(viewModel: GitHubRunnerSettingsViewModel<SettingsStoreType>) {
         _viewModel = StateObject(wrappedValue: viewModel)
         settingsStore = viewModel.settingsStore
     }

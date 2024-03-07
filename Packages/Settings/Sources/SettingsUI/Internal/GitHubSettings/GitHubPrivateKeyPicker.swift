@@ -1,4 +1,4 @@
-import GitHubService
+import GitHubDomain
 import SwiftUI
 
 struct GitHubPrivateKeyPicker: View {

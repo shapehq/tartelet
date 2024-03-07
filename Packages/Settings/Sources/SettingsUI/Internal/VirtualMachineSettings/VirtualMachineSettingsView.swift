@@ -1,11 +1,11 @@
-import SettingsStore
+import SettingsDomain
 import SwiftUI
 
-struct VirtualMachineSettingsView: View {
-    @StateObject private var viewModel: VirtualMachineSettingsViewModel
-    @ObservedObject private var settingsStore: SettingsStore
+struct VirtualMachineSettingsView<SettingsStoreType: SettingsStore>: View {
+    @StateObject private var viewModel: VirtualMachineSettingsViewModel<SettingsStoreType>
+    @ObservedObject private var settingsStore: SettingsStoreType
 
-    init(viewModel: VirtualMachineSettingsViewModel) {
+    init(viewModel: VirtualMachineSettingsViewModel<SettingsStoreType>) {
         self._settingsStore = ObservedObject(wrappedValue: viewModel.settingsStore)
         _viewModel = StateObject(wrappedValue: viewModel)
     }

@@ -7,22 +7,16 @@ let package = Package(
     name: "Keychain",
     platforms: [.macOS(.v13)],
     products: [
-        .library(name: "Keychain", targets: ["Keychain"]),
-        .library(name: "KeychainLive", targets: ["KeychainLive"]),
-        .library(name: "RSAPrivateKey", targets: ["RSAPrivateKey"])
+        .library(name: "Keychain", targets: [
+            "Keychain"
+        ])
     ],
     dependencies: [
         .package(path: "../Logging")
     ],
     targets: [
         .target(name: "Keychain", dependencies: [
-            "RSAPrivateKey"
-        ]),
-        .target(name: "KeychainLive", dependencies: [
-            "Keychain",
-            .product(name: "LogHelpers", package: "Logging"),
-            "RSAPrivateKey"
-        ]),
-        .target(name: "RSAPrivateKey")
+            .product(name: "LoggingDomain", package: "Logging")
+        ])
     ]
 )

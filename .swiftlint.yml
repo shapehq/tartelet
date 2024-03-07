@@ -1,5 +1,5 @@
 excluded:
-  - Packages/MenuBar/Sources/MenuBarItem/Internal/L10n.swift
+  - Packages/MenuBar/Sources/MenuBar/Internal/L10n.swift
   - Packages/Settings/Sources/SettingsUI/Internal/Assets.swift
   - Packages/Settings/Sources/SettingsUI/Internal/L10n.swift
 disabled_rules:

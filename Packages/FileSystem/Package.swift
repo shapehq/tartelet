@@ -7,13 +7,17 @@ let package = Package(
     name: "FileSystem",
     platforms: [.macOS(.v13)],
     products: [
-        .library(name: "FileSystem", targets: ["FileSystem"]),
-        .library(name: "FileSystemDisk", targets: ["FileSystemDisk"])
+        .library(name: "FileSystemData", targets: [
+            "FileSystemData"
+        ]),
+        .library(name: "FileSystemDomain", targets: [
+            "FileSystemDomain"
+        ])
     ],
     targets: [
-        .target(name: "FileSystem"),
-        .target(name: "FileSystemDisk", dependencies: [
-            "FileSystem"
-        ])
+        .target(name: "FileSystemData", dependencies: [
+            "FileSystemDomain"
+        ]),
+        .target(name: "FileSystemDomain")
     ]
 )

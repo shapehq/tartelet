@@ -1,17 +1,17 @@
 xcassets:
   inputs:
-    - Packages/Settings/Sources/SettingsUI/Supporting files/Assets.xcassets
+    - Packages/Settings/Sources/SettingsUI/Internal/Assets.xcassets
   outputs:
   - templateName: swift5
     output: Packages/Settings/Sources/SettingsUI/Internal/Assets.swift
 strings:
   - inputs: 
-    - Packages/MenuBar/Sources/MenuBarItem/Supporting files/Localizable.strings
+    - Packages/MenuBar/Sources/MenuBar/Internal/Localizable.strings
     outputs:
       templateName: structured-swift5
-      output: Packages/MenuBar/Sources/MenuBarItem/Internal/L10n.swift
+      output: Packages/MenuBar/Sources/MenuBar/Internal/L10n.swift
   - inputs: 
-    - Packages/Settings/Sources/SettingsUI/Supporting files/Localizable.strings
+    - Packages/Settings/Sources/SettingsUI/Internal/Localizable.strings
     outputs:
       templateName: structured-swift5
       output: Packages/Settings/Sources/SettingsUI/Internal/L10n.swift

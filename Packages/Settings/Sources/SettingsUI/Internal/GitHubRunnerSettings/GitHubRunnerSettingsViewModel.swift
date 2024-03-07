@@ -1,17 +1,17 @@
 import Combine
-import SettingsStore
+import SettingsDomain
 import SwiftUI
 
 @MainActor
-final class GitHubRunnerSettingsViewModel: ObservableObject {
-    let settingsStore: SettingsStore
+final class GitHubRunnerSettingsViewModel<SettingsStoreType: SettingsStore>: ObservableObject {
+    let settingsStore: SettingsStoreType
     @Published var labels: String = ""
     @Published var group: String = ""
     @Published private(set) var isSettingsEnabled = true
 
     private var cancellables: Set<AnyCancellable> = []
 
-    init(settingsStore: SettingsStore, isSettingsEnabled: AnyPublisher<Bool, Never>) {
+    init(settingsStore: SettingsStoreType, isSettingsEnabled: AnyPublisher<Bool, Never>) {
         self.settingsStore = settingsStore
         labels = settingsStore.gitHubRunnerLabels
         isSettingsEnabled.assign(to: \.isSettingsEnabled, on: self).store(in: &cancellables)

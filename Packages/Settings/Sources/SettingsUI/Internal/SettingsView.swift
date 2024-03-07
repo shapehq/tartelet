@@ -1,12 +1,12 @@
 import Combine
-import GitHubCredentialsStore
-import LogExporter
-import SettingsStore
+import GitHubDomain
+import LoggingDomain
+import SettingsDomain
 import SwiftUI
-import VirtualMachineSourceNameRepository
+import VirtualMachineDomain
 
-struct SettingsView: View {
-    let settingsStore: SettingsStore
+struct SettingsView<SettingsStoreType: SettingsStore>: View {
+    let settingsStore: SettingsStoreType
     let gitHubCredentialsStore: GitHubCredentialsStore
     let virtualMachinesSourceNameRepository: VirtualMachineSourceNameRepository
     let logExporter: LogExporter

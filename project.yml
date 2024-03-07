@@ -18,80 +18,39 @@ targets:
       path: scripts/swiftlint.sh
       basedOnDependencyAnalysis: false
     dependencies:
-      - package: Dock
-        product: Dock
       - package: FileSystem
-        product: FileSystem
+        product: FileSystemData
       - package: FileSystem
-        product: FileSystemDisk
+        product: FileSystemDomain
       - package: GitHub
-        product: GitHubCredentialsStore
+        product: GitHubData
       - package: GitHub
-        product: GitHubCredentialsStoreKeychain
-      - package: GitHub
-        product: GitHubService
-      - package: GitHub
-        product: GitHubServiceLive
+        product: GitHubDomain
       - package: Keychain
         product: Keychain
-      - package: Keychain
-        product: KeychainLive
       - package: Logging
-        product: LogHelpers
+        product: LoggingData
       - package: Logging
-        product: LogExporter
-      - package: Logging
-        product: LogExporterLive
-      - package: Logging
-        product: LogStore
-      - package: Logging
-        product: LogStoreOSLog
+        product: LoggingDomain
       - package: MenuBar
-        product: MenuBarItem
+        product: MenuBar
       - package: Networking
-        product: NetworkingService
+        product: NetworkingData
       - package: Networking
-        product: NetworkingServiceLive
+        product: NetworkingDomain
       - package: Settings
-        product: Settings
+        product: SettingsData
       - package: Settings
-        product: SettingsStore
+        product: SettingsDomain
       - package: Settings
         product: SettingsUI
       - package: Shell
         product: Shell
-      - package: Tart
-        product: Tart
-      - package: TartVirtualMachine
-        product: EphemeralTartVirtualMachine
-      - package: TartVirtualMachine
-        product: TartVirtualMachine
-      - package: TartVirtualMachine
-        product: TartVirtualMachineSourceNameRepository
       - package: VirtualMachine
-        product: VirtualMachine
+        product: VirtualMachineData
       - package: VirtualMachine
-        product: VirtualMachineFactory
-      - package: VirtualMachine
-        product: VirtualMachineFleet
-      - package: VirtualMachine
-        product: VirtualMachineFleetLive
-      - package: VirtualMachine
-        product: VirtualMachineEditorService
-      - package: VirtualMachine
-        product: VirtualMachineResourcesCopier
-      - package: VirtualMachine
-        product: VirtualMachineResourcesService
-      - package: VirtualMachine
-        product: VirtualMachineResourcesServiceEditor
-      - package: VirtualMachine
-        product: VirtualMachineResourcesServiceEphemeral
-      - package: VirtualMachine
-        product: VirtualMachineSourceNameRepository
-      - package: VirtualMachineAutomaticLauncher
-        product: VirtualMachineAutomaticLauncher
+        product: VirtualMachineDomain
 localPackages:
-  - Packages/Dock
   - Packages/FileSystem
   - Packages/GitHub
   - Packages/Keychain
@@ -100,7 +59,4 @@ localPackages:
   - Packages/Networking
   - Packages/Settings
   - Packages/Shell
-  - Packages/Tart
-  - Packages/TartVirtualMachine
   - Packages/VirtualMachine
-  - Packages/VirtualMachineAutomaticLauncher

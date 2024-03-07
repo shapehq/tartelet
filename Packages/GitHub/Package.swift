@@ -7,10 +7,12 @@ let package = Package(
     name: "GitHub",
     platforms: [.macOS(.v13)],
     products: [
-        .library(name: "GitHubCredentialsStore", targets: ["GitHubCredentialsStore"]),
-        .library(name: "GitHubCredentialsStoreKeychain", targets: ["GitHubCredentialsStoreKeychain"]),
-        .library(name: "GitHubService", targets: ["GitHubService"]),
-        .library(name: "GitHubServiceLive", targets: ["GitHubServiceLive"])
+        .library(name: "GitHubData", targets: [
+            "GitHubData"
+        ]),
+        .library(name: "GitHubDomain", targets: [
+            "GitHubDomain"
+        ])
     ],
     dependencies: [
         .package(path: "../Keychain"),
@@ -18,20 +20,13 @@ let package = Package(
         .package(url: "https://github.com/Kitura/Swift-JWT", from: "4.0.0")
     ],
     targets: [
-        .target(name: "GitHubCredentialsStore"),
-        .target(name: "GitHubCredentialsStoreKeychain", dependencies: [
-            "GitHubCredentialsStore",
-            .product(name: "Keychain", package: "Keychain")
+        .target(name: "GitHubData", dependencies: [
+            "GitHubDomain",
+            .product(name: "Keychain", package: "Keychain"),
+            .product(name: "NetworkingDomain", package: "Networking")
         ]),
-        .target(name: "GitHubJWTTokenFactory", dependencies: [
+        .target(name: "GitHubDomain", dependencies: [
             .product(name: "SwiftJWT", package: "Swift-JWT")
-        ]),
-        .target(name: "GitHubService"),
-        .target(name: "GitHubServiceLive", dependencies: [
-            "GitHubService",
-            "GitHubCredentialsStore",
-            "GitHubJWTTokenFactory",
-            .product(name: "NetworkingService", package: "Networking")
         ])
     ]
 )

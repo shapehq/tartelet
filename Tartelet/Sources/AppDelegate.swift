@@ -1,17 +1,29 @@
 import AppKit
 import Foundation
+import SettingsUI
+import VirtualMachineDomain
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
+    private let dock = Dock(
+        showAppInDock: Composers.settingsStore
+            .onChange
+            .map(\.applicationUIMode.showInDock)
+            .eraseToAnyPublisher()
+    )
+
     func applicationWillFinishLaunching(_ notification: Notification) {
-        _ = CompositionRoot.dock
+        dock.setIconShown(Composers.settingsStore.applicationUIMode.showInDock)
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        CompositionRoot.virtualMachineAutomaticLauncher.startVirtualMachinesIfNeeded()
+        dock.beginObservingAppIconVisibility()
+        if Composers.settingsStore.startVirtualMachinesOnLaunch {
+            try? Composers.fleet.start(numberOfMachines: Composers.settingsStore.numberOfVirtualMachines)
+        }
     }
 
     func applicationWillTerminate(_ notification: Notification) {
-        CompositionRoot.editorService.stop()
-        CompositionRoot.fleet.stop()
+        Composers.editor.stop()
+        Composers.fleet.stop()
     }
 }

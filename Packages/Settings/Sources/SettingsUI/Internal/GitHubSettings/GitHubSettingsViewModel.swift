@@ -1,13 +1,12 @@
 import AppKit
 import Combine
-import GitHubCredentialsStore
-import GitHubService
-import SettingsStore
+import GitHubDomain
+import SettingsDomain
 import SwiftUI
 
 @MainActor
-final class GitHubSettingsViewModel: ObservableObject {
-    let settingsStore: SettingsStore
+final class GitHubSettingsViewModel<SettingsStoreType: SettingsStore>: ObservableObject {
+    let settingsStore: SettingsStoreType
     @Published var organizationName: String = ""
     @Published var repositoryName: String = ""
     @Published var ownerName: String = ""
@@ -26,16 +25,24 @@ final class GitHubSettingsViewModel: ObservableObject {
         return url.appending(path: "/settings/apps")
     }
 
-    init(settingsStore: SettingsStore, credentialsStore: GitHubCredentialsStore, isSettingsEnabled: AnyPublisher<Bool, Never>) {
+    init(
+        settingsStore: SettingsStoreType,
+        credentialsStore: GitHubCredentialsStore,
+        isSettingsEnabled: AnyPublisher<Bool, Never>
+    ) {
         self.settingsStore = settingsStore
         self.credentialsStore = credentialsStore
         self.runnerScope = settingsStore.githubRunnerScope
         isSettingsEnabled.assign(to: \.isSettingsEnabled, on: self).store(in: &cancellables)
-        $appId.debounce(for: 0.5, scheduler: DispatchQueue.main).nilIfEmpty().dropFirst().sink { [weak self] appId in
-            Task {
-                await self?.credentialsStore.setAppID(appId)
-            }
-        }.store(in: &cancellables)
+        $appId
+            .debounce(for: 0.5, scheduler: DispatchQueue.main)
+            .nilIfEmpty()
+            .dropFirst()
+            .sink { [weak self] appId in
+                Task {
+                    await self?.credentialsStore.setAppID(appId)
+                }
+            }.store(in: &cancellables)
         $runnerScope
             .combineLatest(
                 $organizationName.nilIfEmpty(),

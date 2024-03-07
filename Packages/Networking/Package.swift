@@ -7,17 +7,21 @@ let package = Package(
     name: "Networking",
     platforms: [.macOS(.v13)],
     products: [
-        .library(name: "NetworkingService", targets: ["NetworkingService"]),
-        .library(name: "NetworkingServiceLive", targets: ["NetworkingServiceLive"])
+        .library(name: "NetworkingData", targets: [
+            "NetworkingData"
+        ]),
+        .library(name: "NetworkingDomain", targets: [
+            "NetworkingDomain"
+        ])
     ],
     dependencies: [
         .package(path: "../Logging")
     ],
     targets: [
-        .target(name: "NetworkingService"),
-        .target(name: "NetworkingServiceLive", dependencies: [
-            .product(name: "LogHelpers", package: "Logging"),
-            "NetworkingService"
-        ])
+        .target(name: "NetworkingData", dependencies: [
+            .product(name: "LoggingDomain", package: "Logging"),
+            "NetworkingDomain"
+        ]),
+        .target(name: "NetworkingDomain")
     ]
 )

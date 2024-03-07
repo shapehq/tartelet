@@ -1,0 +1,13 @@
+"menu_bar_item.virtual_machines.start" = "Start";
+"menu_bar_item.virtual_machines.stop" = "Stop";
+"menu_bar_item.virtual_machines.stopping" = "Stopping...";
+"menu_bar_item.virtual_machines.stopping_info" = "Stops when virtual machines have terminated.";
+"menu_bar_item.virtual_machines.unavailable" = "Select Virtual Machine...";
+"menu_bar_item.editor.edit_virtual_machine.start" = "Edit Virtual Machine";
+"menu_bar_item.editor.edit_virtual_machine.editing" = "Editing...";
+"menu_bar_item.about" = "About...";
+"menu_bar_item.settings" = "Settings...";
+"menu_bar_item.quit" = "Quit";
+
+"menu.virtual_machines.singularis" = "Virtual Machine";
+"menu.virtual_machines.pluralis" = "Virtual Machines";

@@ -1,20 +1,22 @@
-import LogExporter
-import Settings
-import SettingsStore
+import LoggingDomain
+import SettingsDomain
 import SwiftUI
 
-struct GeneralSettingsView: View {
-    @StateObject private var viewModel: GeneralSettingsViewModel
-    @ObservedObject private var settingsStore: SettingsStore
+struct GeneralSettingsView<SettingsStoreType: SettingsStore>: View {
+    @StateObject private var viewModel: GeneralSettingsViewModel<SettingsStoreType>
+    @ObservedObject private var settingsStore: SettingsStoreType
 
-    init(viewModel: GeneralSettingsViewModel) {
+    init(viewModel: GeneralSettingsViewModel<SettingsStoreType>) {
         _viewModel = StateObject(wrappedValue: viewModel)
         _settingsStore = ObservedObject(wrappedValue: viewModel.settingsStore)
     }
 
     var body: some View {
         Form {
-            Picker(L10n.Settings.General.applicationUiMode, selection: $settingsStore.applicationUIMode) {
+            Picker(
+                L10n.Settings.General.applicationUiMode,
+                selection: $settingsStore.applicationUIMode
+            ) {
                 ForEach(ApplicationUIMode.allCases) { mode in
                     Text(mode.title)
                 }

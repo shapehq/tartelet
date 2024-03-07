@@ -1,11 +1,10 @@
 import Combine
-import Settings
-import SettingsStore
+import SettingsDomain
 import SwiftUI
-import VirtualMachineSourceNameRepository
+import VirtualMachineDomain
 
-final class VirtualMachineSettingsViewModel: ObservableObject {
-    let settingsStore: SettingsStore
+final class VirtualMachineSettingsViewModel<SettingsStoreType: SettingsStore>: ObservableObject {
+    let settingsStore: SettingsStoreType
 
     @Published private(set) var isRefreshingVirtualMachines = false
     @Published private(set) var isSettingsEnabled = false
@@ -15,7 +14,7 @@ final class VirtualMachineSettingsViewModel: ObservableObject {
     private var cancellables: Set<AnyCancellable> = []
 
     init(
-        settingsStore: SettingsStore,
+        settingsStore: SettingsStoreType,
         virtualMachinesSourceNameRepository: VirtualMachineSourceNameRepository,
         isSettingsEnabled: AnyPublisher<Bool, Never>
     ) {

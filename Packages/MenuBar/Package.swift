@@ -7,17 +7,18 @@ let package = Package(
     name: "MenuBar",
     platforms: [.macOS(.v13)],
     products: [
-        .library(name: "MenuBarItem", targets: ["MenuBarItem"])
+        .library(name: "MenuBar", targets: [
+            "MenuBar"
+        ])
     ],
     dependencies: [
         .package(path: "../Settings"),
         .package(path: "../VirtualMachine")
     ],
     targets: [
-        .target(name: "MenuBarItem", dependencies: [
-            .product(name: "SettingsStore", package: "Settings"),
-            .product(name: "VirtualMachineEditorService", package: "VirtualMachine"),
-            .product(name: "VirtualMachineFleet", package: "VirtualMachine")
-        ], resources: [.process("Supporting files/Localizable.strings")])
+        .target(name: "MenuBar", dependencies: [
+            .product(name: "SettingsDomain", package: "Settings"),
+            .product(name: "VirtualMachineDomain", package: "VirtualMachine")
+        ], resources: [.process("Internal/Localizable.strings")])
     ]
 )
