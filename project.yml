@@ -34,6 +34,8 @@ targets:
         products: [SettingsData, SettingsDomain, SettingsUI]
       - package: Shell
         products: [ShellData, ShellDomain]
+      - package: SSH
+        products: [SSHData, SSHDomain]
       - package: VirtualMachine
         products: [VirtualMachineData, VirtualMachineDomain]
 localPackages:
@@ -44,5 +46,6 @@ localPackages:
   - Packages/MenuBar
   - Packages/Networking
   - Packages/Settings
+  - Packages/SSH
   - Packages/Shell
   - Packages/VirtualMachine

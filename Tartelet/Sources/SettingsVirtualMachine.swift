@@ -30,4 +30,8 @@ struct SettingsVirtualMachine<SettingsStoreType: SettingsStore>: VirtualMachineD
     func delete() async throws {
         try await virtualMachine.delete()
     }
+
+    func getIPAddress() async throws -> String {
+        try await virtualMachine.getIPAddress()
+    }
 }

@@ -27,4 +27,8 @@ public final class TartVirtualMachine: VirtualMachine {
     public func delete() async throws {
         try await tart.delete(name: name)
     }
+
+    public func getIPAddress() async throws -> String {
+        try await tart.getIPAddress(ofVirtualMachineNamed: name)
+    }
 }

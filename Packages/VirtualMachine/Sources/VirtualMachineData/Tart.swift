@@ -31,6 +31,11 @@ public struct Tart {
         let result = try await executeCommand(withArguments: ["list", "-q", "--source", "local"])
         return result.split(separator: "\n").map(String.init)
     }
+
+    public func getIPAddress(ofVirtualMachineNamed name: String) async throws -> String {
+        let result = try await executeCommand(withArguments: ["ip", name])
+        return result.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
 }
 
 private extension Tart {
@@ -38,10 +43,17 @@ private extension Tart {
     private func executeCommand(withArguments arguments: [String]) async throws -> String {
         let locator = TartLocator(shell: shell)
         let filePath = try locator.locate()
-        return try await shell.runExecutable(
-            atPath: filePath,
-            withArguments: arguments,
-            environment: environment
-        )
+        if let environment {
+            return try await shell.runExecutable(
+                atPath: filePath,
+                withArguments: arguments,
+                environment: environment
+            )
+        } else {
+            return try await shell.runExecutable(
+                atPath: filePath,
+                withArguments: arguments
+            )
+        }
     }
 }

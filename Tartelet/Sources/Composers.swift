@@ -1,6 +1,11 @@
+import GitHubData
+import GitHubDomain
+import Keychain
 import LoggingData
+import NetworkingData
 import SettingsData
 import ShellData
+import SSHData
 import VirtualMachineData
 import VirtualMachineDomain
 
@@ -9,14 +14,35 @@ enum Composers {
 
     static let fleet = VirtualMachineFleet(
         logger: OSLogger(subsystem: "VirtualMachineFleet"),
-        baseVirtualMachine: SettingsVirtualMachine(
-            tart: Tart(
-                homeProvider: SettingsTartHomeProvider(
+        baseVirtualMachine: SSHConnectingVirtualMachine(
+            virtualMachine: SettingsVirtualMachine(
+                tart: Tart(
+                    homeProvider: SettingsTartHomeProvider(
+                        settingsStore: settingsStore
+                    ),
+                    shell: ProcessShell()
+                ),
+                settingsStore: settingsStore
+            ),
+            sshClient: VirtualMachineSSHClient(
+                client: CitadelSSHClient(),
+                ipAddressReader: RetryingVirtualMachineIPAddressReader(),
+                credentials: SettingsVirtualMachineSSHCredentials(
                     settingsStore: settingsStore
                 ),
-                shell: ProcessShell()
-            ),
-            settingsStore: settingsStore
+                connectionHandler: GitHubActionsRunnerSSHConnectionHandler(
+                    client: NetworkingGitHubClient(
+                        credentialsStore: gitHubCredentialsStore,
+                        networkingService: URLSessionNetworkingService(
+                            logger: OSLogger(subsystem: "URLSessionNetworkingService")
+                        )
+                    ),
+                    credentialsStore: gitHubCredentialsStore,
+                    configuration: SettingsGitHubActionsRunnerConfiguration(
+                        settingsStore: settingsStore
+                    )
+                )
+            )
         )
     )
 
@@ -32,4 +58,14 @@ enum Composers {
             settingsStore: settingsStore
         )
     )
+
+    static var gitHubCredentialsStore: GitHubCredentialsStore {
+        KeychainGitHubCredentialsStore(
+            keychain: Keychain(
+                logger: OSLogger(subsystem: "GitHubCredentialsStore"),
+                accessGroup: "566MC7D8D4.dk.shape.Tartelet"
+            ),
+            serviceName: "Tartelet GitHub Account"
+        )
+    }
 }

@@ -1,6 +1,6 @@
 import Foundation
 
-enum ProcessShellError: LocalizedError {
+public enum ProcessShellError: LocalizedError {
    case unexpectedTerminationStatus(Int32)
 
    public var errorDescription: String? {

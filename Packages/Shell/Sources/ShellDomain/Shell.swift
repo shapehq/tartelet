@@ -16,8 +16,8 @@ public extension Shell {
         withArguments arguments: [String]
     ) async throws -> String {
         try await runExecutable(
-            atPath: executablePath, 
-            withArguments: arguments, 
+            atPath: executablePath,
+            withArguments: arguments,
             environment: [:]
         )
     }

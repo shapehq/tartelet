@@ -5,4 +5,5 @@ public protocol VirtualMachine {
     func start() async throws
     func clone(named newName: String) async throws -> VirtualMachine
     func delete() async throws
+    func getIPAddress() async throws -> String
 }
