@@ -1,5 +1,6 @@
 import Foundation
 import GitHubDomain
+import LoggingDomain
 import SSHDomain
 
 private enum GitHubActionsRunnerSSHConnectionHandlerError: LocalizedError {
@@ -17,15 +18,18 @@ private enum GitHubActionsRunnerSSHConnectionHandlerError: LocalizedError {
 }
 
 public struct GitHubActionsRunnerSSHConnectionHandler: VirtualMachineSSHConnectionHandler {
+    private let logger: Logger
     private let client: GitHubClient
     private let credentialsStore: GitHubCredentialsStore
     private let configuration: GitHubActionsRunnerConfiguration
 
     public init(
+        logger: Logger,
         client: GitHubClient,
         credentialsStore: GitHubCredentialsStore,
         configuration: GitHubActionsRunnerConfiguration
     ) {
+        self.logger = logger
         self.client = client
         self.credentialsStore = credentialsStore
         self.configuration = configuration
@@ -93,10 +97,10 @@ EOF
 private extension GitHubActionsRunnerSSHConnectionHandler {
     private func getRunnerURL() async throws -> URL {
         switch configuration.runnerScope {
-
         case .organization:
             let organizationName = try await getOrganizationName()
             guard let runnerURL = URL(string: "https://github.com/" + organizationName) else {
+                logger.info("Invalid runner URL for organization with name \(organizationName)")
                 throw GitHubActionsRunnerSSHConnectionHandlerError.invalidRunnerURL
             }
             return runnerURL
@@ -106,6 +110,7 @@ private extension GitHubActionsRunnerSSHConnectionHandler {
                 let repositoryName = await credentialsStore.repositoryName,
                 let runnerURL = URL(string: "https://github.com/\(ownerName)/\(repositoryName)")
             else {
+                logger.info("Invalid runner URL for repository")
                 throw GitHubActionsRunnerSSHConnectionHandlerError.invalidRunnerURL
             }
             return runnerURL
@@ -113,10 +118,10 @@ private extension GitHubActionsRunnerSSHConnectionHandler {
     }
 
     private func getOrganizationName() async throws -> String {
-        if let organizationName = await credentialsStore.organizationName {
-            return organizationName
-        } else {
+        guard let organizationName = await credentialsStore.organizationName else {
+            logger.info("The GitHub organization name is not available")
             throw GitHubActionsRunnerSSHConnectionHandlerError.organizationNameUnavailable
         }
+        return organizationName
     }
 }

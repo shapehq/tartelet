@@ -27,14 +27,16 @@ enum Composers {
                 settingsStore: settingsStore
             ),
             sshClient: VirtualMachineSSHClient(
+                logger: logger(subsystem: "VirtualMachineSSHClient"),
                 client: CitadelSSHClient(
-                    logger: logger(subsystem: "SSH")
+                    logger: logger(subsystem: "CitadelSSHClient")
                 ),
                 ipAddressReader: RetryingVirtualMachineIPAddressReader(),
                 credentials: SettingsVirtualMachineSSHCredentials(
                     settingsStore: settingsStore
                 ),
                 connectionHandler: GitHubActionsRunnerSSHConnectionHandler(
+                    logger: logger(subsystem: "GitHubActionsRunnerSSHConnectionHandler"),
                     client: NetworkingGitHubClient(
                         credentialsStore: gitHubCredentialsStore,
                         networkingService: URLSessionNetworkingService(
