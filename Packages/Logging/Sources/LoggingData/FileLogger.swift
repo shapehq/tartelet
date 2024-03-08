@@ -84,9 +84,8 @@ private extension FileLogger {
             }
             let elapsedSeconds = dateProvider.now.timeIntervalSince(date)
             let elapsedDays = elapsedSeconds / (24 * 3_600)
-            print(elapsedDays)
             if elapsedDays >= Double(daysOfRetention) {
-                print("Remove \(fileURL)")
+                try fileSystem.removeItem(at: fileURL)
             }
         }
     }
