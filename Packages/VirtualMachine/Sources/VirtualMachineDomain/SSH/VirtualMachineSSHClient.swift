@@ -1,24 +1,43 @@
+import Foundation
 import LoggingDomain
 import SSHDomain
+
+private enum VirtualMachineSSHClientError: LocalizedError, CustomDebugStringConvertible {
+    case missingSSHUsername
+    case missingSSHPassword
+
+    var errorDescription: String? {
+        debugDescription
+    }
+
+    var debugDescription: String {
+        switch self {
+        case .missingSSHUsername:
+            "The SSH username is not set in Tartelet's settings."
+        case .missingSSHPassword:
+            "The SSH password is not set in Tartelet's settings."
+        }
+    }
+}
 
 public struct VirtualMachineSSHClient<SSHClientType: SSHClient> {
     private let logger: Logger
     private let client: SSHClientType
     private let ipAddressReader: VirtualMachineIPAddressReader
-    private let credentials: VirtualMachineSSHCredentials
+    private let credentialsStore: VirtualMachineSSHCredentialsStore
     private let connectionHandler: VirtualMachineSSHConnectionHandler
 
     public init(
         logger: Logger,
         client: SSHClientType,
         ipAddressReader: VirtualMachineIPAddressReader,
-        credentials: VirtualMachineSSHCredentials,
+        credentialsStore: VirtualMachineSSHCredentialsStore,
         connectionHandler: VirtualMachineSSHConnectionHandler
     ) {
         self.logger = logger
         self.client = client
         self.ipAddressReader = ipAddressReader
-        self.credentials = credentials
+        self.credentialsStore = credentialsStore
         self.connectionHandler = connectionHandler
     }
 
@@ -44,12 +63,16 @@ private extension VirtualMachineSSHClient {
         named virtualMachineName: String,
         on host: String
     ) async throws -> SSHClientType.SSHConnectionType {
+        guard let username = credentialsStore.username else {
+            logger.error("Failed connecting to to \(virtualMachineName) on \(host). The SSH username is not set in Tartelet's settings.")
+            throw VirtualMachineSSHClientError.missingSSHUsername
+        }
+        guard let password = credentialsStore.password else {
+            logger.error("Failed connecting to to \(virtualMachineName) on \(host). The SSH password is not set in Tartelet's settings.")
+            throw VirtualMachineSSHClientError.missingSSHPassword
+        }
         do {
-            return try await client.connect(
-                host: host,
-                username: credentials.username,
-                password: credentials.password
-            )
+            return try await client.connect(host: host, username: username, password: password)
         } catch {
             logger.error("Failed connecting to \(virtualMachineName) on \(host): \(error.localizedDescription)")
             throw error

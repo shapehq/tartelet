@@ -16,6 +16,7 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../GitHub"),
+        .package(path: "../Keychain"),
         .package(path: "../Logging"),
         .package(path: "../Shell"),
         .package(path: "../SSH")
@@ -23,6 +24,7 @@ let package = Package(
     targets: [
         .target(name: "VirtualMachineData", dependencies: [
             "VirtualMachineDomain",
+            .product(name: "Keychain", package: "Keychain"),
             .product(name: "LoggingDomain", package: "Logging"),
             .product(name: "ShellDomain", package: "Shell")
         ]),

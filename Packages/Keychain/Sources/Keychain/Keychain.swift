@@ -2,7 +2,7 @@ import Foundation
 import LocalAuthentication
 import LoggingDomain
 
-public actor Keychain {
+public final class Keychain {
     private let logger: Logger
     private let accessGroup: String?
 
@@ -14,7 +14,7 @@ public actor Keychain {
 
 // MARK: - Passwords
 public extension Keychain {
-    func setPassword(_ password: Data, forAccount account: String, belongingToService service: String) async -> Bool {
+    func setPassword(_ password: Data, forAccount account: String, belongingToService service: String) -> Bool {
         let findQuery = FindPasswordQuery(accessGroup: accessGroup, service: service, account: account)
         if SecItemCopyMatching(findQuery.rawQuery, nil) == errSecSuccess {
             let updateQuery = UpdatePasswordQuery(password: password)
@@ -34,21 +34,21 @@ public extension Keychain {
         return true
     }
 
-    func setPassword(_ password: String, forAccount account: String, belongingToService service: String) async -> Bool {
+    func setPassword(_ password: String, forAccount account: String, belongingToService service: String) -> Bool {
         guard let data = password.data(using: .utf8) else {
             // swiftlint:disable:next line_length
             logger.error("Failed setting password for account \(account) belong to service \(service) because the password could not be converted to UTF-8 data")
             return false
         }
-        return await setPassword(data, forAccount: account, belongingToService: service)
+        return setPassword(data, forAccount: account, belongingToService: service)
     }
 
-    func password(forAccount account: String, belongingToService service: String) async -> Data? {
+    func password(forAccount account: String, belongingToService service: String) -> Data? {
         let query = ReadPasswordQuery(accessGroup: accessGroup, service: service, account: account)
         return read(Data.self, usingQuery: query.rawQuery)
     }
 
-    func password(forAccount account: String, belongingToService service: String) async -> String? {
+    func password(forAccount account: String, belongingToService service: String) -> String? {
         let query = ReadPasswordQuery(accessGroup: accessGroup, service: service, account: account)
         guard let data = read(Data.self, usingQuery: query.rawQuery) else {
             return nil
@@ -56,7 +56,7 @@ public extension Keychain {
         return String(data: data, encoding: .utf8)
     }
 
-    func removePassword(forAccount account: String, belongingToService service: String) async {
+    func removePassword(forAccount account: String, belongingToService service: String) {
         let query = FindPasswordQuery(accessGroup: accessGroup, service: service, account: account)
         SecItemDelete(query.rawQuery)
     }
@@ -64,7 +64,7 @@ public extension Keychain {
 
 // MARK: - Keys
 public extension Keychain {
-    func setKey(_ key: RSAPrivateKey, withTag tag: String) async -> Bool {
+    func setKey(_ key: RSAPrivateKey, withTag tag: String) -> Bool {
         let findQuery = FindKeyQuery(accessGroup: accessGroup, tag: tag)
         if SecItemCopyMatching(findQuery.rawQuery, nil) == errSecSuccess {
             let removeStatus = SecItemDelete(findQuery.rawQuery)
@@ -82,7 +82,7 @@ public extension Keychain {
         return true
     }
 
-    func key(withTag tag: String) async -> RSAPrivateKey? {
+    func key(withTag tag: String) -> RSAPrivateKey? {
         let query = ReadKeyQuery(accessGroup: accessGroup, tag: tag)
         guard let key = read(SecKey.self, usingQuery: query.rawQuery) else {
             return nil
@@ -90,7 +90,7 @@ public extension Keychain {
         return RSAPrivateKey(key)
     }
 
-    func removeKey(withTag tag: String) async {
+    func removeKey(withTag tag: String) {
         let query = FindKeyQuery(accessGroup: accessGroup, tag: tag)
         SecItemDelete(query.rawQuery)
     }

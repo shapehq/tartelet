@@ -23,7 +23,8 @@ struct TarteletApp: App {
         SettingsScene(
             settingsStore: Composers.settingsStore,
             gitHubCredentialsStore: Composers.gitHubCredentialsStore,
-            sourceNameRepository: TartVirtualMachineSourceNameRepository(
+            virtualMachineCredentialsStore: Composers.virtualMachineSSHCredentialsStore,
+            virtualMachinesSourceNameRepository: TartVirtualMachineSourceNameRepository(
                 tart: Tart(
                     homeProvider: SettingsTartHomeProvider(
                         settingsStore: Composers.settingsStore

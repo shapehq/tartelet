@@ -21,7 +21,6 @@ struct GitHubRunnerSettingsView<SettingsStoreType: SettingsStore>: View {
                 .disabled(!viewModel.isSettingsEnabled)
             } footer: {
                 Text(L10n.Settings.GithubRunner.Labels.footer)
-                    .foregroundColor(.secondary)
             }
             Section {
                 TextField(

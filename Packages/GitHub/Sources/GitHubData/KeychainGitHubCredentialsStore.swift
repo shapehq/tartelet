@@ -2,7 +2,7 @@ import Foundation
 import GitHubDomain
 import Keychain
 
-public final actor KeychainGitHubCredentialsStore: GitHubCredentialsStore {
+public final class KeychainGitHubCredentialsStore: GitHubCredentialsStore {
     private enum PasswordAccount {
         static let organizationName = "github.credentials.organizationName"
         static let repositoryName = "github.credentials.repositoryName"
@@ -15,29 +15,31 @@ public final actor KeychainGitHubCredentialsStore: GitHubCredentialsStore {
     }
 
     public var organizationName: String? {
-        get async {
-            return await keychain.password(forAccount: PasswordAccount.organizationName, belongingToService: serviceName)
-        }
+        keychain.password(
+            forAccount: PasswordAccount.organizationName,
+            belongingToService: serviceName
+        )
     }
     public var repositoryName: String? {
-        get async {
-            return await keychain.password(forAccount: PasswordAccount.repositoryName, belongingToService: serviceName)
-        }
+        keychain.password(
+            forAccount: PasswordAccount.repositoryName,
+            belongingToService: serviceName
+        )
     }
     public var ownerName: String? {
-        get async {
-            return await keychain.password(forAccount: PasswordAccount.ownerName, belongingToService: serviceName)
-        }
+        keychain.password(
+            forAccount: PasswordAccount.ownerName,
+            belongingToService: serviceName
+        )
     }
     public var appId: String? {
-        get async {
-            return await keychain.password(forAccount: PasswordAccount.appId, belongingToService: serviceName)
-        }
+        keychain.password(
+            forAccount: PasswordAccount.appId,
+            belongingToService: serviceName
+        )
     }
     public var privateKey: Data? {
-        get async {
-            return await keychain.key(withTag: KeyTag.privateKey)?.data
-        }
+        keychain.key(withTag: KeyTag.privateKey)?.data
     }
 
     private let keychain: Keychain
@@ -48,39 +50,68 @@ public final actor KeychainGitHubCredentialsStore: GitHubCredentialsStore {
         self.serviceName = serviceName
     }
 
-    public func setOrganizationName(_ organizationName: String?) async {
+    public func setOrganizationName(_ organizationName: String?) {
         if let organizationName {
-            _ = await keychain.setPassword(organizationName, forAccount: PasswordAccount.organizationName, belongingToService: serviceName)
+            _ = keychain.setPassword(
+                organizationName,
+                forAccount: PasswordAccount.organizationName,
+                belongingToService: serviceName
+            )
         } else {
-            await keychain.removePassword(forAccount: PasswordAccount.organizationName, belongingToService: serviceName)
+            keychain.removePassword(
+                forAccount: PasswordAccount.organizationName,
+                belongingToService: serviceName
+            )
         }
     }
-    public func setRepository(_ repositoryName: String?, withOwner ownerName: String?) async {
+
+    public func setRepository(_ repositoryName: String?, withOwner ownerName: String?) {
         if let repositoryName {
-            _ = await keychain.setPassword(repositoryName, forAccount: PasswordAccount.repositoryName, belongingToService: serviceName)
+            _ = keychain.setPassword(
+                repositoryName,
+                forAccount: PasswordAccount.repositoryName,
+                belongingToService: serviceName
+            )
         } else {
-            await keychain.removePassword(forAccount: PasswordAccount.repositoryName, belongingToService: serviceName)
+            keychain.removePassword(
+                forAccount: PasswordAccount.repositoryName,
+                belongingToService: serviceName
+            )
         }
         if let ownerName {
-            _ = await keychain.setPassword(ownerName, forAccount: PasswordAccount.ownerName, belongingToService: serviceName)
+            _ = keychain.setPassword(
+                ownerName,
+                forAccount: PasswordAccount.ownerName,
+                belongingToService: serviceName
+            )
         } else {
-            await keychain.removePassword(forAccount: PasswordAccount.ownerName, belongingToService: serviceName)
+            keychain.removePassword(
+                forAccount: PasswordAccount.ownerName,
+                belongingToService: serviceName
+            )
         }
     }
 
-    public func setAppID(_ appID: String?) async {
+    public func setAppID(_ appID: String?) {
         if let appID {
-            _ = await keychain.setPassword(appID, forAccount: PasswordAccount.appId, belongingToService: serviceName)
+            _ = keychain.setPassword(
+                appID,
+                forAccount: PasswordAccount.appId,
+                belongingToService: serviceName
+            )
         } else {
-            await keychain.removePassword(forAccount: PasswordAccount.appId, belongingToService: serviceName)
+            keychain.removePassword(
+                forAccount: PasswordAccount.appId,
+                belongingToService: serviceName
+            )
         }
     }
 
-    public func setPrivateKey(_ privateKeyData: Data?) async {
+    public func setPrivateKey(_ privateKeyData: Data?) {
         if let privateKeyData, let key = RSAPrivateKey(privateKeyData) {
-            _ = await keychain.setKey(key, withTag: KeyTag.privateKey)
+            _ = keychain.setKey(key, withTag: KeyTag.privateKey)
         } else {
-            await keychain.removeKey(withTag: KeyTag.privateKey)
+            keychain.removeKey(withTag: KeyTag.privateKey)
         }
     }
 }

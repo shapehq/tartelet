@@ -103,10 +103,12 @@ internal enum L10n {
       internal static let count = L10n.tr("Localizable", "settings.virtual_machine.count", fallback: "Number of Machines")
       /// Use the Tart CLI to create a virtual machine.
       internal static let noVirtualMachinesAvailable = L10n.tr("Localizable", "settings.virtual_machine.no_virtual_machines_available", fallback: "Use the Tart CLI to create a virtual machine.")
+      /// SSH
+      internal static let ssh = L10n.tr("Localizable", "settings.virtual_machine.ssh", fallback: "SSH")
       /// Start Virtual Machines on App Launch
       internal static let startVirtualMachinesOnAppLaunch = L10n.tr("Localizable", "settings.virtual_machine.start_virtual_machines_on_app_launch", fallback: "Start Virtual Machines on App Launch")
       /// Tart Home
-      internal static let tartHomeFolder = L10n.tr("Localizable", "settings.virtual_machine.tart_home_folder", fallback: "Tart Home")
+      internal static let tartHome = L10n.tr("Localizable", "settings.virtual_machine.tart_home", fallback: "Tart Home")
       /// Unknown
       internal static let unknown = L10n.tr("Localizable", "settings.virtual_machine.unknown", fallback: "Unknown")
       internal enum Count {
@@ -115,15 +117,29 @@ internal enum L10n {
         /// Two
         internal static let two = L10n.tr("Localizable", "settings.virtual_machine.count.two", fallback: "Two")
       }
-      internal enum TartHomeFolder {
-        /// Value of the TART_HOME environment variable.
-        internal static let footer = L10n.tr("Localizable", "settings.virtual_machine.tart_home_folder.footer", fallback: "Value of the TART_HOME environment variable.")
+      internal enum Ssh {
+        /// The credentials are used to SSH into the virtual machine to configure it to start the GitHub Actions runner
+        internal static let footer = L10n.tr("Localizable", "settings.virtual_machine.ssh.footer", fallback: "The credentials are used to SSH into the virtual machine to configure it to start the GitHub Actions runner")
+        /// Password
+        internal static let password = L10n.tr("Localizable", "settings.virtual_machine.ssh.password", fallback: "Password")
+        /// Username
+        internal static let username = L10n.tr("Localizable", "settings.virtual_machine.ssh.username", fallback: "Username")
+        internal enum Username {
+          /// runner
+          internal static let placeholder = L10n.tr("Localizable", "settings.virtual_machine.ssh.username.placeholder", fallback: "runner")
+        }
+      }
+      internal enum TartHome {
+        /// Folder
+        internal static let folder = L10n.tr("Localizable", "settings.virtual_machine.tart_home.folder", fallback: "Folder")
+        /// Folder to find virtual machine images in. This will be passed as the TART_HOME environment variable when Tartelet invokes Tart.
+        internal static let footer = L10n.tr("Localizable", "settings.virtual_machine.tart_home.footer", fallback: "Folder to find virtual machine images in. This will be passed as the TART_HOME environment variable when Tartelet invokes Tart.")
         /// ~/.tart
-        internal static let placeholder = L10n.tr("Localizable", "settings.virtual_machine.tart_home_folder.placeholder", fallback: "~/.tart")
+        internal static let placeholder = L10n.tr("Localizable", "settings.virtual_machine.tart_home.placeholder", fallback: "~/.tart")
         /// Reset to Default
-        internal static let resetToDefault = L10n.tr("Localizable", "settings.virtual_machine.tart_home_folder.reset_to_default", fallback: "Reset to Default")
+        internal static let resetToDefault = L10n.tr("Localizable", "settings.virtual_machine.tart_home.reset_to_default", fallback: "Reset to Default")
         /// Select Folder
-        internal static let selectFolder = L10n.tr("Localizable", "settings.virtual_machine.tart_home_folder.select_folder", fallback: "Select Folder")
+        internal static let selectFolder = L10n.tr("Localizable", "settings.virtual_machine.tart_home.select_folder", fallback: "Select Folder")
       }
     }
   }

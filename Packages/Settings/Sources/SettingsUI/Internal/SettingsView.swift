@@ -8,6 +8,7 @@ import VirtualMachineDomain
 struct SettingsView<SettingsStoreType: SettingsStore>: View {
     let settingsStore: SettingsStoreType
     let gitHubCredentialsStore: GitHubCredentialsStore
+    let virtualMachineCredentialsStore: VirtualMachineSSHCredentialsStore
     let virtualMachinesSourceNameRepository: VirtualMachineSourceNameRepository
     let logExporter: LogExporter
     let isVirtualMachineSettingsEnabled: AnyPublisher<Bool, Never>
@@ -26,6 +27,7 @@ struct SettingsView<SettingsStoreType: SettingsStore>: View {
                 viewModel: VirtualMachineSettingsViewModel(
                     settingsStore: settingsStore,
                     virtualMachinesSourceNameRepository: virtualMachinesSourceNameRepository,
+                    credentialsStore: virtualMachineCredentialsStore,
                     isSettingsEnabled: isVirtualMachineSettingsEnabled
                 )
             ).tabItem {

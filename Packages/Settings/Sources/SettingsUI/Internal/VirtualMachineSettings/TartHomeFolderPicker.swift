@@ -15,9 +15,9 @@ struct TartHomeFolderPicker: View {
         LabeledContent {
             HStack {
                 TextField(
-                    L10n.Settings.VirtualMachine.tartHomeFolder,
+                    L10n.Settings.VirtualMachine.TartHome.folder,
                     text: $folderPath,
-                    prompt: Text(L10n.Settings.VirtualMachine.TartHomeFolder.placeholder)
+                    prompt: Text(L10n.Settings.VirtualMachine.TartHome.placeholder)
                 )
                 .labelsHidden()
                 .fixedSize()
@@ -29,20 +29,20 @@ struct TartHomeFolderPicker: View {
                         }
                     }
                 } label: {
-                    Text(L10n.Settings.VirtualMachine.TartHomeFolder.selectFolder)
+                    Text(L10n.Settings.VirtualMachine.TartHome.selectFolder)
                         .fixedSize()
                 }
                 .disabled(!isEnabled)
                 Button {
                     folderURL = nil
                 } label: {
-                    Text(L10n.Settings.VirtualMachine.TartHomeFolder.resetToDefault)
+                    Text(L10n.Settings.VirtualMachine.TartHome.resetToDefault)
                         .fixedSize()
                 }
                 .disabled(!isEnabled)
             }
         } label: {
-            Text(L10n.Settings.VirtualMachine.tartHomeFolder)
+            Text(L10n.Settings.VirtualMachine.TartHome.folder)
         }
         .onChange(of: folderURL) { _ in
             folderPath = folderURL?.path() ?? ""

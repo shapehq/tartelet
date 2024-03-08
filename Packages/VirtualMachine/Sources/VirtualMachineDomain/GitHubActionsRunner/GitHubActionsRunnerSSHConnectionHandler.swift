@@ -106,8 +106,8 @@ private extension GitHubActionsRunnerSSHConnectionHandler {
             return runnerURL
         case .repo:
             guard
-                let ownerName = await credentialsStore.ownerName,
-                let repositoryName = await credentialsStore.repositoryName,
+                let ownerName = credentialsStore.ownerName,
+                let repositoryName = credentialsStore.repositoryName,
                 let runnerURL = URL(string: "https://github.com/\(ownerName)/\(repositoryName)")
             else {
                 logger.info("Invalid runner URL for repository")
@@ -118,7 +118,7 @@ private extension GitHubActionsRunnerSSHConnectionHandler {
     }
 
     private func getOrganizationName() async throws -> String {
-        guard let organizationName = await credentialsStore.organizationName else {
+        guard let organizationName = credentialsStore.organizationName else {
             logger.info("The GitHub organization name is not available")
             throw GitHubActionsRunnerSSHConnectionHandlerError.organizationNameUnavailable
         }

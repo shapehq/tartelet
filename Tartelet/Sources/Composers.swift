@@ -32,9 +32,7 @@ enum Composers {
                     logger: logger(subsystem: "CitadelSSHClient")
                 ),
                 ipAddressReader: RetryingVirtualMachineIPAddressReader(),
-                credentials: SettingsVirtualMachineSSHCredentials(
-                    settingsStore: settingsStore
-                ),
+                credentialsStore: virtualMachineSSHCredentialsStore,
                 connectionHandler: GitHubActionsRunnerSSHConnectionHandler(
                     logger: logger(subsystem: "GitHubActionsRunnerSSHConnectionHandler"),
                     client: NetworkingGitHubClient(
@@ -67,11 +65,19 @@ enum Composers {
 
     static var gitHubCredentialsStore: GitHubCredentialsStore {
         KeychainGitHubCredentialsStore(
-            keychain: Keychain(
-                logger: logger(subsystem: "GitHubCredentialsStore"),
-                accessGroup: "566MC7D8D4.dk.shape.Tartelet"
+            keychain: keychain(
+                logger: logger(subsystem: "GitHubCredentialsStore")
             ),
             serviceName: "Tartelet GitHub Account"
+        )
+    }
+
+    static var virtualMachineSSHCredentialsStore: VirtualMachineSSHCredentialsStore {
+        KeychainVirtualMachineSSHCredentialsStore(
+            keychain: keychain(
+                logger: logger(subsystem: "KeychainVirtualMachineSSHCredentialsStore")
+            ),
+            serviceName: "Tartelet Virtual Machine SSH Credentials"
         )
     }
 }
@@ -84,5 +90,9 @@ private extension Composers {
             subsystem: subsystem,
             daysOfRetention: 7
         )
+    }
+
+    private static func keychain(logger: Logger) -> Keychain {
+        Keychain(logger: logger, accessGroup: "566MC7D8D4.dk.shape.Tartelet")
     }
 }

@@ -55,18 +55,15 @@ struct GitHubSettingsView<SettingsStoreType: SettingsStore>: View {
                         await viewModel.storePrivateKey(at: fileURL)
                     }
                 }
+            } footer: {
                 Button {
                     viewModel.openCreateApp()
                 } label: {
                     Text(L10n.Settings.Github.createApp)
                 }
-                .frame(maxWidth: .infinity, alignment: .trailing)
             }
         }
         .formStyle(.grouped)
-        .task {
-            await viewModel.loadCredentials()
-        }
     }
 }
 
