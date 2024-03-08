@@ -1,8 +1,10 @@
 import Citadel
+import LoggingDomain
 import SSHDomain
 
 struct CitadelSSHConnection: SSHConnection {
     let client: Citadel.SSHClient
+    let logger: Logger
 
     func executeCommand(_ command: String) async throws {
         let outputs = try await client.executeCommandStream(command, inShell: false)
@@ -10,10 +12,10 @@ struct CitadelSSHConnection: SSHConnection {
             switch output {
             case let .stdout(buffer):
                 let string = String(buffer: buffer)
-                print(string)
+                logger.info(string)
             case let .stderr(buffer):
                 let string = String(buffer: buffer)
-                print(string)
+                logger.error(string)
             }
         }
     }

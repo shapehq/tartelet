@@ -15,12 +15,14 @@ let package = Package(
         ])
     ],
     dependencies: [
+        .package(path: "../Logging"),
         .package(url: "https://github.com/orlandos-nl/Citadel", .upToNextMinor(from: "0.7.0"))
     ],
     targets: [
         .target(name: "SSHData", dependencies: [
             "SSHDomain",
-            "Citadel"
+            "Citadel",
+            .product(name: "LoggingDomain", package: "Logging")
         ]),
         .target(name: "SSHDomain")
     ]

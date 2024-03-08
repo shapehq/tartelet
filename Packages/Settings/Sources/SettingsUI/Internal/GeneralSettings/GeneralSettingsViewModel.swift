@@ -20,8 +20,7 @@ final class GeneralSettingsViewModel<SettingsStoreType: SettingsStore>: Observab
             isExportingLogs = false
         }
         do {
-            let fileURL = try await logExporter.export()
-            NSWorkspace.shared.activateFileViewerSelecting([fileURL])
+            try await logExporter.export()
         } catch {
             #if DEBUG
             print(error)

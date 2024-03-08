@@ -8,4 +8,5 @@ public protocol FileSystem {
     func contentsOfDirectory(at directoryURL: URL) throws -> [URL]
     func itemExists(at directoryURL: URL) -> Bool
     func write(_ data: Data, toFileAt fileURL: URL) throws
+    func append(_ data: Data, toFileAt fileURL: URL) throws
 }

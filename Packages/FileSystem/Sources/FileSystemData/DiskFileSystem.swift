@@ -46,4 +46,18 @@ public final class DiskFileSystem: FileSystem {
             try data.write(to: safeFileURL, options: .atomic)
         }
     }
+
+    public func append(_ data: Data, toFileAt fileURL: URL) throws {
+        try NSFileCoordinator.coordinateWritingItem(at: fileURL, options: .forReplacing) { safeFileURL in
+            if let fileHandle = FileHandle(forWritingAtPath: safeFileURL.path) {
+                defer {
+                    fileHandle.closeFile()
+                }
+                fileHandle.seekToEndOfFile()
+                fileHandle.write(data)
+            } else {
+                try data.write(to: safeFileURL, options: .atomic)
+            }
+        }
+    }
 }

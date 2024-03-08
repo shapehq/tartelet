@@ -1,3 +1,4 @@
+import FileSystemData
 import LoggingData
 import MenuBar
 import SettingsDomain
@@ -30,7 +31,9 @@ struct TarteletApp: App {
                     shell: ProcessShell()
                 )
             ),
-            logExporter: NullObjectLogExporter(),
+            logExporter: FileLogExporter(
+                fileSystem: DiskFileSystem()
+            ),
             fleet: Composers.fleet,
             editor: Composers.editor
         )

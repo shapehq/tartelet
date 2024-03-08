@@ -1,7 +1,11 @@
 import Foundation
 
 extension NSFileCoordinator {
-    static func coordinateWritingItem(at fileURL: URL, options: NSFileCoordinator.WritingOptions = [], handler: (URL) throws -> Void) throws {
+    static func coordinateWritingItem(
+        at fileURL: URL,
+        options: NSFileCoordinator.WritingOptions = [],
+        handler: (URL) throws -> Void
+    ) throws {
         let coordinator = NSFileCoordinator()
         var coordinationError: NSError?
         var writeError: Error?
@@ -28,7 +32,11 @@ extension NSFileCoordinator {
         var coordinationError: NSError?
         var readError: Error?
         var value: T?
-        coordinator.coordinate(readingItemAt: fileURL, options: options, error: &coordinationError) { safeFileURL in
+        coordinator.coordinate(
+            readingItemAt: fileURL,
+            options: options,
+            error: &coordinationError
+        ) { safeFileURL in
             do {
                 value = try handler(safeFileURL)
             } catch {
