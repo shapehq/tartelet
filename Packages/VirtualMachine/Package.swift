@@ -22,7 +22,7 @@ let package = Package(
         .target(name: "VirtualMachineData", dependencies: [
             "VirtualMachineDomain",
             .product(name: "LoggingDomain", package: "Logging"),
-            .product(name: "Shell", package: "Shell")
+            .product(name: "ShellDomain", package: "Shell")
         ]),
         .target(name: "VirtualMachineDomain", dependencies: [
             .product(name: "LoggingDomain", package: "Logging")

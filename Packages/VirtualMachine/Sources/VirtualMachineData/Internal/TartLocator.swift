@@ -1,5 +1,5 @@
 import Foundation
-import Shell
+import ShellDomain
 
 enum TartLocatorError: LocalizedError {
     case notFound

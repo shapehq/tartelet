@@ -19,37 +19,23 @@ targets:
       basedOnDependencyAnalysis: false
     dependencies:
       - package: FileSystem
-        product: FileSystemData
-      - package: FileSystem
-        product: FileSystemDomain
+        products: [FileSystemData, FileSystemDomain]
       - package: GitHub
-        product: GitHubData
-      - package: GitHub
-        product: GitHubDomain
+        products: [GitHubData, GitHubDomain]
       - package: Keychain
-        product: Keychain
+        products: Keychain
       - package: Logging
-        product: LoggingData
-      - package: Logging
-        product: LoggingDomain
+        products: [LoggingData, LoggingDomain]
       - package: MenuBar
-        product: MenuBar
+        products: MenuBar
       - package: Networking
-        product: NetworkingData
-      - package: Networking
-        product: NetworkingDomain
+        products: [NetworkingData, NetworkingDomain]
       - package: Settings
-        product: SettingsData
-      - package: Settings
-        product: SettingsDomain
-      - package: Settings
-        product: SettingsUI
+        products: [SettingsData, SettingsDomain, SettingsUI]
       - package: Shell
-        product: Shell
+        products: [ShellData, ShellDomain]
       - package: VirtualMachine
-        product: VirtualMachineData
-      - package: VirtualMachine
-        product: VirtualMachineDomain
+        products: [VirtualMachineData, VirtualMachineDomain]
 localPackages:
   - Packages/FileSystem
   - Packages/GitHub

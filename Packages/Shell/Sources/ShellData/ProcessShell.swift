@@ -1,25 +1,13 @@
-import Combine
 import Foundation
+import ShellDomain
 
-public enum ShellError: LocalizedError {
-    case unexpectedTerminationStatus(Int32)
-
-    public var errorDescription: String? {
-        switch self {
-        case .unexpectedTerminationStatus(let terminationStatus):
-            return "Unexpected termination status: \(terminationStatus)"
-        }
-    }
-}
-
-public struct Shell {
+public struct ProcessShell: Shell {
     public init() {}
 
-    @discardableResult
     public func runExecutable(
         atPath executablePath: String,
         withArguments arguments: [String],
-        environment: [String: String]? = nil
+        environment: [String: String]
     ) async throws -> String {
         let process = Process()
         let sendableProcess = SendableProcess(process)
@@ -34,19 +22,11 @@ public struct Shell {
             let data = pipe.fileHandleForReading.readDataToEndOfFile()
             process.waitUntilExit()
             guard process.terminationStatus == 0 else {
-                throw ShellError.unexpectedTerminationStatus(process.terminationStatus)
+                throw ProcessShellError.unexpectedTerminationStatus(process.terminationStatus)
             }
             return String(data: data, encoding: .utf8) ?? ""
         } onCancel: {
             sendableProcess.process.terminate()
         }
-    }
-}
-
-private final class SendableProcess: @unchecked Sendable {
-    let process: Process
-
-    init(_ process: Process) {
-        self.process = process
     }
 }

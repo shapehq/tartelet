@@ -6,7 +6,7 @@ import LoggingData
 import MenuBar
 import SettingsDomain
 import SettingsUI
-import Shell
+import ShellData
 import SwiftUI
 import VirtualMachineData
 import VirtualMachineDomain

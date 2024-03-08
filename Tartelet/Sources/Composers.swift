@@ -1,6 +1,6 @@
 import LoggingData
 import SettingsData
-import Shell
+import ShellData
 import VirtualMachineData
 import VirtualMachineDomain
 
@@ -14,7 +14,7 @@ enum Composers {
                 homeProvider: SettingsTartHomeProvider(
                     settingsStore: settingsStore
                 ),
-                shell: Shell()
+                shell: ProcessShell()
             ),
             settingsStore: settingsStore
         )
@@ -27,7 +27,7 @@ enum Composers {
                 homeProvider: SettingsTartHomeProvider(
                     settingsStore: settingsStore
                 ),
-                shell: Shell()
+                shell: ProcessShell()
             ),
             settingsStore: settingsStore
         )

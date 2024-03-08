@@ -1,4 +1,4 @@
-import Shell
+import ShellDomain
 
 public struct Tart {
     private let homeProvider: TartHomeProvider

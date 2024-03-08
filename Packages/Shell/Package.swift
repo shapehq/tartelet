@@ -7,9 +7,17 @@ let package = Package(
     name: "Shell",
     platforms: [.macOS(.v13)],
     products: [
-        .library(name: "Shell", targets: ["Shell"])
+        .library(name: "ShellData", targets: [
+            "ShellData"
+        ]),
+        .library(name: "ShellDomain", targets: [
+            "ShellDomain"
+        ])
     ],
     targets: [
-        .target(name: "Shell")
+        .target(name: "ShellDomain"),
+        .target(name: "ShellData", dependencies: [
+            "ShellDomain"
+        ])
     ]
 )
