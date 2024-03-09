@@ -1,28 +1,25 @@
-import Combine
 import LoggingDomain
+import Observation
 
+@Observable
 public final class VirtualMachineFleet {
-    public let isStarted: AnyPublisher<Bool, Never>
-    public let isStopping: AnyPublisher<Bool, Never>
+    public private(set) var isStarted = false
+    public private(set) var isStopping = false
 
     private let logger: Logger
     private let baseVirtualMachine: VirtualMachine
     private var activeTasks: [String: Task<(), Never>] = [:]
-    private let _isStarted = CurrentValueSubject<Bool, Never>(false)
-    private let _isStopping = CurrentValueSubject<Bool, Never>(false)
 
     public init(logger: Logger, baseVirtualMachine: VirtualMachine) {
         self.logger = logger
         self.baseVirtualMachine = baseVirtualMachine
-        self.isStarted = _isStarted.eraseToAnyPublisher()
-        self.isStopping = _isStopping.eraseToAnyPublisher()
     }
 
     public func start(numberOfMachines: Int) throws {
-        guard !_isStarted.value else {
+        guard !isStarted else {
             return
         }
-        _isStarted.value = true
+        isStarted = true
         for index in 0 ..< numberOfMachines {
             let name = baseVirtualMachine.name + "-\(index + 1)"
             startSequentiallyRunningVirtualMachines(named: name)
@@ -30,8 +27,8 @@ public final class VirtualMachineFleet {
     }
 
     public func stopImmediately() {
-        _isStarted.value = false
-        _isStopping.value = false
+        isStarted = false
+        isStopping = false
         for (_, task) in activeTasks {
             task.cancel()
         }
@@ -39,7 +36,7 @@ public final class VirtualMachineFleet {
     }
 
     public func stop() {
-        _isStopping.value = true
+        isStopping = true
     }
 }
 
@@ -50,7 +47,7 @@ private extension VirtualMachineFleet {
                 do {
                     let virtualMachine = try await baseVirtualMachine.clone(named: name)
                     try await runVirtualMachine(virtualMachine)
-                    if _isStopping.value {
+                    if isStopping {
                         activeTasks[name]?.cancel()
                     }
                 } catch {

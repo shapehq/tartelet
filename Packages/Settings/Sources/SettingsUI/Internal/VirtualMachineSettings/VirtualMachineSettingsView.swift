@@ -1,30 +1,34 @@
+import Observation
 import SettingsDomain
 import SwiftUI
+import VirtualMachineDomain
 
-struct VirtualMachineSettingsView<SettingsStoreType: SettingsStore>: View {
-    @StateObject private var viewModel: VirtualMachineSettingsViewModel<SettingsStoreType>
-    @ObservedObject private var settingsStore: SettingsStoreType
+struct VirtualMachineSettingsView<SettingsStoreType: SettingsStore & Observable>: View {
+    @Bindable var settingsStore: SettingsStoreType
+    let credentialsStore: VirtualMachineSSHCredentialsStore
+    let virtualMachinesSourceNameRepository: VirtualMachineSourceNameRepository
+    let isSettingsEnabled: Bool
 
-    init(viewModel: VirtualMachineSettingsViewModel<SettingsStoreType>) {
-        self._settingsStore = ObservedObject(wrappedValue: viewModel.settingsStore)
-        _viewModel = StateObject(wrappedValue: viewModel)
-    }
+    @State private var virtualMachineNames: [String] = []
+    @State private var isRefreshingVirtualMachines = false
+    @State private var sshUsername = ""
+    @State private var sshPassword = ""
 
     var body: some View {
         Form {
             Section {
                 VirtualMachinePicker(
                     selection: $settingsStore.virtualMachine,
-                    virtualMachineNames: viewModel.virtualMachineNames,
-                    isPickerEnabled: viewModel.isSettingsEnabled,
-                    isRefreshing: viewModel.isRefreshingVirtualMachines
+                    virtualMachineNames: virtualMachineNames,
+                    isPickerEnabled: isSettingsEnabled,
+                    isRefreshing: isRefreshingVirtualMachines
                 ) {
                     Task {
-                        await viewModel.refreshVirtualMachines()
+                        await refreshVirtualMachines()
                     }
                 }
                 VirtualMachineCountPicker(selection: $settingsStore.numberOfVirtualMachines)
-                    .disabled(!viewModel.isSettingsEnabled)
+                    .disabled(!isSettingsEnabled)
                 Toggle(isOn: $settingsStore.startVirtualMachinesOnLaunch) {
                     Text(L10n.Settings.VirtualMachine.startVirtualMachinesOnAppLaunch)
                 }
@@ -32,12 +36,12 @@ struct VirtualMachineSettingsView<SettingsStoreType: SettingsStore>: View {
             Section {
                 TextField(
                     L10n.Settings.VirtualMachine.Ssh.username,
-                    text: $viewModel.sshUsername,
+                    text: $sshUsername,
                     prompt: Text(L10n.Settings.VirtualMachine.Ssh.Username.placeholder)
                 )
-                .disabled(!viewModel.isSettingsEnabled)
-                SecureField(L10n.Settings.VirtualMachine.Ssh.password, text: $viewModel.sshPassword)
-                    .disabled(!viewModel.isSettingsEnabled)
+                .disabled(!isSettingsEnabled)
+                SecureField(L10n.Settings.VirtualMachine.Ssh.password, text: $sshPassword)
+                    .disabled(!isSettingsEnabled)
             } header: {
                 Text(L10n.Settings.VirtualMachine.ssh)
             } footer: {
@@ -46,7 +50,7 @@ struct VirtualMachineSettingsView<SettingsStoreType: SettingsStore>: View {
             Section {
                 TartHomeFolderPicker(
                     folderURL: $settingsStore.tartHomeFolderURL,
-                    isEnabled: viewModel.isSettingsEnabled
+                    isEnabled: isSettingsEnabled
                 )
             } header: {
                 Text(L10n.Settings.VirtualMachine.tartHome)
@@ -56,12 +60,50 @@ struct VirtualMachineSettingsView<SettingsStoreType: SettingsStore>: View {
         }
         .formStyle(.grouped)
         .task {
-            await viewModel.refreshVirtualMachines()
+            await refreshVirtualMachines()
         }
-        .onChange(of: settingsStore.tartHomeFolderURL) { _ in
+        .onAppear {
+            sshUsername = credentialsStore.username ?? ""
+            sshPassword = credentialsStore.password ?? ""
+        }
+        .onChange(of: settingsStore.tartHomeFolderURL) { _, _ in
             Task {
-                await viewModel.refreshVirtualMachines()
+                await refreshVirtualMachines()
             }
+        }
+        .onChange(of: sshUsername) { _, newValue in
+            if !newValue.isEmpty {
+                credentialsStore.setUsername(newValue)
+            } else {
+                credentialsStore.setUsername(nil)
+            }
+        }
+        .onChange(of: sshPassword) { _, newValue in
+            if !newValue.isEmpty {
+                credentialsStore.setPassword(newValue)
+            } else {
+                credentialsStore.setPassword(nil)
+            }
+        }
+    }
+}
+
+private extension VirtualMachineSettingsView {
+    @MainActor
+    func refreshVirtualMachines() async {
+        isRefreshingVirtualMachines = true
+        defer {
+            isRefreshingVirtualMachines = false
+        }
+        do {
+            virtualMachineNames = try await self.virtualMachinesSourceNameRepository.sourceNames()
+            if case let .virtualMachine(name) = settingsStore.virtualMachine, !virtualMachineNames.contains(name) {
+                settingsStore.virtualMachine = .unknown
+            }
+        } catch {
+            #if DEBUG
+            print(error)
+            #endif
         }
     }
 }

@@ -1,27 +1,22 @@
 import SwiftUI
 
 struct TartHomeFolderPicker: View {
-    @Binding private var folderURL: URL?
-    private let isEnabled: Bool
-    @State private var folderPath = ""
+    @Binding var folderURL: URL?
+    let isEnabled: Bool
 
-    init(folderURL: Binding<URL?>, isEnabled: Bool) {
-        self._folderURL = folderURL
-        self.isEnabled = isEnabled
-        folderPath = folderURL.wrappedValue?.path() ?? ""
+    private var folderPath: String {
+        if let folderURL {
+            folderURL.path()
+        } else {
+            L10n.Settings.VirtualMachine.TartHome.placeholder
+        }
     }
 
     var body: some View {
         LabeledContent {
             HStack {
-                TextField(
-                    L10n.Settings.VirtualMachine.TartHome.folder,
-                    text: $folderPath,
-                    prompt: Text(L10n.Settings.VirtualMachine.TartHome.placeholder)
-                )
-                .labelsHidden()
-                .fixedSize()
-                .disabled(true)
+                Text(folderPath)
+                    .foregroundStyle(.secondary)
                 Button {
                     if let selectedFolderURL = presentOpenPanel() {
                         Task {
@@ -43,9 +38,6 @@ struct TartHomeFolderPicker: View {
             }
         } label: {
             Text(L10n.Settings.VirtualMachine.TartHome.folder)
-        }
-        .onChange(of: folderURL) { _ in
-            folderPath = folderURL?.path() ?? ""
         }
     }
 }

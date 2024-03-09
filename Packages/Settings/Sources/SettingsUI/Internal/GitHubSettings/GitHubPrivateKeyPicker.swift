@@ -15,7 +15,12 @@ struct GitHubPrivateKeyPicker: View {
         }
     }
 
-    init(filename: Binding<String>, scope: GitHubRunnerScope, isEnabled: Bool, onSelectFile: @escaping (URL) -> Void) {
+    init(
+        filename: Binding<String>,
+        scope: GitHubRunnerScope,
+        isEnabled: Bool,
+        onSelectFile: @escaping (URL) -> Void
+    ) {
         self._filename = filename
         self.scope = scope
         self.isEnabled = isEnabled

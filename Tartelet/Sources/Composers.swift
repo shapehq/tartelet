@@ -80,10 +80,8 @@ enum Composers {
             serviceName: "Tartelet Virtual Machine SSH Credentials"
         )
     }
-}
 
-private extension Composers {
-    private static func logger(subsystem: String) -> Logger {
+    static func logger(subsystem: String) -> Logger {
         FileLogger(
             fileSystem: DiskFileSystem(),
             dateProvider: FoundationDateProvider(),
@@ -91,7 +89,9 @@ private extension Composers {
             daysOfRetention: 7
         )
     }
+}
 
+private extension Composers {
     private static func keychain(logger: Logger) -> Keychain {
         Keychain(logger: logger, accessGroup: "566MC7D8D4.dk.shape.Tartelet")
     }

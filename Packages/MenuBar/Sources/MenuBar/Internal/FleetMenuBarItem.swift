@@ -1,16 +1,12 @@
 import SwiftUI
 
 struct FleetMenuBarItem: View {
-    enum Action {
-        case start
-        case stop
-    }
-
     let hasSelectedVirtualMachine: Bool
     let isFleetStarted: Bool
     let isStoppingFleet: Bool
     let isEditorStarted: Bool
-    let onSelect: (Action) -> Void
+    let startFleet: () -> Void
+    let stopFleet: () -> Void
 
     var body: some View {
         if isStoppingFleet {
@@ -25,7 +21,7 @@ struct FleetMenuBarItem: View {
             }.disabled(true)
         } else if isFleetStarted {
             Button {
-                onSelect(.stop)
+                stopFleet()
             } label: {
                 HStack {
                     Image(systemName: "stop.fill")
@@ -34,7 +30,7 @@ struct FleetMenuBarItem: View {
             }
         } else if hasSelectedVirtualMachine {
             Button {
-                onSelect(.start)
+                startFleet()
             } label: {
                 HStack {
                     Image(systemName: "play.fill")
@@ -43,7 +39,7 @@ struct FleetMenuBarItem: View {
             }.disabled(isEditorStarted)
         } else {
             Button {
-                onSelect(.start)
+                startFleet()
             } label: {
                 HStack {
                     Image(systemName: "desktopcomputer")

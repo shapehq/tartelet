@@ -1,32 +1,33 @@
-import Combine
 import Foundation
 import LoggingDomain
 
+@Observable
 public final class VirtualMachineEditor {
-    public let isStarted: AnyPublisher<Bool, Never>
+    public private(set) var isStarted = false
 
     private let logger: Logger
     private let virtualMachine: VirtualMachine
-    private var runTask = CurrentValueSubject<Task<(), Error>?, Never>(nil)
+    @ObservationIgnored
+    private var runTask: Task<(), Error>? {
+        didSet {
+            isStarted = runTask != nil
+        }
+    }
 
     public init(logger: Logger, virtualMachine: VirtualMachine) {
         self.logger = logger
         self.virtualMachine = virtualMachine
-        self.isStarted = runTask
-            .receive(on: DispatchQueue.main)
-            .map { $0 != nil }
-            .eraseToAnyPublisher()
     }
 
     public func start() {
-        guard runTask.value == nil else {
+        guard runTask == nil else {
             return
         }
         logger.info("Will start virtual machine editor...")
-        runTask.value = Task {
+        runTask = Task {
             try await withTaskCancellationHandler {
                 defer {
-                    self.runTask.value = nil
+                    self.runTask = nil
                 }
                 try await virtualMachine.start()
             } onCancel: {
@@ -36,12 +37,12 @@ public final class VirtualMachineEditor {
     }
 
     public func stop() {
-        guard runTask.value != nil else {
+        guard runTask != nil else {
             return
         }
-        runTask.value?.cancel()
-        runTask.value = Task {
-            self.runTask.value = nil
+        runTask?.cancel()
+        runTask = Task {
+            self.runTask = nil
             self.logger.info("Did stop virtual machine editor")
         }
     }

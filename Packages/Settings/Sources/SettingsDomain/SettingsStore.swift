@@ -1,8 +1,7 @@
-import Combine
 import GitHubDomain
 import SwiftUI
 
-public protocol SettingsStore: ObservableObject {
+public protocol SettingsStore: AnyObject {
     var applicationUIMode: ApplicationUIMode { get set }
     var tartHomeFolderURL: URL? { get set }
     var virtualMachine: VirtualMachine { get set }
@@ -12,5 +11,4 @@ public protocol SettingsStore: ObservableObject {
     var gitHubRunnerLabels: String { get set }
     var gitHubRunnerGroup: String { get set }
     var githubRunnerScope: GitHubRunnerScope { get set }
-    var onChange: AnyPublisher<Self, Never> { get }
 }

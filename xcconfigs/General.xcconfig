@@ -4,6 +4,6 @@ MARKETING_VERSION = 0.7.1
 DEVELOPMENT_TEAM = 566MC7D8D4
 CODE_SIGN_STYLE = Automatic
 CODE_SIGN_ENTITLEMENTS = Tartelet/Supporting files/Tartelet.entitlements
-MACOSX_DEPLOYMENT_TARGET = 13.0
+MACOSX_DEPLOYMENT_TARGET = 14.0
 ENABLE_HARDENED_RUNTIME = YES
 INFOPLIST_KEY_LSApplicationCategoryType = public.app-category.developer-tools

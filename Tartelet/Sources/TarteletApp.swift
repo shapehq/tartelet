@@ -14,11 +14,9 @@ struct TarteletApp: App {
 
     var body: some Scene {
         MenuBarItem(
-            viewModel: MenuBarItemViewModel(
-                settingsStore: Composers.settingsStore,
-                fleet: Composers.fleet,
-                editor: Composers.editor
-            )
+            settingsStore: Composers.settingsStore,
+            fleet: Composers.fleet,
+            editor: Composers.editor
         )
         SettingsScene(
             settingsStore: Composers.settingsStore,
@@ -33,6 +31,7 @@ struct TarteletApp: App {
                 )
             ),
             logExporter: FileLogExporter(
+                logger: Composers.logger(subsystem: "FileLogExporter"),
                 fileSystem: DiskFileSystem()
             ),
             fleet: Composers.fleet,
