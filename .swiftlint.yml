@@ -3,6 +3,7 @@ excluded:
   - Packages/Settings/Sources/SettingsDomain/Internal/L10n.swift
   - Packages/Settings/Sources/SettingsUI/Internal/Assets.swift
   - Packages/Settings/Sources/SettingsUI/Internal/L10n.swift
+  - "**/.build"
 opt_in_rules:
   - anonymous_argument_in_multiline_closure
   - array_init

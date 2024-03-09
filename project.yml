@@ -10,6 +10,10 @@ configFiles:
   Release: xcconfigs/General.xcconfig
 targets:
   Tartelet:
+    scheme:
+      testPlans:
+        - path: Tartelet/Tartelet.xctestplan
+          defaultPlan: true
     type: application
     platform: macOS
     sources: [Tartelet]

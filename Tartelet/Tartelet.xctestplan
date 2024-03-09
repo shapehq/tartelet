@@ -1,0 +1,31 @@
+{
+  "configurations" : [
+    {
+      "id" : "720571D4-E2FE-444C-8FA8-38E633EFB543",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/Logging",
+        "identifier" : "LogExporterLiveTests",
+        "name" : "LogExporterLiveTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/VirtualMachineAutomaticLauncher",
+        "identifier" : "VirtualMachineAutomaticLauncherTests",
+        "name" : "VirtualMachineAutomaticLauncherTests"
+      }
+    }
+  ],
+  "version" : 1
+}
