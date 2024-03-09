@@ -1,37 +1,38 @@
-import Combine
-import GitHubCredentialsStore
-import LogExporter
-import SettingsStore
+import GitHubDomain
+import LoggingDomain
+import Observation
+import SettingsDomain
 import SwiftUI
-import VirtualMachineEditorService
-import VirtualMachineFleet
-import VirtualMachineSourceNameRepository
+import VirtualMachineDomain
 
-public struct SettingsScene: Scene {
-    private let settingsStore: SettingsStore
+public struct SettingsScene<SettingsStoreType: SettingsStore & Observable>: Scene {
+    private let settingsStore: SettingsStoreType
     private let gitHubCredentialsStore: GitHubCredentialsStore
+    private let virtualMachineSSHCredentialsStore: VirtualMachineSSHCredentialsStore
     private let virtualMachinesSourceNameRepository: VirtualMachineSourceNameRepository
     private let logExporter: LogExporter
-    private let isVirtualMachineSettingsEnabled: AnyPublisher<Bool, Never>
+    private let fleet: VirtualMachineFleet
+    private let editor: VirtualMachineEditor
+    private var isSettingsEnabled: Bool {
+        !fleet.isStarted && !editor.isStarted
+    }
 
     public init(
-        settingsStore: SettingsStore,
+        settingsStore: SettingsStoreType,
         gitHubCredentialsStore: GitHubCredentialsStore,
-        sourceNameRepository: VirtualMachineSourceNameRepository,
+        virtualMachineSSHCredentialsStore: VirtualMachineSSHCredentialsStore,
+        virtualMachinesSourceNameRepository: VirtualMachineSourceNameRepository,
         logExporter: LogExporter,
         fleet: VirtualMachineFleet,
-        editorService: VirtualMachineEditorService
+        editor: VirtualMachineEditor
     ) {
         self.settingsStore = settingsStore
         self.gitHubCredentialsStore = gitHubCredentialsStore
-        self.virtualMachinesSourceNameRepository = sourceNameRepository
+        self.virtualMachineSSHCredentialsStore = virtualMachineSSHCredentialsStore
+        self.virtualMachinesSourceNameRepository = virtualMachinesSourceNameRepository
         self.logExporter = logExporter
-        self.isVirtualMachineSettingsEnabled = Publishers.CombineLatest(
-            fleet.isStarted,
-            editorService.isStarted
-        )
-        .map { !$0 && !$1 }
-        .eraseToAnyPublisher()
+        self.fleet = fleet
+        self.editor = editor
     }
 
     public var body: some Scene {
@@ -39,9 +40,10 @@ public struct SettingsScene: Scene {
             SettingsView(
                 settingsStore: settingsStore,
                 gitHubCredentialsStore: gitHubCredentialsStore,
+                virtualMachineSSHCredentialsStore: virtualMachineSSHCredentialsStore,
                 virtualMachinesSourceNameRepository: virtualMachinesSourceNameRepository,
                 logExporter: logExporter,
-                isVirtualMachineSettingsEnabled: isVirtualMachineSettingsEnabled
+                isSettingsEnabled: isSettingsEnabled
             )
         }
     }

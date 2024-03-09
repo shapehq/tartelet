@@ -1,43 +1,42 @@
-import Combine
-import GitHubCredentialsStore
-import LogExporter
-import SettingsStore
+import GitHubDomain
+import LoggingDomain
+import Observation
+import SettingsDomain
 import SwiftUI
-import VirtualMachineSourceNameRepository
+import VirtualMachineDomain
 
-struct SettingsView: View {
-    let settingsStore: SettingsStore
+struct SettingsView<SettingsStoreType: SettingsStore & Observable>: View {
+    let settingsStore: SettingsStoreType
     let gitHubCredentialsStore: GitHubCredentialsStore
+    let virtualMachineSSHCredentialsStore: VirtualMachineSSHCredentialsStore
     let virtualMachinesSourceNameRepository: VirtualMachineSourceNameRepository
     let logExporter: LogExporter
-    let isVirtualMachineSettingsEnabled: AnyPublisher<Bool, Never>
+    let isSettingsEnabled: Bool
 
     var body: some View {
         TabView {
             GeneralSettingsView(
-                viewModel: GeneralSettingsViewModel(
-                    settingsStore: settingsStore,
-                    logExporter: logExporter
-                )
-            ).tabItem {
+                settingsStore: settingsStore,
+                logExporter: logExporter
+            )
+            .tabItem {
                 Label(L10n.Settings.general, systemImage: "gear")
             }
             VirtualMachineSettingsView(
-                viewModel: VirtualMachineSettingsViewModel(
-                    settingsStore: settingsStore,
-                    virtualMachinesSourceNameRepository: virtualMachinesSourceNameRepository,
-                    isSettingsEnabled: isVirtualMachineSettingsEnabled
-                )
-            ).tabItem {
+                settingsStore: settingsStore,
+                credentialsStore: virtualMachineSSHCredentialsStore,
+                virtualMachinesSourceNameRepository: virtualMachinesSourceNameRepository,
+                isSettingsEnabled: isSettingsEnabled
+            )
+            .tabItem {
                 Label(L10n.Settings.virtualMachine, systemImage: "desktopcomputer")
             }
             GitHubSettingsView(
-                viewModel: GitHubSettingsViewModel(
-                    settingsStore: settingsStore,
-                    credentialsStore: gitHubCredentialsStore,
-                    isSettingsEnabled: isVirtualMachineSettingsEnabled
-                )
-            ).tabItem {
+                settingsStore: settingsStore,
+                credentialsStore: gitHubCredentialsStore,
+                isSettingsEnabled: isSettingsEnabled
+            )
+            .tabItem {
                 Label {
                     Text(L10n.Settings.github)
                 } icon: {
@@ -45,11 +44,10 @@ struct SettingsView: View {
                 }
             }
             GitHubRunnerSettingsView(
-                viewModel: GitHubRunnerSettingsViewModel(
-                    settingsStore: settingsStore,
-                    isSettingsEnabled: isVirtualMachineSettingsEnabled
-                )
-            ).tabItem {
+                settingsStore: settingsStore,
+                isSettingsEnabled: isSettingsEnabled
+            )
+            .tabItem {
                 Label {
                     Text(L10n.Settings.githubRunner)
                 } icon: {

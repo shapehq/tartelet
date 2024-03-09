@@ -1,4 +1,4 @@
-import Settings
+import SettingsDomain
 import SwiftUI
 
 struct VirtualMachinePicker: View {

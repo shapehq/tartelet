@@ -1,15 +1,21 @@
-// swift-tools-version: 5.7
+// swift-tools-version: 5.10
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
 let package = Package(
     name: "Settings",
-    platforms: [.macOS(.v13)],
+    platforms: [.macOS(.v14)],
     products: [
-        .library(name: "Settings", targets: ["Settings"]),
-        .library(name: "SettingsStore", targets: ["SettingsStore"]),
-        .library(name: "SettingsUI", targets: ["SettingsUI"])
+        .library(name: "SettingsData", targets: [
+            "SettingsData"
+        ]),
+        .library(name: "SettingsDomain", targets: [
+            "SettingsDomain"
+        ]),
+        .library(name: "SettingsUI", targets: [
+            "SettingsUI"
+        ])
     ],
     dependencies: [
         .package(path: "../GitHub"),
@@ -17,20 +23,23 @@ let package = Package(
         .package(path: "../VirtualMachine")
     ],
     targets: [
-        .target(name: "Settings"),
-        .target(name: "SettingsStore", dependencies: [
-            .product(name: "GitHubService", package: "GitHub"),
-            "Settings"
+        .target(name: "SettingsData", dependencies: [
+            "SettingsDomain",
+            .product(name: "GitHubDomain", package: "GitHub")
+        ]),
+        .target(name: "SettingsDomain", dependencies: [
+            .product(name: "GitHubDomain", package: "GitHub"),
+            .product(name: "VirtualMachineDomain", package: "VirtualMachine")
+        ], resources: [
+            .process("Internal/Localizable.strings")
         ]),
         .target(name: "SettingsUI", dependencies: [
-            .product(name: "GitHubCredentialsStore", package: "GitHub"),
-            .product(name: "GitHubService", package: "GitHub"),
-            .product(name: "LogExporter", package: "Logging"),
-            "Settings",
-            "SettingsStore",
-            .product(name: "VirtualMachineEditorService", package: "VirtualMachine"),
-            .product(name: "VirtualMachineFleet", package: "VirtualMachine"),
-            .product(name: "VirtualMachineSourceNameRepository", package: "VirtualMachine")
-        ], resources: [.process("Supporting files/Localizable.strings")])
+            "SettingsDomain",
+            .product(name: "GitHubDomain", package: "GitHub"),
+            .product(name: "LoggingDomain", package: "Logging"),
+            .product(name: "VirtualMachineDomain", package: "VirtualMachine")
+        ], resources: [
+            .process("Internal/Localizable.strings")
+        ])
     ]
 )

@@ -1,4 +1,4 @@
-import Settings
+import SettingsDomain
 
 extension ApplicationUIMode {
     public var title: String {

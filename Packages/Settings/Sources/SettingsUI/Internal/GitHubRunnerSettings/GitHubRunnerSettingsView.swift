@@ -1,35 +1,30 @@
-import SettingsStore
+import Observation
+import SettingsDomain
 import SwiftUI
 
-struct GitHubRunnerSettingsView: View {
-    @StateObject private var viewModel: GitHubRunnerSettingsViewModel
-    @ObservedObject private var settingsStore: SettingsStore
-
-    init(viewModel: GitHubRunnerSettingsViewModel) {
-        _viewModel = StateObject(wrappedValue: viewModel)
-        settingsStore = viewModel.settingsStore
-    }
+struct GitHubRunnerSettingsView<SettingsStoreType: SettingsStore & Observable>: View {
+    @Bindable var settingsStore: SettingsStoreType
+    let isSettingsEnabled: Bool
 
     var body: some View {
         Form {
             Section {
                 TextField(
                     L10n.Settings.GithubRunner.labels,
-                    text: $viewModel.labels,
+                    text: $settingsStore.gitHubRunnerLabels,
                     prompt: Text(L10n.Settings.GithubRunner.Labels.prompt)
                 )
-                .disabled(!viewModel.isSettingsEnabled)
+                .disabled(!isSettingsEnabled)
             } footer: {
                 Text(L10n.Settings.GithubRunner.Labels.footer)
-                    .foregroundColor(.secondary)
             }
             Section {
                 TextField(
                     L10n.Settings.GithubRunner.group,
-                    text: $viewModel.group,
+                    text: $settingsStore.gitHubRunnerGroup,
                     prompt: Text(L10n.Settings.GithubRunner.Group.prompt)
                 )
-                .disabled(!viewModel.isSettingsEnabled)
+                .disabled(!isSettingsEnabled)
             }
         }
         .formStyle(.grouped)

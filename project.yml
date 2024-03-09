@@ -22,80 +22,27 @@ targets:
       path: scripts/swiftlint.sh
       basedOnDependencyAnalysis: false
     dependencies:
-      - package: Dock
-        product: Dock
       - package: FileSystem
-        product: FileSystem
-      - package: FileSystem
-        product: FileSystemDisk
+        products: [FileSystemData, FileSystemDomain]
       - package: GitHub
-        product: GitHubCredentialsStore
-      - package: GitHub
-        product: GitHubCredentialsStoreKeychain
-      - package: GitHub
-        product: GitHubService
-      - package: GitHub
-        product: GitHubServiceLive
+        products: [GitHubData, GitHubDomain]
       - package: Keychain
-        product: Keychain
-      - package: Keychain
-        product: KeychainLive
+        products: Keychain
       - package: Logging
-        product: LogHelpers
-      - package: Logging
-        product: LogExporter
-      - package: Logging
-        product: LogExporterLive
-      - package: Logging
-        product: LogStore
-      - package: Logging
-        product: LogStoreOSLog
+        products: [LoggingData, LoggingDomain]
       - package: MenuBar
-        product: MenuBarItem
+        products: MenuBar
       - package: Networking
-        product: NetworkingService
-      - package: Networking
-        product: NetworkingServiceLive
+        products: [NetworkingData, NetworkingDomain]
       - package: Settings
-        product: Settings
-      - package: Settings
-        product: SettingsStore
-      - package: Settings
-        product: SettingsUI
+        products: [SettingsData, SettingsDomain, SettingsUI]
       - package: Shell
-        product: Shell
-      - package: Tart
-        product: Tart
-      - package: TartVirtualMachine
-        product: EphemeralTartVirtualMachine
-      - package: TartVirtualMachine
-        product: TartVirtualMachine
-      - package: TartVirtualMachine
-        product: TartVirtualMachineSourceNameRepository
+        products: [ShellData, ShellDomain]
+      - package: SSH
+        products: [SSHData, SSHDomain]
       - package: VirtualMachine
-        product: VirtualMachine
-      - package: VirtualMachine
-        product: VirtualMachineFactory
-      - package: VirtualMachine
-        product: VirtualMachineFleet
-      - package: VirtualMachine
-        product: VirtualMachineFleetLive
-      - package: VirtualMachine
-        product: VirtualMachineEditorService
-      - package: VirtualMachine
-        product: VirtualMachineResourcesCopier
-      - package: VirtualMachine
-        product: VirtualMachineResourcesService
-      - package: VirtualMachine
-        product: VirtualMachineResourcesServiceEditor
-      - package: VirtualMachine
-        product: VirtualMachineResourcesServiceEphemeral
-      - package: VirtualMachine
-        product: VirtualMachineSourceNameRepository
-      - package: VirtualMachineAutomaticLauncher
-        product: VirtualMachineAutomaticLauncher
+        products: [VirtualMachineData, VirtualMachineDomain]
 localPackages:
-  - Packages/Dock
   - Packages/FileSystem
   - Packages/GitHub
   - Packages/Keychain
@@ -103,8 +50,6 @@ localPackages:
   - Packages/MenuBar
   - Packages/Networking
   - Packages/Settings
+  - Packages/SSH
   - Packages/Shell
-  - Packages/Tart
-  - Packages/TartVirtualMachine
   - Packages/VirtualMachine
-  - Packages/VirtualMachineAutomaticLauncher
