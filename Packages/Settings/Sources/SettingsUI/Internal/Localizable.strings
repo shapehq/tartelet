@@ -21,7 +21,7 @@
 "settings.virtual_machine.ssh.username" = "Username";
 "settings.virtual_machine.ssh.username.placeholder" = "runner";
 "settings.virtual_machine.ssh.password" = "Password";
-"settings.virtual_machine.ssh.footer" = "The credentials are used to SSH into the virtual machine to configure it to start the GitHub Actions runner";
+"settings.virtual_machine.ssh.footer" = "The credentials are used to SSH into the virtual machine to configure it to start the GitHub Actions runner. Make sure \"Remote Login\" is enabled in the virtual machine.";
 "settings.virtual_machine.start_virtual_machines_on_app_launch" = "Start Virtual Machines on App Launch";
 
 "settings.github" = "GitHub";
