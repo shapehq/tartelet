@@ -2,8 +2,6 @@ excluded:
   - Packages/MenuBar/Sources/MenuBar/Internal/L10n.swift
   - Packages/Settings/Sources/SettingsUI/Internal/Assets.swift
   - Packages/Settings/Sources/SettingsUI/Internal/L10n.swift
-disabled_rules:
-  - nesting
 opt_in_rules:
   - anonymous_argument_in_multiline_closure
   - array_init
@@ -62,10 +60,6 @@ opt_in_rules:
   - yoda_condition
 analyzer_rules:
   - capture_variable
-line_length:
-  warning: 150
-  error: 175
-  ignores_comments: true
 type_name:
   max_length:
     warning: 60

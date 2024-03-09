@@ -20,14 +20,25 @@ public extension Keychain {
             let updateQuery = UpdatePasswordQuery(password: password)
             let updateStatus = SecItemUpdate(findQuery.rawQuery, updateQuery.rawQuery)
             guard updateStatus == errSecSuccess else {
-                logger.error("Failed updating password for account \(account) belong to service \(service). Received status: \(updateStatus)")
+                logger.error(
+                    "Failed updating password for account \(account) belong to service \(service)."
+                    + " Received status: \(updateStatus)"
+                )
                 return false
             }
         } else {
-            let addQuery = AddPasswordQuery(accessGroup: accessGroup, service: service, account: account, password: password)
+            let addQuery = AddPasswordQuery(
+                accessGroup: accessGroup,
+                service: service,
+                account: account,
+                password: password
+            )
             let addStatus = SecItemAdd(addQuery.rawQuery, nil)
             guard addStatus == errSecSuccess else {
-                logger.error("Failed setting password for account \(account) belong to service \(service). Received status: \(addStatus)")
+                logger.error(
+                    "Failed setting password for account \(account) belong to service \(service)."
+                    + " Received status: \(addStatus)"
+                )
                 return false
             }
         }
@@ -69,14 +80,20 @@ public extension Keychain {
         if SecItemCopyMatching(findQuery.rawQuery, nil) == errSecSuccess {
             let removeStatus = SecItemDelete(findQuery.rawQuery)
             guard removeStatus == errSecSuccess else {
-                logger.error("Failed removing existing RSA private key with tag \(tag). Received status code: \(removeStatus)")
+                logger.error(
+                    "Failed removing existing RSA private key with tag \(tag)."
+                    + " Received status code: \(removeStatus)"
+                )
                 return false
             }
         }
         let addQuery = AddKeyQuery(accessGroup: accessGroup, tag: tag, key: key.rawValue)
         let addStatus = SecItemAdd(addQuery.rawQuery, nil)
         guard addStatus == errSecSuccess else {
-            logger.error("Failed storing RSA private key with tag \(tag). Received status code: \(addStatus)")
+            logger.error(
+                "Failed storing RSA private key with tag \(tag)."
+                + " Received status code: \(addStatus)"
+            )
             return false
         }
         return true

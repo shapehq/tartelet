@@ -51,10 +51,10 @@ private extension VirtualMachineFleet {
                         activeTasks[name]?.cancel()
                     }
                 } catch {
-                    // Ignore the error and try again until the task is cancelled.
-                    // The error should have been logged using OSLog so we know what is going on in case we need to debug.
-                    // However, the actual error is not important at this point so we ignore it and let the loop run again,
-                    // thus giving us another chance to start the virtual machine.
+                    // Ignore the error and try again until the task is cancelled. The error should
+                    // have been logged so we know what is going on in case we need to debug.
+                    // However, the actual error is not important at this point so we ignore it and
+                    // let the loop run again, thus giving us another chance to start the virtual machine.
                 }
             }
             logger.info("Task running virtual machine named \(name) was cancelled.")
@@ -80,7 +80,10 @@ private extension VirtualMachineFleet {
                     throw error
                 }
             } catch {
-                logger.info("Virtual machine named \(virtualMachine.name) stopped with message: \(error.localizedDescription)")
+                logger.info(
+                    "Virtual machine named \(virtualMachine.name) stopped with message: "
+                    + error.localizedDescription
+                )
                 throw error
             }
         } onCancel: {
@@ -89,7 +92,10 @@ private extension VirtualMachineFleet {
                 do {
                     try await virtualMachine.delete()
                 } catch {
-                    self.logger.info("Could not delete virtual machine named \(virtualMachine.name): \(error.localizedDescription)")
+                    self.logger.info(
+                        "Could not delete virtual machine named \(virtualMachine.name): "
+                        + error.localizedDescription
+                    )
                     throw error
                 }
             }

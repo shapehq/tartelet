@@ -28,7 +28,10 @@ public final class DiskFileSystem: FileSystem {
     }
 
     public func copyItem(from sourceItemURL: URL, to destinationItemURL: URL) throws {
-        try NSFileCoordinator.coordinateReadingItem(at: sourceItemURL, writingTo: destinationItemURL) { safeReadingFileURL, safeWritingFileURL in
+        try NSFileCoordinator.coordinateReadingItem(
+            at: sourceItemURL,
+            writingTo: destinationItemURL
+        ) { safeReadingFileURL, safeWritingFileURL in
             try fileManager.copyItem(at: safeReadingFileURL, to: safeWritingFileURL)
         }
     }

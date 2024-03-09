@@ -54,7 +54,10 @@ private extension VirtualMachineSSHClient {
         do {
             return try await ipAddressReader.readIPAddress(of: virtualMachine)
         } catch {
-            logger.error("Failed obtaining IP address of virtual machine named \(virtualMachine.name): \(error.localizedDescription)")
+            logger.error(
+                "Failed obtaining IP address of virtual machine named \(virtualMachine.name): "
+                + error.localizedDescription
+            )
             throw error
         }
     }
@@ -64,17 +67,26 @@ private extension VirtualMachineSSHClient {
         on host: String
     ) async throws -> SSHClientType.SSHConnectionType {
         guard let username = credentialsStore.username else {
-            logger.error("Failed connecting to to \(virtualMachineName) on \(host). The SSH username is not set in Tartelet's settings.")
+            logger.error(
+                "Failed connecting to to \(virtualMachineName) on \(host)."
+                + " The SSH username is not set in Tartelet's settings."
+            )
             throw VirtualMachineSSHClientError.missingSSHUsername
         }
         guard let password = credentialsStore.password else {
-            logger.error("Failed connecting to to \(virtualMachineName) on \(host). The SSH password is not set in Tartelet's settings.")
+            logger.error(
+                "Failed connecting to to \(virtualMachineName) on \(host)."
+                + " The SSH password is not set in Tartelet's settings."
+            )
             throw VirtualMachineSSHClientError.missingSSHPassword
         }
         do {
             return try await client.connect(host: host, username: username, password: password)
         } catch {
-            logger.error("Failed connecting to \(virtualMachineName) on \(host): \(error.localizedDescription)")
+            logger.error(
+                "Failed connecting to \(virtualMachineName) on \(host): "
+                + error.localizedDescription
+            )
             throw error
         }
     }

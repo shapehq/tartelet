@@ -52,12 +52,18 @@ public final class NetworkingGitHubClient: GitHubClient {
         let jwtToken = try GitHubJWTTokenFactory.makeJWTToken(privateKey: privateKey, appID: appID)
         var request = URLRequest(url: url).addingBearerToken(jwtToken)
         request.httpMethod = "POST"
-        return try await networkingService.load(IntermediateGitHubAppAccessToken.self, from: request).map { parameters in
+        return try await networkingService.load(
+            IntermediateGitHubAppAccessToken.self,
+            from: request
+        ).map { parameters in
             GitHubAppAccessToken(parameters.value.token)
         }
     }
 
-    public func getRunnerDownloadURL(with appAccessToken: GitHubAppAccessToken, runnerScope: GitHubRunnerScope) async throws -> URL {
+    public func getRunnerDownloadURL(
+        with appAccessToken: GitHubAppAccessToken,
+        runnerScope: GitHubRunnerScope
+    ) async throws -> URL {
         let url = try await baseURL.appending(path: runnerScope.runnerDownloadPath(using: credentialsStore))
         let request = URLRequest(url: url).addingBearerToken(appAccessToken.rawValue)
         let downloads = try await networkingService.load([GitHubRunnerDownload].self, from: request).map(\.value)
@@ -76,7 +82,10 @@ public final class NetworkingGitHubClient: GitHubClient {
         let url = try await baseURL.appending(path: runnerScope.runnerRegistrationPath(using: credentialsStore))
         var request = URLRequest(url: url).addingBearerToken(appAccessToken.rawValue)
         request.httpMethod = "POST"
-        return try await networkingService.load(IntermediateGitHubRunnerRegistrationToken.self, from: request).map { parameters in
+        return try await networkingService.load(
+            IntermediateGitHubRunnerRegistrationToken.self,
+            from: request
+        ).map { parameters in
             GitHubRunnerRegistrationToken(parameters.value.token)
         }
     }
@@ -87,7 +96,10 @@ private extension NetworkingGitHubClient {
         let url = baseURL.appending(path: "/app/installations")
         let token = try await getAppJWTToken()
         let request = URLRequest(url: url).addingBearerToken(token)
-        let appInstallations = try await networkingService.load([GitHubAppInstallation].self, from: request).map(\.value)
+        let appInstallations = try await networkingService.load(
+            [GitHubAppInstallation].self,
+            from: request
+        ).map(\.value)
         let loginName = await runnerScope.runnerLogin(using: credentialsStore)
         guard let appInstallation = appInstallations.first(where: { $0.account.login == loginName }) else {
             throw NetworkingGitHubClientError.appIsNotInstalled

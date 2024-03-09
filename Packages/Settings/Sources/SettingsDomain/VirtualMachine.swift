@@ -20,7 +20,8 @@ public enum VirtualMachine: RawRepresentable, Hashable {
     public init(rawValue: String) {
         let prefix = Self.rawValuePrefixForVirtualMachine
         if rawValue.hasPrefix(prefix) {
-            let name = String(rawValue[rawValue.index(rawValue.startIndex, offsetBy: prefix.count) ..< rawValue.endIndex])
+            let startIndex = rawValue.index(rawValue.startIndex, offsetBy: prefix.count)
+            let name = String(rawValue[startIndex ..< rawValue.endIndex])
             self = .virtualMachine(name)
         } else {
             self = .unknown
