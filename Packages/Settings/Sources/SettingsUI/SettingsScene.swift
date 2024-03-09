@@ -8,7 +8,7 @@ import VirtualMachineDomain
 public struct SettingsScene<SettingsStoreType: SettingsStore & Observable>: Scene {
     private let settingsStore: SettingsStoreType
     private let gitHubCredentialsStore: GitHubCredentialsStore
-    private let virtualMachineCredentialsStore: VirtualMachineSSHCredentialsStore
+    private let virtualMachineSSHCredentialsStore: VirtualMachineSSHCredentialsStore
     private let virtualMachinesSourceNameRepository: VirtualMachineSourceNameRepository
     private let logExporter: LogExporter
     private let fleet: VirtualMachineFleet
@@ -20,7 +20,7 @@ public struct SettingsScene<SettingsStoreType: SettingsStore & Observable>: Scen
     public init(
         settingsStore: SettingsStoreType,
         gitHubCredentialsStore: GitHubCredentialsStore,
-        virtualMachineCredentialsStore: VirtualMachineSSHCredentialsStore,
+        virtualMachineSSHCredentialsStore: VirtualMachineSSHCredentialsStore,
         virtualMachinesSourceNameRepository: VirtualMachineSourceNameRepository,
         logExporter: LogExporter,
         fleet: VirtualMachineFleet,
@@ -28,7 +28,7 @@ public struct SettingsScene<SettingsStoreType: SettingsStore & Observable>: Scen
     ) {
         self.settingsStore = settingsStore
         self.gitHubCredentialsStore = gitHubCredentialsStore
-        self.virtualMachineCredentialsStore = virtualMachineCredentialsStore
+        self.virtualMachineSSHCredentialsStore = virtualMachineSSHCredentialsStore
         self.virtualMachinesSourceNameRepository = virtualMachinesSourceNameRepository
         self.logExporter = logExporter
         self.fleet = fleet
@@ -40,7 +40,7 @@ public struct SettingsScene<SettingsStoreType: SettingsStore & Observable>: Scen
             SettingsView(
                 settingsStore: settingsStore,
                 gitHubCredentialsStore: gitHubCredentialsStore,
-                virtualMachineCredentialsStore: virtualMachineCredentialsStore,
+                virtualMachineSSHCredentialsStore: virtualMachineSSHCredentialsStore,
                 virtualMachinesSourceNameRepository: virtualMachinesSourceNameRepository,
                 logExporter: logExporter,
                 isSettingsEnabled: isSettingsEnabled

@@ -11,6 +11,11 @@ strings:
       templateName: structured-swift5
       output: Packages/MenuBar/Sources/MenuBar/Internal/L10n.swift
   - inputs: 
+    - Packages/Settings/Sources/SettingsDomain/Internal/Localizable.strings
+    outputs:
+      templateName: structured-swift5
+      output: Packages/Settings/Sources/SettingsDomain/Internal/L10n.swift
+  - inputs: 
     - Packages/Settings/Sources/SettingsUI/Internal/Localizable.strings
     outputs:
       templateName: structured-swift5

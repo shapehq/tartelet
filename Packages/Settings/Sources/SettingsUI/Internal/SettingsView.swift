@@ -8,7 +8,7 @@ import VirtualMachineDomain
 struct SettingsView<SettingsStoreType: SettingsStore & Observable>: View {
     let settingsStore: SettingsStoreType
     let gitHubCredentialsStore: GitHubCredentialsStore
-    let virtualMachineCredentialsStore: VirtualMachineSSHCredentialsStore
+    let virtualMachineSSHCredentialsStore: VirtualMachineSSHCredentialsStore
     let virtualMachinesSourceNameRepository: VirtualMachineSourceNameRepository
     let logExporter: LogExporter
     let isSettingsEnabled: Bool
@@ -24,7 +24,7 @@ struct SettingsView<SettingsStoreType: SettingsStore & Observable>: View {
             }
             VirtualMachineSettingsView(
                 settingsStore: settingsStore,
-                credentialsStore: virtualMachineCredentialsStore,
+                credentialsStore: virtualMachineSSHCredentialsStore,
                 virtualMachinesSourceNameRepository: virtualMachinesSourceNameRepository,
                 isSettingsEnabled: isSettingsEnabled
             )

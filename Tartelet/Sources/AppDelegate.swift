@@ -14,7 +14,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         beginObservingAppIconVisibility()
         if Composers.settingsStore.startVirtualMachinesOnLaunch {
-            try? Composers.fleet.start(numberOfMachines: Composers.settingsStore.numberOfVirtualMachines)
+            Composers.fleet.start(numberOfMachines: Composers.settingsStore.numberOfVirtualMachines)
         }
     }
 

@@ -28,13 +28,18 @@ let package = Package(
             .product(name: "GitHubDomain", package: "GitHub")
         ]),
         .target(name: "SettingsDomain", dependencies: [
-            .product(name: "GitHubDomain", package: "GitHub")
+            .product(name: "GitHubDomain", package: "GitHub"),
+            .product(name: "VirtualMachineDomain", package: "VirtualMachine")
+        ], resources: [
+            .process("Internal/Localizable.strings")
         ]),
         .target(name: "SettingsUI", dependencies: [
             "SettingsDomain",
             .product(name: "GitHubDomain", package: "GitHub"),
             .product(name: "LoggingDomain", package: "Logging"),
             .product(name: "VirtualMachineDomain", package: "VirtualMachine")
-        ], resources: [.process("Internal/Localizable.strings")])
+        ], resources: [
+            .process("Internal/Localizable.strings")
+        ])
     ]
 )

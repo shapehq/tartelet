@@ -2,6 +2,7 @@ import Foundation
 import GitHubDomain
 import Keychain
 
+@Observable
 public final class KeychainGitHubCredentialsStore: GitHubCredentialsStore {
     private enum PasswordAccount {
         static let organizationName = "github.credentials.organizationName"
@@ -15,31 +16,36 @@ public final class KeychainGitHubCredentialsStore: GitHubCredentialsStore {
     }
 
     public var organizationName: String? {
-        keychain.password(
+        access(keyPath: \.organizationName)
+        return keychain.password(
             forAccount: PasswordAccount.organizationName,
             belongingToService: serviceName
         )
     }
     public var repositoryName: String? {
-        keychain.password(
+        access(keyPath: \.repositoryName)
+        return keychain.password(
             forAccount: PasswordAccount.repositoryName,
             belongingToService: serviceName
         )
     }
     public var ownerName: String? {
-        keychain.password(
+        access(keyPath: \.ownerName)
+        return keychain.password(
             forAccount: PasswordAccount.ownerName,
             belongingToService: serviceName
         )
     }
     public var appId: String? {
-        keychain.password(
+        access(keyPath: \.appId)
+        return keychain.password(
             forAccount: PasswordAccount.appId,
             belongingToService: serviceName
         )
     }
     public var privateKey: Data? {
-        keychain.key(withTag: KeyTag.privateKey)?.data
+        access(keyPath: \.privateKey)
+        return keychain.key(withTag: KeyTag.privateKey)?.data
     }
 
     private let keychain: Keychain
@@ -51,67 +57,77 @@ public final class KeychainGitHubCredentialsStore: GitHubCredentialsStore {
     }
 
     public func setOrganizationName(_ organizationName: String?) {
-        if let organizationName {
-            _ = keychain.setPassword(
-                organizationName,
-                forAccount: PasswordAccount.organizationName,
-                belongingToService: serviceName
-            )
-        } else {
-            keychain.removePassword(
-                forAccount: PasswordAccount.organizationName,
-                belongingToService: serviceName
-            )
+        withMutation(keyPath: \.organizationName) {
+            if let organizationName {
+                _ = keychain.setPassword(
+                    organizationName,
+                    forAccount: PasswordAccount.organizationName,
+                    belongingToService: serviceName
+                )
+            } else {
+                keychain.removePassword(
+                    forAccount: PasswordAccount.organizationName,
+                    belongingToService: serviceName
+                )
+            }
         }
     }
 
     public func setRepository(_ repositoryName: String?, withOwner ownerName: String?) {
-        if let repositoryName {
-            _ = keychain.setPassword(
-                repositoryName,
-                forAccount: PasswordAccount.repositoryName,
-                belongingToService: serviceName
-            )
-        } else {
-            keychain.removePassword(
-                forAccount: PasswordAccount.repositoryName,
-                belongingToService: serviceName
-            )
+        withMutation(keyPath: \.repositoryName) {
+            if let repositoryName {
+                _ = keychain.setPassword(
+                    repositoryName,
+                    forAccount: PasswordAccount.repositoryName,
+                    belongingToService: serviceName
+                )
+            } else {
+                keychain.removePassword(
+                    forAccount: PasswordAccount.repositoryName,
+                    belongingToService: serviceName
+                )
+            }
         }
-        if let ownerName {
-            _ = keychain.setPassword(
-                ownerName,
-                forAccount: PasswordAccount.ownerName,
-                belongingToService: serviceName
-            )
-        } else {
-            keychain.removePassword(
-                forAccount: PasswordAccount.ownerName,
-                belongingToService: serviceName
-            )
+        withMutation(keyPath: \.ownerName) {
+            if let ownerName {
+                _ = keychain.setPassword(
+                    ownerName,
+                    forAccount: PasswordAccount.ownerName,
+                    belongingToService: serviceName
+                )
+            } else {
+                keychain.removePassword(
+                    forAccount: PasswordAccount.ownerName,
+                    belongingToService: serviceName
+                )
+            }
         }
     }
 
     public func setAppID(_ appID: String?) {
-        if let appID {
-            _ = keychain.setPassword(
-                appID,
-                forAccount: PasswordAccount.appId,
-                belongingToService: serviceName
-            )
-        } else {
-            keychain.removePassword(
-                forAccount: PasswordAccount.appId,
-                belongingToService: serviceName
-            )
+        withMutation(keyPath: \.appId) {
+            if let appID {
+                _ = keychain.setPassword(
+                    appID,
+                    forAccount: PasswordAccount.appId,
+                    belongingToService: serviceName
+                )
+            } else {
+                keychain.removePassword(
+                    forAccount: PasswordAccount.appId,
+                    belongingToService: serviceName
+                )
+            }
         }
     }
 
     public func setPrivateKey(_ privateKeyData: Data?) {
-        if let privateKeyData, let key = RSAPrivateKey(privateKeyData) {
-            _ = keychain.setKey(key, withTag: KeyTag.privateKey)
-        } else {
-            keychain.removeKey(withTag: KeyTag.privateKey)
+        withMutation(keyPath: \.privateKey) {
+            if let privateKeyData, let key = RSAPrivateKey(privateKeyData) {
+                _ = keychain.setKey(key, withTag: KeyTag.privateKey)
+            } else {
+                keychain.removeKey(withTag: KeyTag.privateKey)
+            }
         }
     }
 }

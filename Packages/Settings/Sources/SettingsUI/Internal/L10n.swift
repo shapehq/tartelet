@@ -118,8 +118,8 @@ internal enum L10n {
         internal static let two = L10n.tr("Localizable", "settings.virtual_machine.count.two", fallback: "Two")
       }
       internal enum Ssh {
-        /// The credentials are used to SSH into the virtual machine to configure it to start the GitHub Actions runner
-        internal static let footer = L10n.tr("Localizable", "settings.virtual_machine.ssh.footer", fallback: "The credentials are used to SSH into the virtual machine to configure it to start the GitHub Actions runner")
+        /// The credentials are used to SSH into the virtual machine to configure it to start the GitHub Actions runner. Make sure "Remote Login" is enabled in the virtual machine.
+        internal static let footer = L10n.tr("Localizable", "settings.virtual_machine.ssh.footer", fallback: "The credentials are used to SSH into the virtual machine to configure it to start the GitHub Actions runner. Make sure \"Remote Login\" is enabled in the virtual machine.")
         /// Password
         internal static let password = L10n.tr("Localizable", "settings.virtual_machine.ssh.password", fallback: "Password")
         /// Username

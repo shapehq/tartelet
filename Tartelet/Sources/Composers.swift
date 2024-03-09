@@ -5,6 +5,7 @@ import Keychain
 import LoggingData
 import LoggingDomain
 import NetworkingData
+import Observation
 import SettingsData
 import ShellData
 import SSHData
@@ -63,23 +64,19 @@ enum Composers {
         )
     )
 
-    static var gitHubCredentialsStore: GitHubCredentialsStore {
-        KeychainGitHubCredentialsStore(
-            keychain: keychain(
-                logger: logger(subsystem: "GitHubCredentialsStore")
-            ),
-            serviceName: "Tartelet GitHub Account"
-        )
-    }
+    static let gitHubCredentialsStore = KeychainGitHubCredentialsStore(
+        keychain: keychain(
+            logger: logger(subsystem: "GitHubCredentialsStore")
+        ),
+        serviceName: "Tartelet GitHub Account"
+    )
 
-    static var virtualMachineSSHCredentialsStore: VirtualMachineSSHCredentialsStore {
-        KeychainVirtualMachineSSHCredentialsStore(
-            keychain: keychain(
-                logger: logger(subsystem: "KeychainVirtualMachineSSHCredentialsStore")
-            ),
-            serviceName: "Tartelet Virtual Machine SSH Credentials"
-        )
-    }
+    static let virtualMachineSSHCredentialsStore = KeychainVirtualMachineSSHCredentialsStore(
+        keychain: keychain(
+            logger: logger(subsystem: "KeychainVirtualMachineSSHCredentialsStore")
+        ),
+        serviceName: "Tartelet Virtual Machine SSH Credentials"
+    )
 
     static func logger(subsystem: String) -> Logger {
         FileLogger(

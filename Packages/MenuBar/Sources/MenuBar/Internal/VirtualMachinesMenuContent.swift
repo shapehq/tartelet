@@ -2,56 +2,34 @@ import SettingsDomain
 import SwiftUI
 import VirtualMachineDomain
 
-struct VirtualMachinesMenuContent<SettingsStoreType: SettingsStore>: View {
-    let settingsStore: SettingsStoreType
-    let fleet: VirtualMachineFleet
-    let editor: VirtualMachineEditor
+struct VirtualMachinesMenuContent: View {
+    enum Action {
+        case startFleet
+        case stopFleet
+        case startEditor
+    }
 
-    private var hasSelectedVirtualMachine: Bool {
-        switch settingsStore.virtualMachine {
-        case .virtualMachine:
-            return true
-        case .unknown:
-            return false
-        }
-    }
-    private var isEditorMenuBarItemEnabled: Bool {
-        !fleet.isStarted && !editor.isStarted && hasSelectedVirtualMachine
-    }
+    let configurationState: ConfigurationState
+    let virtualMachineState: VirtualMachineState
+    let onSelect: (Action) -> Void
 
     var body: some View {
         FleetMenuBarItem(
-            hasSelectedVirtualMachine: hasSelectedVirtualMachine,
-            isFleetStarted: fleet.isStarted,
-            isStoppingFleet: fleet.isStopping,
-            isEditorStarted: editor.isStarted,
+            configurationState: configurationState,
+            virtualMachineState: virtualMachineState,
             startFleet: {
-                if hasSelectedVirtualMachine {
-                    startFleet()
-                } else {
-                    SettingsPresenter.presentSettings()
-                }
+                onSelect(.startFleet)
             },
             stopFleet: {
-                fleet.stop()
+                onSelect(.stopFleet)
             }
         )
         Divider()
-        EditorMenuBarItem(isEditorStarted: editor.isStarted) {
-            editor.start()
-        }
-        .disabled(!isEditorMenuBarItemEnabled)
-    }
-}
-
-private extension VirtualMachinesMenuContent {
-    private func startFleet() {
-        do {
-            try fleet.start(numberOfMachines: settingsStore.numberOfVirtualMachines)
-        } catch {
-            #if DEBUG
-            print(error)
-            #endif
+        EditorMenuBarItem(
+            configurationState: configurationState,
+            virtualMachineState: virtualMachineState
+        ) {
+            onSelect(.startEditor)
         }
     }
 }

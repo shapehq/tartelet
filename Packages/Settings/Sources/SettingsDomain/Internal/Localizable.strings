@@ -1,0 +1,8 @@
+"settings.configuration_state.ready.short_instruction" = "Ready";
+"settings.configuration_state.missing_virtual_machine.short_instruction" = "Select Virtual Machine...";
+"settings.configuration_state.missing_ssh_credentials.short_instruction" = "Set SSH Credentials...";
+"settings.configuration_state.missing_github_app_id.short_instruction" = "Set GitHub App ID...";
+"settings.configuration_state.missing_github_private_key.short_instruction" = "Set GitHub Private Key...";
+"settings.configuration_state.missing_github_organization_name.short_instruction" = "Set GitHub Organization Name...";
+"settings.configuration_state.missing_github_owner_name.short_instruction" = "Set GitHub Owner Name...";
+"settings.configuration_state.missing_github_repository_name.short_instruction" = "Set GitHub Repository Name...";

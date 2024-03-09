@@ -1,12 +1,16 @@
+import GitHubDomain
+import Observation
 import SettingsDomain
 import SwiftUI
 import VirtualMachineDomain
 
-public struct MenuBarItem<SettingsStoreType: SettingsStore>: Scene {
+public struct MenuBarItem<SettingsStoreType: SettingsStore & Observable>: Scene {
     @State private var isInserted: Bool
     private let settingsStore: SettingsStoreType
     private let fleet: VirtualMachineFleet
     private let editor: VirtualMachineEditor
+    private let configurationState: ConfigurationState
+    private let virtualMachineState: VirtualMachineState
     private var virtualMachinesMenuTitle: String {
         if settingsStore.numberOfVirtualMachines == 1 {
             L10n.Menu.VirtualMachines.singularis
@@ -18,11 +22,15 @@ public struct MenuBarItem<SettingsStoreType: SettingsStore>: Scene {
     public init(
         settingsStore: SettingsStoreType,
         fleet: VirtualMachineFleet,
-        editor: VirtualMachineEditor
+        editor: VirtualMachineEditor,
+        configurationState: ConfigurationState,
+        virtualMachineState: VirtualMachineState
     ) {
         self.settingsStore = settingsStore
         self.fleet = fleet
         self.editor = editor
+        self.configurationState = configurationState
+        self.virtualMachineState = virtualMachineState
         self.isInserted = settingsStore.applicationUIMode.showInMenuBar
     }
 
@@ -30,17 +38,9 @@ public struct MenuBarItem<SettingsStoreType: SettingsStore>: Scene {
         MenuBarExtra(isInserted: $isInserted) {
             makeVirtualMachinesMenuContent()
             Divider()
-            if #available(macOS 14, *) {
-                SettingsLink {
-                    Text(L10n.MenuBarItem.settings)
-                }.keyboardShortcut(",", modifiers: .command)
-            } else {
-                Button {
-                    SettingsPresenter.presentSettings()
-                } label: {
-                    Text(L10n.MenuBarItem.settings)
-                }.keyboardShortcut(",", modifiers: .command)
-            }
+            SettingsLink {
+                Text(L10n.MenuBarItem.settings)
+            }.keyboardShortcut(",", modifiers: .command)
             Button {
                 presentAbout()
             } label: {
@@ -79,9 +79,17 @@ private extension MenuBarItem {
     @ViewBuilder
     private func makeVirtualMachinesMenuContent() -> some View {
         VirtualMachinesMenuContent(
-            settingsStore: settingsStore,
-            fleet: fleet,
-            editor: editor
-        )
+            configurationState: configurationState,
+            virtualMachineState: virtualMachineState
+        ) { action in
+            switch action {
+            case .startFleet:
+                fleet.start(numberOfMachines: settingsStore.numberOfVirtualMachines)
+            case .stopFleet:
+                fleet.stop()
+            case .startEditor:
+                editor.start()
+            }
+        }
     }
 }

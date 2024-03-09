@@ -1,5 +1,6 @@
 excluded:
   - Packages/MenuBar/Sources/MenuBar/Internal/L10n.swift
+  - Packages/Settings/Sources/SettingsDomain/Internal/L10n.swift
   - Packages/Settings/Sources/SettingsUI/Internal/Assets.swift
   - Packages/Settings/Sources/SettingsUI/Internal/L10n.swift
 opt_in_rules:
@@ -61,6 +62,10 @@ opt_in_rules:
 analyzer_rules:
   - capture_variable
 type_name:
+  max_length:
+    warning: 60
+    error: 60
+generic_type_name:
   max_length:
     warning: 60
     error: 60

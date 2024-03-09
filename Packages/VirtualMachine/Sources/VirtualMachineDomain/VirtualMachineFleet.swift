@@ -15,7 +15,7 @@ public final class VirtualMachineFleet {
         self.baseVirtualMachine = baseVirtualMachine
     }
 
-    public func start(numberOfMachines: Int) throws {
+    public func start(numberOfMachines: Int) {
         guard !isStarted else {
             return
         }
