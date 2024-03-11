@@ -18,6 +18,7 @@ enum Composers {
     static let fleet = VirtualMachineFleet(
         logger: logger(subsystem: "VirtualMachineFleet"),
         baseVirtualMachine: SSHConnectingVirtualMachine(
+            logger: logger(subsystem: "SSHConnectingVirtualMachine"),
             virtualMachine: SettingsVirtualMachine(
                 tart: Tart(
                     homeProvider: SettingsTartHomeProvider(
