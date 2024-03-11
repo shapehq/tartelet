@@ -120,7 +120,8 @@ private extension SSHConnectingVirtualMachine {
 
     private func connect(to virtualMachine: VirtualMachine) async throws -> StartVirtualMachineResult {
         do {
-            try await sshClient.connect(to: virtualMachine)
+            let connection = try await sshClient.connect(to: virtualMachine)
+            try await connection.close()
             return .success(.sshConnectionCompleted)
         } catch {
             if error is CancellationError {
