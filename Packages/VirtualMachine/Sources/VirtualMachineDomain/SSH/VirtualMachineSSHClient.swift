@@ -5,6 +5,7 @@ import SSHDomain
 private enum VirtualMachineSSHClientError: LocalizedError, CustomDebugStringConvertible {
     case missingSSHUsername
     case missingSSHPassword
+    case failedConnectingToVirtualMachineAfterRetries
 
     var errorDescription: String? {
         debugDescription
@@ -16,6 +17,8 @@ private enum VirtualMachineSSHClientError: LocalizedError, CustomDebugStringConv
             "The SSH username is not set in Tartelet's settings."
         case .missingSSHPassword:
             "The SSH password is not set in Tartelet's settings."
+        case .failedConnectingToVirtualMachineAfterRetries:
+            "Failed establishing connection to virtual machine after retrying a number of times."
         }
     }
 }
@@ -41,11 +44,15 @@ public struct VirtualMachineSSHClient<SSHClientType: SSHClient> {
         self.connectionHandler = connectionHandler
     }
 
-    func connect(to virtualMachine: VirtualMachine) async throws -> SSHClientType.SSHConnectionType {
+    func connect(to virtualMachine: VirtualMachine) async throws {
         let ipAddress = try await getIPAddress(of: virtualMachine)
-        let connection = try await connectToVirtualMachine(named: virtualMachine.name, on: ipAddress)
+        let connection = try await connectToVirtualMachine(
+            named: virtualMachine.name,
+            on: ipAddress,
+            remainingAttempts: 3
+        )
         try await connectionHandler.didConnect(to: virtualMachine, through: connection)
-        return connection
+        try? await connection.close()
     }
 }
 
@@ -59,6 +66,28 @@ private extension VirtualMachineSSHClient {
                 + error.localizedDescription
             )
             throw error
+        }
+    }
+
+    private func connectToVirtualMachine(
+        named virtualMachineName: String,
+        on host: String,
+        remainingAttempts: Int
+    ) async throws -> SSHClientType.SSHConnectionType {
+        do {
+            try Task.checkCancellation()
+            return try await connectToVirtualMachine(named: virtualMachineName, on: host)
+        } catch {
+            guard remainingAttempts > 1 else {
+                throw VirtualMachineSSHClientError.failedConnectingToVirtualMachineAfterRetries
+            }
+            try Task.checkCancellation()
+            try await Task.sleep(for: .seconds(2))
+            return try await connectToVirtualMachine(
+                named: virtualMachineName,
+                on: host,
+                remainingAttempts: remainingAttempts - 1
+            )
         }
     }
 
