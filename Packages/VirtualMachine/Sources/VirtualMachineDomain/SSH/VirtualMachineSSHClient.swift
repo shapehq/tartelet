@@ -44,7 +44,7 @@ public struct VirtualMachineSSHClient<SSHClientType: SSHClient> {
         self.connectionHandler = connectionHandler
     }
 
-    func connect(to virtualMachine: VirtualMachine) async throws {
+    func connect(to virtualMachine: VirtualMachine) async throws -> SSHClientType.SSHConnectionType {
         let ipAddress = try await getIPAddress(of: virtualMachine)
         let connection = try await connectToVirtualMachine(
             named: virtualMachine.name,
@@ -52,7 +52,7 @@ public struct VirtualMachineSSHClient<SSHClientType: SSHClient> {
             remainingAttempts: 3
         )
         try await connectionHandler.didConnect(to: virtualMachine, through: connection)
-        try? await connection.close()
+        return connection
     }
 }
 
