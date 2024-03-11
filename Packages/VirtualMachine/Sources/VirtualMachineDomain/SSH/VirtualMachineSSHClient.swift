@@ -49,7 +49,7 @@ public struct VirtualMachineSSHClient<SSHClientType: SSHClient> {
         let connection = try await connectToVirtualMachine(
             named: virtualMachine.name,
             on: ipAddress,
-            remainingAttempts: 3
+            maximumAttempts: 3
         )
         try await connectionHandler.didConnect(to: virtualMachine, through: connection)
         return connection
@@ -72,13 +72,25 @@ private extension VirtualMachineSSHClient {
     private func connectToVirtualMachine(
         named virtualMachineName: String,
         on host: String,
-        remainingAttempts: Int
+        attempt: Int = 1,
+        maximumAttempts: Int
     ) async throws -> SSHClientType.SSHConnectionType {
         do {
+            if attempt < 3 {
+                throw NSError(domain: "dk.simonbs.Tartelet", code: -42)
+            }
             try Task.checkCancellation()
             return try await connectToVirtualMachine(named: virtualMachineName, on: host)
         } catch {
-            guard remainingAttempts > 1 else {
+            logger.error(
+                "Attempt \(attempt) out of \(maximumAttempts) to establish an SSH connection"
+                + " to the virtual machine named \(virtualMachineName) failed."
+            )
+            guard attempt < maximumAttempts else {
+                logger.error(
+                    "Last attempt to establish an SSH connection to"
+                    + " virtual machine named \(virtualMachineName) failed."
+                )
                 throw VirtualMachineSSHClientError.failedConnectingToVirtualMachineAfterRetries
             }
             try Task.checkCancellation()
@@ -86,7 +98,8 @@ private extension VirtualMachineSSHClient {
             return try await connectToVirtualMachine(
                 named: virtualMachineName,
                 on: host,
-                remainingAttempts: remainingAttempts - 1
+                attempt: attempt + 1,
+                maximumAttempts: maximumAttempts
             )
         }
     }
