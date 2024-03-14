@@ -76,9 +76,6 @@ private extension VirtualMachineSSHClient {
         maximumAttempts: Int
     ) async throws -> SSHClientType.SSHConnectionType {
         do {
-            if attempt < 3 {
-                throw NSError(domain: "dk.simonbs.Tartelet", code: -42)
-            }
             try Task.checkCancellation()
             return try await connectToVirtualMachine(named: virtualMachineName, on: host)
         } catch {
