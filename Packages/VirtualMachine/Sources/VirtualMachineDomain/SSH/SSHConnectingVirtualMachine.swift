@@ -34,6 +34,9 @@ public final class SSHConnectingVirtualMachine<SSHClientType: SSHClient>: Virtua
     public var name: String {
         virtualMachine.name
     }
+    public var canStart: Bool {
+        virtualMachine.canStart
+    }
 
     private let logger: Logger
     private let virtualMachine: VirtualMachine
