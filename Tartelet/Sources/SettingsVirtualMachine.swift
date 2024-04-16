@@ -11,6 +11,14 @@ struct SettingsVirtualMachine<SettingsStoreType: SettingsStore>: VirtualMachineD
             fatalError("Cannot get name of virtual machine because none has been selected in settings")
         }
     }
+    var canStart: Bool {
+        switch settingsStore.virtualMachine {
+        case .virtualMachine:
+            return true
+        case .unknown:
+            return false
+        }
+    }
 
     let tart: Tart
     let settingsStore: SettingsStoreType

@@ -19,6 +19,9 @@ public final class VirtualMachineFleet {
         guard !isStarted else {
             return
         }
+        guard baseVirtualMachine.canStart else {
+            return
+        }
         isStarted = true
         for index in 0 ..< numberOfMachines {
             let name = baseVirtualMachine.name + "-\(index + 1)"
