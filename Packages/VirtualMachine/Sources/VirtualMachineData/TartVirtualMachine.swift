@@ -5,6 +5,9 @@ public final class TartVirtualMachine: VirtualMachine {
     public var name: String {
         vmName
     }
+    public var canStart: Bool {
+        true
+    }
 
     private let tart: Tart
     private let vmName: String
