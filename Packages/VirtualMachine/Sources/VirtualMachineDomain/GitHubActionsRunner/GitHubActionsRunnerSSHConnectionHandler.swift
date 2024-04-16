@@ -65,14 +65,16 @@ trap onexit EXIT
 # Wait until we can connect to GitHub.
 until curl -Is https://github.com &>/dev/null; do :; done
 
-# Download the runner if the archive does not already exist.
-if [ ! -f \\$ACTIONS_RUNNER_ARCHIVE ]; then
-  curl -o \\$ACTIONS_RUNNER_ARCHIVE -L "\(runnerDownloadURL)"
+# Download the runner if the runner directory and
+# archive does not already exist.
+if [ ! -d \\$ACTIONS_RUNNER_DIRECTORY ]; then
+  if [ ! -f \\$ACTIONS_RUNNER_ARCHIVE ]; then
+    curl -o \\$ACTIONS_RUNNER_ARCHIVE -L "\(runnerDownloadURL)"
+    # Unarchive the runner.
+    mkdir -p \\$ACTIONS_RUNNER_DIRECTORY
+    tar xzf \\$ACTIONS_RUNNER_ARCHIVE --directory \\$ACTIONS_RUNNER_DIRECTORY
+  fi
 fi
-
-# Unarchive the runner.
-mkdir \\$ACTIONS_RUNNER_DIRECTORY
-tar xzf \\$ACTIONS_RUNNER_ARCHIVE --directory \\$ACTIONS_RUNNER_DIRECTORY
 
 # Configure and run the runner.
 cd \\$ACTIONS_RUNNER_DIRECTORY
