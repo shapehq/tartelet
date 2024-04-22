@@ -38,6 +38,14 @@ public struct MenuBarItem<SettingsStoreType: SettingsStore & Observable>: Scene 
         MenuBarExtra(isInserted: $isInserted) {
             makeVirtualMachinesMenuContent()
             Divider()
+            Button {
+                if let url = URL(string: "https://github.com/shapehq/tartelet/wiki") {
+                    NSWorkspace.shared.open(url)
+                }
+            } label: {
+                Text(L10n.MenuBarItem.documentation)
+            }
+            Divider()
             SettingsLink {
                 Text(L10n.MenuBarItem.settings)
             }.keyboardShortcut(",", modifiers: .command)
