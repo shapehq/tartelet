@@ -91,7 +91,7 @@ if [ -f "\\$POST_RUN_SCRIPT_PATH" ]; then
   RUNNER_ENV="\\${RUNNER_ENV}ACTIONS_RUNNER_HOOK_JOB_COMPLETED=\\${POST_RUN_SCRIPT_PATH}\n"
 fi
 
-# Create .env file read by runner.
+# Create .env file in runner's diectory.
 if [ "\\$RUNNER_ENV" != "" ]; then
   echo \\$RUNNER_ENV > \\$ACTIONS_RUNNER_DIRECTORY/.env
 fi
