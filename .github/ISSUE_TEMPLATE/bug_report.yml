@@ -29,7 +29,7 @@ body:
     id: expected-behavior
     attributes:
       label: What is the expected behavior?
-      description: Please describe the behavior you expect of Runestone.
-      placeholder: I expect that Runestone would...
+      description: Please describe the behavior you expect of Tartelet.
+      placeholder: I expect that Tartelet would...
     validations:
       required: true
