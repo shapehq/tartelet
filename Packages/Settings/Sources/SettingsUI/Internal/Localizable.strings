@@ -49,3 +49,7 @@
 
 "settings.runner_scope.organization" = "Organization";
 "settings.runner_scope.repository" = "Repository";
+
+"settings.documentation" = "Documentation";
+"settings.documentation.introduction" = "Find articles on getting started with Tartelet and advanced topics in the documentation.";
+"settings.documentation.open_documentation" = "Open Documentation";

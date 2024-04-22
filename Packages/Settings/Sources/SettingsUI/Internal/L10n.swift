@@ -11,6 +11,8 @@ import Foundation
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal enum L10n {
   internal enum Settings {
+    /// Documentation
+    internal static let documentation = L10n.tr("Localizable", "settings.documentation", fallback: "Documentation")
     /// General
     internal static let general = L10n.tr("Localizable", "settings.general", fallback: "General")
     /// GitHub
@@ -19,6 +21,12 @@ internal enum L10n {
     internal static let githubRunner = L10n.tr("Localizable", "settings.github_runner", fallback: "Runner")
     /// Virtual Machine
     internal static let virtualMachine = L10n.tr("Localizable", "settings.virtual_machine", fallback: "Virtual Machine")
+    internal enum Documentation {
+      /// Find articles on getting started with Tartelet and advanced topics in the documentation.
+      internal static let introduction = L10n.tr("Localizable", "settings.documentation.introduction", fallback: "Find articles on getting started with Tartelet and advanced topics in the documentation.")
+      /// Open Documentation
+      internal static let openDocumentation = L10n.tr("Localizable", "settings.documentation.open_documentation", fallback: "Open Documentation")
+    }
     internal enum General {
       /// Show App In
       internal static let applicationUiMode = L10n.tr("Localizable", "settings.general.application_ui_mode", fallback: "Show App In")
