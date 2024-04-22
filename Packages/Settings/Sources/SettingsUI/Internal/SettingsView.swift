@@ -54,6 +54,10 @@ struct SettingsView<SettingsStoreType: SettingsStore & Observable>: View {
                     Asset.githubActions.swiftUIImage
                 }
             }
+            DocumentationSettingsView()
+                .tabItem {
+                    Label(L10n.Settings.documentation, systemImage: "text.book.closed")
+                }
         }
         .frame(minWidth: 450, maxWidth: 650, minHeight: 250, maxHeight: 450)
     }

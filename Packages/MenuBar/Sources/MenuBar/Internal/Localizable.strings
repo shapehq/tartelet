@@ -7,6 +7,7 @@
 "menu_bar_item.editor.edit_virtual_machine.editing" = "Editing...";
 "menu_bar_item.about" = "About...";
 "menu_bar_item.settings" = "Settings...";
+"menu_bar_item.documentation" = "Documentation...";
 "menu_bar_item.quit" = "Quit";
 
 "menu.virtual_machines.singularis" = "Virtual Machine";

@@ -26,7 +26,9 @@ public struct ProcessShell: Shell {
             }
             return String(data: data, encoding: .utf8) ?? ""
         } onCancel: {
-            sendableProcess.process.terminate()
+            if sendableProcess.process.isRunning {
+                sendableProcess.process.terminate()
+            }
         }
     }
 }
