@@ -76,6 +76,26 @@ if [ ! -d \\$ACTIONS_RUNNER_DIRECTORY ]; then
   fi
 fi
 
+# Holds environment passed to runner.
+RUNNER_ENV=""
+
+# Configure pre-run script.
+PRE_RUN_SCRIPT_PATH="\\$HOME/.tartelet/pre-run.sh"
+if [ -f "\\$PRE_RUN_SCRIPT_PATH" ]; then
+  RUNNER_ENV="\\${RUNNER_ENV}ACTIONS_RUNNER_HOOK_JOB_STARTED=\\${PRE_RUN_SCRIPT_PATH}\n"
+fi
+
+# Configure post-run script.
+POST_RUN_SCRIPT_PATH="\\$HOME/.tartelet/post-run.sh"
+if [ -f "\\$POST_RUN_SCRIPT_PATH" ]; then
+  RUNNER_ENV="\\${RUNNER_ENV}ACTIONS_RUNNER_HOOK_JOB_COMPLETED=\\${POST_RUN_SCRIPT_PATH}\n"
+fi
+
+# Create .env file read by runner.
+if [ "\\$RUNNER_ENV" != "" ]; then
+  echo \\$RUNNER_ENV > \\$ACTIONS_RUNNER_DIRECTORY/.env
+fi
+
 # Configure and run the runner.
 cd \\$ACTIONS_RUNNER_DIRECTORY
 ./config.sh\\\\
