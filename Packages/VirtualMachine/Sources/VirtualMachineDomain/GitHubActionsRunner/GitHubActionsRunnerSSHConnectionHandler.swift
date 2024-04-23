@@ -47,10 +47,10 @@ public struct GitHubActionsRunnerSSHConnectionHandler: VirtualMachineSSHConnecti
             with: appAccessToken,
             runnerScope: configuration.runnerScope
         )
-        let bootScriptFilePath = "~/boot.sh"
-        try await connection.executeCommand("touch \(bootScriptFilePath)")
+        let startRunnerScriptFilePath = "~/start-runner.sh"
+        try await connection.executeCommand("touch \(startRunnerScriptFilePath)")
         try await connection.executeCommand("""
-cat > \(bootScriptFilePath) << EOF
+cat > \(startRunnerScriptFilePath) << EOF
 #!/bin/zsh
 ACTIONS_RUNNER_ARCHIVE=./actions-runner.tar.gz
 ACTIONS_RUNNER_DIRECTORY=~/actions-runner
@@ -111,8 +111,8 @@ cd \\$ACTIONS_RUNNER_DIRECTORY
 ./run.sh
 EOF
 """)
-        try await connection.executeCommand("chmod +x \(bootScriptFilePath)")
-        try await connection.executeCommand("open -a Terminal \(bootScriptFilePath)")
+        try await connection.executeCommand("chmod +x \(startRunnerScriptFilePath)")
+        try await connection.executeCommand("open -a Terminal \(startRunnerScriptFilePath)")
     }
 }
 
