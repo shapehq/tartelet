@@ -64,7 +64,7 @@ public extension Keychain {
         guard let data = read(Data.self, usingQuery: query.rawQuery) else {
             return nil
         }
-        return String(data: data, encoding: .utf8)
+        return String(decoding: data, as: UTF8.self)
     }
 
     func removePassword(forAccount account: String, belongingToService service: String) {

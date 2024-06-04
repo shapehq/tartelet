@@ -24,7 +24,7 @@ public struct ProcessShell: Shell {
             guard process.terminationStatus == 0 else {
                 throw ProcessShellError.unexpectedTerminationStatus(process.terminationStatus)
             }
-            return String(data: data, encoding: .utf8) ?? ""
+            return String(decoding: data, as: UTF8.self)
         } onCancel: {
             if sendableProcess.process.isRunning {
                 sendableProcess.process.terminate()
