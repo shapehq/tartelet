@@ -105,6 +105,8 @@ brew install swiftlint
 
 The app is named Tartelet because it builds upon [Tart](https://tart.run), a source-available CLI for managing macOS virtual machines. Tartelet makes it easy to run multiple virtual machines using Tart. The Danish word for "easy" is "let". "Tart" + "e" + "let" = "Tartelet" and [a "tartelet" is a traditional Danish food.](https://www.valdemarsro.dk/tarteletter-hoens-asparges/)
 
+<img src="Tartelet/Assets.xcassets/AppIcon.appiconset/Artboard_512x512.png?raw=true" width="192" />
+
 ## 🙏 Acknowledgements
 
 - [Tart](https://github.com/cirruslabs/tart) does all the heavy-lifting of creating, cloning, and running virtual machines.
