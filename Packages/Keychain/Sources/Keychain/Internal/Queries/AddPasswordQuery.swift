@@ -15,6 +15,7 @@ struct AddPasswordQuery: KeychainQuery {
         if let accessGroup {
             query[kSecAttrAccessGroup as String] = accessGroup
         }
+        query[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlock
         return query as CFDictionary
     }
 }
