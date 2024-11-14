@@ -24,7 +24,9 @@ public final class RSAPrivateKey {
     }
 
     public convenience init?(_ data: Data) {
-        let string = String(decoding: data, as: UTF8.self)
+        guard let string = String(data: data, encoding: .utf8) else {
+            return nil
+        }
         self.init(string)
     }
 

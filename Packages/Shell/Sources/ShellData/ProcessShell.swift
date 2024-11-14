@@ -18,13 +18,16 @@ public struct ProcessShell: Shell {
             process.launchPath = executablePath
             process.standardInput = nil
             process.environment = environment
-            process.launch()
+            try process.run()
             let data = pipe.fileHandleForReading.readDataToEndOfFile()
+            // Explicitly close the pipe file handle to prevent running out of file descriptors.
+            // See https://github.com/swiftlang/swift/issues/57827
+            try pipe.fileHandleForReading.close()
             process.waitUntilExit()
             guard process.terminationStatus == 0 else {
                 throw ProcessShellError.unexpectedTerminationStatus(process.terminationStatus)
             }
-            return String(decoding: data, as: UTF8.self)
+            return String(data: data, encoding: .utf8) ?? ""
         } onCancel: {
             if sendableProcess.process.isRunning {
                 sendableProcess.process.terminate()
