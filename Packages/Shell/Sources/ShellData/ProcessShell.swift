@@ -22,7 +22,7 @@ public struct ProcessShell: Shell {
             let data = pipe.fileHandleForReading.readDataToEndOfFile()
             // Explicitly close the pipe file handle to prevent running out of file descriptors.
             // See https://github.com/swiftlang/swift/issues/57827
-            try! pipe.fileHandleForReading.close()
+            try pipe.fileHandleForReading.close()
             process.waitUntilExit()
             guard process.terminationStatus == 0 else {
                 throw ProcessShellError.unexpectedTerminationStatus(process.terminationStatus)
