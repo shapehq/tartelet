@@ -108,6 +108,13 @@ cd \\$ACTIONS_RUNNER_DIRECTORY
   --runnergroup "\(configuration.runnerGroup)"\\\\
   --work "_work"\\\\
   --token "\(runnerToken.rawValue)"
+
+# Run post-config script.
+POST_CONFIG_SCRIPT_PATH="\\$HOME/.tartelet/post-config.sh"
+if [ -f "\\$POST_CONFIG_SCRIPT_PATH" ]; then
+  bash "\\$POST_CONFIG_SCRIPT_PATH"
+fi
+
 ./run.sh
 EOF
 """)
