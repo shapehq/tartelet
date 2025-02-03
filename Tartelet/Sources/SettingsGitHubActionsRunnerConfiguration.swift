@@ -6,6 +6,9 @@ struct SettingsGitHubActionsRunnerConfiguration<
     SettingsStoreType: SettingsStore
 >: GitHubActionsRunnerConfiguration {
     let settingsStore: SettingsStoreType
+    var runnerDisableUpdates: Bool {
+        settingsStore.gitHubRunnerDisableUpdates
+    }
     var runnerScope: GitHubRunnerScope {
         settingsStore.githubRunnerScope
     }

@@ -85,6 +85,8 @@ internal enum L10n {
       }
     }
     internal enum GithubRunner {
+      /// Auto-update
+      internal static let disableUpdates = L10n.tr("Localizable", "settings.github_runner.disableUpdates", fallback: "Disable Github runner auto-updates")
       /// Group
       internal static let group = L10n.tr("Localizable", "settings.github_runner.group", fallback: "Group")
       /// Labels
@@ -98,6 +100,10 @@ internal enum L10n {
         internal static let footer = L10n.tr("Localizable", "settings.github_runner.labels.footer", fallback: "Comma-separated list of labels.")
         /// comma,separated,list
         internal static let prompt = L10n.tr("Localizable", "settings.github_runner.labels.prompt", fallback: "comma,separated,list")
+      }
+      internal enum DisableUpdates {
+        /// This is meant to be used when a fixed version is pre-installed, otherwise Tartlet will install the latest version when the VM starts.
+        internal static let subtitle = L10n.tr("Localizable", "settings.github_runner.disableUpdates.subtitle", fallback: "This is meant to be used when a fixed version is pre-installed, otherwise Tartlet will install the latest version when the VM starts.")
       }
     }
     internal enum RunnerScope {

@@ -8,6 +8,7 @@ public protocol SettingsStore: AnyObject {
     var numberOfVirtualMachines: Int { get set }
     var startVirtualMachinesOnLaunch: Bool { get set }
     var gitHubPrivateKeyName: String? { get set }
+    var gitHubRunnerDisableUpdates: Bool { get set }
     var gitHubRunnerLabels: String { get set }
     var gitHubRunnerGroup: String { get set }
     var githubRunnerScope: GitHubRunnerScope { get set }
