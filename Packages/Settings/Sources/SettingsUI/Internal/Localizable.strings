@@ -42,7 +42,7 @@
 
 "settings.github_runner" = "Runner";
 "settings.github_runner.disableUpdates" = "Disable runner auto-update";
-"settings.github_runner.disableUpdates.subtitle" = "This is meant to be used when a fixed version is pre-installed, otherwise Tartlet will install the latest version when the VM starts.";
+"settings.github_runner.disableUpdates.subtitle" = "This is meant to be used when a fixed version is pre-installed, otherwise Tartelet will install the latest version when the VM starts.";
 "settings.github_runner.labels" = "Labels";
 "settings.github_runner.labels.prompt" = "comma,separated,list";
 "settings.github_runner.labels.footer" = "Comma-separated list of labels.";
