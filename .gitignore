@@ -1,5 +1,6 @@
 .DS_Store
 .build
+.index-build
 .swiftpm
 xcuserdata
 Tartelet.xcodeproj
