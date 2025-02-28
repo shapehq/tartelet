@@ -108,7 +108,7 @@ cd \\$ACTIONS_RUNNER_DIRECTORY
   --runnergroup "\(configuration.runnerGroup)"\\\\
   --work "_work"\\\\
   --token "\(runnerToken.rawValue)"\\\\
-  \(configuration.runnerDisableUpdates ? "--disableUpdates" : "")
+  \(configuration.runnerDisableUpdates ? "--disableupdate" : "")
 ./run.sh
 EOF
 """)
