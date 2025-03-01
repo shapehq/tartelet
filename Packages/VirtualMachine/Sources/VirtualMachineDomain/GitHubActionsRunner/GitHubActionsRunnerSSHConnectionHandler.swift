@@ -107,7 +107,8 @@ cd \\$ACTIONS_RUNNER_DIRECTORY
   --name "\(virtualMachine.name)"\\\\
   --runnergroup "\(configuration.runnerGroup)"\\\\
   --work "_work"\\\\
-  --token "\(runnerToken.rawValue)"
+  --token "\(runnerToken.rawValue)"\\\\
+  \(configuration.runnerDisableUpdates ? "--disableupdate" : "")
 ./run.sh
 EOF
 """)

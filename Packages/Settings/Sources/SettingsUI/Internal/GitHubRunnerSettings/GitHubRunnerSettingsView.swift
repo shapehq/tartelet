@@ -26,6 +26,13 @@ struct GitHubRunnerSettingsView<SettingsStoreType: SettingsStore & Observable>: 
                 )
                 .disabled(!isSettingsEnabled)
             }
+            Section {
+                Toggle(isOn: $settingsStore.gitHubRunnerDisableUpdates) {
+                    Text(L10n.Settings.GithubRunner.disableUpdates)
+                    Text(L10n.Settings.GithubRunner.DisableUpdates.subtitle)
+                }
+                .disabled(!isSettingsEnabled)
+            }
         }
         .formStyle(.grouped)
     }
