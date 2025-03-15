@@ -6,7 +6,7 @@ struct TartHomeFolderPicker: View {
 
     private var folderPath: String {
         if let folderURL {
-            folderURL.path()
+            folderURL.path(percentEncoded: false)
         } else {
             L10n.Settings.VirtualMachine.TartHome.placeholder
         }
