@@ -7,7 +7,7 @@ public struct Tart {
         guard let homeFolderURL = homeProvider.homeFolderURL else {
             return nil
         }
-        return ["TART_HOME": homeFolderURL.absoluteString]
+        return ["TART_HOME": homeFolderURL.path(percentEncoded: false)]
     }
 
     public init(homeProvider: TartHomeProvider, shell: Shell) {
