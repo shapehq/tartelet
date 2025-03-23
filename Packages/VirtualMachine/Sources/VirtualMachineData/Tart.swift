@@ -1,3 +1,4 @@
+import Foundation
 import ShellDomain
 
 public struct Tart {
@@ -20,7 +21,13 @@ public struct Tart {
     }
 
     public func run(name: String) async throws {
-        try await executeCommand(withArguments: ["run", name])
+        let homeFolderURL = homeProvider.homeFolderURL ??
+            FileManager.default.homeDirectoryForCurrentUser.appending(component: ".tart")
+        let cacheFolder = homeFolderURL.appendingPathComponent("cache")
+        if !FileManager.default.fileExists(atPath: cacheFolder.path) {
+            try FileManager.default.createDirectory(atPath: cacheFolder.path, withIntermediateDirectories: true)
+        }
+        try await executeCommand(withArguments: ["run", "--dir=cache:\(cacheFolder.path())", name])
     }
 
     public func delete(name: String) async throws {
