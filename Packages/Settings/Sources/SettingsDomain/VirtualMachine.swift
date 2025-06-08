@@ -27,6 +27,15 @@ public enum VirtualMachine: RawRepresentable, Hashable {
             self = .unknown
         }
     }
+
+    public var name: String {
+        switch self {
+        case .unknown:
+            return "Unknown"
+        case .virtualMachine(let name):
+            return name
+        }
+    }
 }
 
 private extension VirtualMachine {
