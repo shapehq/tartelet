@@ -48,6 +48,9 @@
 "settings.github_runner.labels.footer" = "Comma-separated list of labels.";
 "settings.github_runner.group" = "Group";
 "settings.github_runner.group.prompt" = "acme";
+"settings.github_runner.name" = "Name";
+"settings.github_runner.name.prompt" = "Optional custom name, e.g., My CI Runner";
+"settings.github_runner.name.footer" = "Base name for runners.";
 
 "settings.runner_scope.organization" = "Organization";
 "settings.runner_scope.repository" = "Repository";

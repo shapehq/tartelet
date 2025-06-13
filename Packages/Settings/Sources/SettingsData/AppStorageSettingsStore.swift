@@ -14,6 +14,7 @@ public final class AppStorageSettingsStore: SettingsStore {
         static let gitHubRunnerDisableUpdates = "gitHubRunnerDisableUpdates"
         static let gitHubRunnerLabels = "gitHubRunnerLabels"
         static let gitHubRunnerGroup = "gitHubRunnerGroup"
+        static let gitHubRunnerName = "gitHubRunnerName"
         static let githubRunnerScope = "githubRunnerScope"
     }
 
@@ -122,6 +123,17 @@ public final class AppStorageSettingsStore: SettingsStore {
         set {
             withMutation(keyPath: \.gitHubRunnerGroup) {
                 userDefaults.setValue(newValue, forKey: AppStorageKey.gitHubRunnerGroup)
+            }
+        }
+    }
+    public var gitHubRunnerName: String {
+        get {
+            access(keyPath: \.gitHubRunnerName)
+            return userDefaults.string(forKey: AppStorageKey.gitHubRunnerName) ?? ""
+        }
+        set {
+            withMutation(keyPath: \.gitHubRunnerName) {
+                userDefaults.setValue(newValue, forKey: AppStorageKey.gitHubRunnerName)
             }
         }
     }
