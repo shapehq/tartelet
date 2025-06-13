@@ -104,7 +104,7 @@ cd \\$ACTIONS_RUNNER_DIRECTORY
   --ephemeral\\\\
   --replace\\\\
   --labels "\(configuration.runnerLabels)"\\\\
-  --name "\(virtualMachine.name)"\\\\
+  --name "\(runnerName(for: virtualMachine))"\\\\
   --runnergroup "\(configuration.runnerGroup)"\\\\
   --work "_work"\\\\
   --token "\(runnerToken.rawValue)"\\\\
@@ -114,6 +114,25 @@ EOF
 """)
         try await connection.executeCommand("chmod +x \(startRunnerScriptFilePath)")
         try await connection.executeCommand("open -a Terminal \(startRunnerScriptFilePath)")
+    }
+    private func runnerName(for virtualMachine: VirtualMachine) -> String {
+        let configuredRunnerName = configuration.runnerName
+
+        // If no custom runner name is configured, use the VM name as-is
+        if configuredRunnerName.isEmpty {
+            return virtualMachine.name
+        }
+
+        // Extract the index suffix from VM names like "baseVM-1", "baseVM-2"
+        let vmName = virtualMachine.name
+        if let lastDashIndex = vmName.lastIndex(of: "-") {
+            let indexString = String(vmName[vmName.index(after: lastDashIndex)...])
+            if !indexString.isEmpty, Int(indexString) != nil {
+                return "\(configuredRunnerName) \(indexString)"
+            }
+        }
+        // Fallback to just the runner name if we can't extract an index
+        return configuredRunnerName
     }
 }
 

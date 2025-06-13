@@ -18,4 +18,7 @@ struct SettingsGitHubActionsRunnerConfiguration<
     var runnerGroup: String {
         settingsStore.gitHubRunnerGroup
     }
+    var runnerName: String {
+        settingsStore.gitHubRunnerName
+    }
 }

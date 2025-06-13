@@ -10,6 +10,13 @@ struct GitHubRunnerSettingsView<SettingsStoreType: SettingsStore & Observable>: 
         Form {
             Section {
                 TextField(
+                    L10n.Settings.GithubRunner.name,
+                    text: $settingsStore.gitHubRunnerName,
+                    prompt: Text(githubRunnerNamePrompt)
+                )
+                .disabled(!isSettingsEnabled)
+
+                TextField(
                     L10n.Settings.GithubRunner.labels,
                     text: $settingsStore.gitHubRunnerLabels,
                     prompt: Text(L10n.Settings.GithubRunner.Labels.prompt)
@@ -35,5 +42,14 @@ struct GitHubRunnerSettingsView<SettingsStoreType: SettingsStore & Observable>: 
             }
         }
         .formStyle(.grouped)
+    }
+
+    private var githubRunnerNamePrompt: String {
+        switch settingsStore.virtualMachine {
+            case .unknown:
+                return L10n.Settings.GithubRunner.Name.prompt
+            case .virtualMachine(let name):
+                return name
+        }
     }
 }
