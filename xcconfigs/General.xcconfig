@@ -1,4 +1,15 @@
 GENERATE_INFOPLIST_FILE = YES
+
+// Even though we are generating an Info.plist from the settings defined here,
+// we also include an Info.plist in the project.
+//
+// This is because we need to define the `NSBonjourServices` setting in order for
+// Tartelet to connect to local VMs via SSH. This key's value is an array of strings,
+// and it is not possible to define an array of strings in an xcconfig file.
+//
+// Xcode's Info.plist generation will merge the values specified here with
+// the Info.plist file in the project.
+
 CURRENT_PROJECT_VERSION = 1
 MARKETING_VERSION = 0.12.0
 DEVELOPMENT_TEAM = 566MC7D8D4
