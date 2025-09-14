@@ -15,7 +15,7 @@ public final class VirtualMachineFleet {
         self.baseVirtualMachine = baseVirtualMachine
     }
 
-    public func start(numberOfMachines: Int) {
+    public func start(numberOfMachines: Int, arguments: [String]) {
         guard !isStarted else {
             return
         }
@@ -25,7 +25,7 @@ public final class VirtualMachineFleet {
         isStarted = true
         for index in 0 ..< numberOfMachines {
             let name = baseVirtualMachine.name + "-\(index + 1)"
-            startSequentiallyRunningVirtualMachines(named: name)
+            startSequentiallyRunningVirtualMachines(named: name, arguments: arguments)
         }
     }
 
@@ -44,12 +44,12 @@ public final class VirtualMachineFleet {
 }
 
 private extension VirtualMachineFleet {
-    private func startSequentiallyRunningVirtualMachines(named name: String) {
+    private func startSequentiallyRunningVirtualMachines(named name: String, arguments: [String]) {
         let task = Task {
             while !Task.isCancelled {
                 do {
                     let virtualMachine = try await baseVirtualMachine.clone(named: name)
-                    try await runVirtualMachine(virtualMachine)
+                    try await runVirtualMachine(virtualMachine, arguments: arguments)
                     if isStopping {
                         activeTasks[name]?.cancel()
                     }
@@ -69,11 +69,11 @@ private extension VirtualMachineFleet {
         activeTasks[name] = task
     }
 
-    private func runVirtualMachine(_ virtualMachine: VirtualMachine) async throws {
+    private func runVirtualMachine(_ virtualMachine: VirtualMachine, arguments: [String]) async throws {
         try await withTaskCancellationHandler {
             logger.info("Start virtual machine named \(virtualMachine.name)")
             do {
-                try await virtualMachine.start()
+                try await virtualMachine.start(arguments: arguments)
                 logger.info("Did stop virtual machine named \(virtualMachine.name)")
                 do {
                     try await virtualMachine.delete()

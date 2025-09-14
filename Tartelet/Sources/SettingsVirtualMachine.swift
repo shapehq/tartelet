@@ -27,8 +27,8 @@ struct SettingsVirtualMachine<SettingsStoreType: SettingsStore>: VirtualMachineD
         TartVirtualMachine(tart: tart, vmName: name)
     }
 
-    func start() async throws {
-        try await virtualMachine.start()
+    func start(arguments: [String]) async throws {
+        try await virtualMachine.start(arguments: arguments)
     }
 
     func clone(named newName: String) async throws -> VirtualMachineDomain.VirtualMachine {

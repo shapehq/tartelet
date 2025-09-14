@@ -17,8 +17,8 @@ public final class TartVirtualMachine: VirtualMachine {
         self.vmName = vmName
     }
 
-    public func start() async throws {
-        try await tart.run(name: vmName)
+    public func start(arguments: [String]) async throws {
+        try await tart.run(name: vmName, additionalArguments: arguments)
     }
 
     public func clone(named newName: String) async throws -> VirtualMachine {
