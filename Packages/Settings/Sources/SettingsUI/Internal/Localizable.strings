@@ -23,6 +23,8 @@
 "settings.virtual_machine.ssh.password" = "Password";
 "settings.virtual_machine.ssh.footer" = "The credentials are used to SSH into the virtual machine to configure it to start the GitHub Actions runner. Make sure \"Remote Login\" is enabled in the virtual machine.";
 "settings.virtual_machine.start_virtual_machines_on_app_launch" = "Start Virtual Machines on App Launch";
+"settings.virtual_machine.additional_arguments" = "Additional Arguments";
+"settings.virtual_machine.additional_arguments.prompt" = "Specify additional tart launch arguments.";
 
 "settings.github" = "GitHub";
 "settings.github.organization_name" = "Organization Name";
@@ -41,7 +43,7 @@
 "settings.github.create_app" = "Create GitHub App";
 
 "settings.github_runner" = "Runner";
-"settings.github_runner.disableDefaultLabels" = "Disable default labels"
+"settings.github_runner.disableDefaultLabels" = "Disable default labels";
 "settings.github_runner.disableUpdates" = "Disable runner auto-update";
 "settings.github_runner.disableUpdates.subtitle" = "This is meant to be used when a fixed version is pre-installed, otherwise Tartelet will install the latest version when the VM starts.";
 "settings.github_runner.labels" = "Labels";
