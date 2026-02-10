@@ -85,6 +85,8 @@ internal enum L10n {
       }
     }
     internal enum GithubRunner {
+      /// Disable default labels
+      internal static let disableDefaultLabels = L10n.tr("Localizable", "settings.github_runner.disableDefaultLabels", fallback: "Disable default labels")
       /// Disable runner auto-update
       internal static let disableUpdates = L10n.tr("Localizable", "settings.github_runner.disableUpdates", fallback: "Disable runner auto-update")
       /// Group
@@ -101,7 +103,6 @@ internal enum L10n {
         /// acme
         internal static let prompt = L10n.tr("Localizable", "settings.github_runner.group.prompt", fallback: "acme")
       }
-      internal static let disableDefaultLabels = L10n.tr("Localizable", "settings.github_runner.disableDefaultLabels", fallback: "Disable default labels")
       internal enum Labels {
         /// Comma-separated list of labels.
         internal static let footer = L10n.tr("Localizable", "settings.github_runner.labels.footer", fallback: "Comma-separated list of labels.")
@@ -122,6 +123,8 @@ internal enum L10n {
       internal static let repository = L10n.tr("Localizable", "settings.runner_scope.repository", fallback: "Repository")
     }
     internal enum VirtualMachine {
+      /// Additional Arguments
+      internal static let additionalArguments = L10n.tr("Localizable", "settings.virtual_machine.additional_arguments", fallback: "Additional Arguments")
       /// Number of Machines
       internal static let count = L10n.tr("Localizable", "settings.virtual_machine.count", fallback: "Number of Machines")
       /// Use the Tart CLI to create a virtual machine.
@@ -134,6 +137,10 @@ internal enum L10n {
       internal static let tartHome = L10n.tr("Localizable", "settings.virtual_machine.tart_home", fallback: "Tart Home")
       /// Unknown
       internal static let unknown = L10n.tr("Localizable", "settings.virtual_machine.unknown", fallback: "Unknown")
+      internal enum AdditionalArguments {
+        /// Specify additional tart launch arguments.
+        internal static let prompt = L10n.tr("Localizable", "settings.virtual_machine.additional_arguments.prompt", fallback: "Specify additional tart launch arguments.")
+      }
       internal enum Count {
         /// One
         internal static let one = L10n.tr("Localizable", "settings.virtual_machine.count.one", fallback: "One")

@@ -92,11 +92,14 @@ private extension MenuBarItem {
         ) { action in
             switch action {
             case .startFleet:
-                fleet.start(numberOfMachines: settingsStore.numberOfVirtualMachines)
+                fleet.start(
+                    numberOfMachines: settingsStore.numberOfVirtualMachines,
+                    arguments: settingsStore.virtualMachineArguments
+                )
             case .stopFleet:
                 fleet.stop()
             case .startEditor:
-                editor.start()
+                editor.start(arguments: settingsStore.virtualMachineArguments)
             }
         }
     }

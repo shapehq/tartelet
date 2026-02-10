@@ -10,6 +10,7 @@ public final class AppStorageSettingsStore: SettingsStore {
         static let virtualMachine = "virtualMachine"
         static let numberOfVirtualMachines = "numberOfVirtualMachines"
         static let startVirtualMachinesOnLaunch = "startVirtualMachinesOnLaunch"
+        static let virtualMachineArguments = "virtualMachineArguments"
         static let gitHubPrivateKeyName = "gitHubPrivateKeyName"
         static let gitHubRunnerDisableUpdates = "gitHubRunnerDisableUpdates"
         static let gitHubRunnerLabels = "gitHubRunnerLabels"
@@ -80,6 +81,17 @@ public final class AppStorageSettingsStore: SettingsStore {
         set {
             withMutation(keyPath: \.startVirtualMachinesOnLaunch) {
                 userDefaults.setValue(newValue, forKey: AppStorageKey.startVirtualMachinesOnLaunch)
+            }
+        }
+    }
+    public var virtualMachineArguments: [String] {
+        get {
+            access(keyPath: \.virtualMachineArguments)
+            return userDefaults.stringArray(forKey: AppStorageKey.virtualMachineArguments) ?? []
+        }
+        set {
+            withMutation(keyPath: \.virtualMachineArguments) {
+                userDefaults.setValue(newValue, forKey: AppStorageKey.virtualMachineArguments)
             }
         }
     }

@@ -19,7 +19,7 @@ public final class VirtualMachineEditor {
         self.virtualMachine = virtualMachine
     }
 
-    public func start() {
+    public func start(arguments: [String]) {
         guard runTask == nil else {
             return
         }
@@ -29,7 +29,7 @@ public final class VirtualMachineEditor {
                 defer {
                     self.runTask = nil
                 }
-                try await virtualMachine.start()
+                try await virtualMachine.start(arguments: arguments)
             } onCancel: {
                 self.stop()
             }

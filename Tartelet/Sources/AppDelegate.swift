@@ -14,7 +14,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         beginObservingAppIconVisibility()
         if Composers.settingsStore.startVirtualMachinesOnLaunch {
-            Composers.fleet.start(numberOfMachines: Composers.settingsStore.numberOfVirtualMachines)
+            Composers.fleet.start(
+                numberOfMachines: Composers.settingsStore.numberOfVirtualMachines,
+                arguments: Composers.settingsStore.virtualMachineArguments
+            )
         }
 
         // If Tartelet is launched as a login item, we can keep the window hidden

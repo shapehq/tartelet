@@ -13,6 +13,7 @@ struct VirtualMachineSettingsView<SettingsStoreType: SettingsStore & Observable>
     @State private var isRefreshingVirtualMachines = false
     @State private var sshUsername = ""
     @State private var sshPassword = ""
+    @State private var additionalArguments = ""
 
     var body: some View {
         Form {
@@ -32,6 +33,12 @@ struct VirtualMachineSettingsView<SettingsStoreType: SettingsStore & Observable>
                 Toggle(isOn: $settingsStore.startVirtualMachinesOnLaunch) {
                     Text(L10n.Settings.VirtualMachine.startVirtualMachinesOnAppLaunch)
                 }
+                TextField(
+                    L10n.Settings.VirtualMachine.additionalArguments,
+                    text: $additionalArguments,
+                    prompt: Text(L10n.Settings.VirtualMachine.AdditionalArguments.prompt)
+                )
+                .disabled(!isSettingsEnabled)
             }
             Section {
                 TextField(
@@ -70,6 +77,12 @@ struct VirtualMachineSettingsView<SettingsStoreType: SettingsStore & Observable>
             Task {
                 await refreshVirtualMachines()
             }
+        }
+        .onChange(of: settingsStore.virtualMachineArguments) { _, newValue in
+            additionalArguments = newValue.joined(separator: " ")
+        }
+        .onChange(of: additionalArguments) { _, newValue in
+            settingsStore.virtualMachineArguments = newValue.split(separator: " ").map(String.init)
         }
         .onChange(of: sshUsername) { _, newValue in
             if !newValue.isEmpty {

@@ -20,7 +20,7 @@ public struct Tart {
         try await executeCommand(withArguments: ["clone", sourceName, newName])
     }
 
-    public func run(name: String) async throws {
+    public func run(name: String, additionalArguments: [String] = []) async throws {
         let homeFolderURL = homeProvider.homeFolderURL ??
             FileManager.default.homeDirectoryForCurrentUser.appending(component: ".tart")
         let cacheFolder = homeFolderURL.appendingPathComponent("cache")
@@ -28,6 +28,7 @@ public struct Tart {
             try FileManager.default.createDirectory(atPath: cacheFolder.path, withIntermediateDirectories: true)
         }
         var runArgs =  ["run", "--dir=cache:\(cacheFolder.path())"]
+        runArgs.append(contentsOf: additionalArguments)
         if let tartRunOptions = ProcessInfo.processInfo.environment["TARTELET_RUN_OPTIONS"] {
             runArgs.append(tartRunOptions)
         }
