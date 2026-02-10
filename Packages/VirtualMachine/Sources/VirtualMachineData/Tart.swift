@@ -45,7 +45,7 @@ public struct Tart {
     }
 
     public func getIPAddress(ofVirtualMachineNamed name: String) async throws -> String {
-        let result = try await executeCommand(withArguments: ["ip", name])
+        let result = try await executeCommand(withArguments: ["ip", name, "--wait", "5"])
         return result.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }
