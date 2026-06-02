@@ -60,7 +60,7 @@ set -e pipefail
 function onexit {
   sudo shutdown -h now
 }
-trap onexit EXIT
+trap onexit EXIT INT TERM HUP
 
 # Wait until we can connect to GitHub.
 until curl -Is https://github.com &>/dev/null; do :; done
