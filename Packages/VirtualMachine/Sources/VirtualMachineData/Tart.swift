@@ -4,12 +4,6 @@ import ShellDomain
 public struct Tart {
     private let homeProvider: TartHomeProvider
     private let shell: Shell
-    private var environment: [String: String]? {
-        guard let homeFolderURL = homeProvider.homeFolderURL else {
-            return nil
-        }
-        return ["TART_HOME": homeFolderURL.path(percentEncoded: false)]
-    }
 
     public init(homeProvider: TartHomeProvider, shell: Shell) {
         self.homeProvider = homeProvider
@@ -53,19 +47,32 @@ public struct Tart {
 private extension Tart {
     @discardableResult
     private func executeCommand(withArguments arguments: [String]) async throws -> String {
-        let locator = TartLocator(shell: shell)
-        let filePath = try locator.locate()
-        if let environment {
-            return try await shell.runExecutable(
-                atPath: filePath,
-                withArguments: arguments,
-                environment: environment
-            )
-        } else {
-            return try await shell.runExecutable(
-                atPath: filePath,
-                withArguments: arguments
-            )
+        let filePath = try TartLocator(shell: shell).locate()
+        return try await shell.runExecutable(
+            atPath: filePath,
+            withArguments: arguments,
+            environment: environment(forTartAt: filePath)
+        )
+    }
+
+    private func environment(forTartAt tartPath: String) -> [String: String] {
+        // Inherit the launching process's environment instead of replacing it.
+        // Spawning tart with an empty (or TART_HOME-only) environment left it
+        // without a usable PATH, so it could not find helpers it execs by name.
+        var environment = ProcessInfo.processInfo.environment
+        if let homeFolderURL = homeProvider.homeFolderURL {
+            environment["TART_HOME"] = homeFolderURL.path(percentEncoded: false)
         }
+        // tart execs helper binaries (e.g. `softnet` for `--net-softnet`) by name,
+        // resolving them through PATH. They are installed alongside the tart binary,
+        // so ensure tart's own directory is on PATH. This matters when Tartelet runs
+        // as a GUI app, whose launchd PATH omits e.g. the Homebrew bin directory.
+        let tartDirectory = (tartPath as NSString).deletingLastPathComponent
+        if let existingPath = environment["PATH"], !existingPath.isEmpty {
+            environment["PATH"] = tartDirectory + ":" + existingPath
+        } else {
+            environment["PATH"] = tartDirectory
+        }
+        return environment
     }
 }
