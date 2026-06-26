@@ -29,7 +29,10 @@ public struct Tart {
         }
         var runArgs =  ["run", "--dir=cache:\(cacheFolder.path())"]
         if let tartRunOptions = ProcessInfo.processInfo.environment["TARTELET_RUN_OPTIONS"] {
-            runArgs.append(tartRunOptions)
+            // Shell-tokenize into separate argv elements; appending the whole
+            // string as one argument makes `tart run` reject it as a single
+            // unknown option (e.g. "--net-softnet --net-softnet-allow=…").
+            runArgs.append(contentsOf: ShellWordSplitter.split(tartRunOptions))
         }
         runArgs.append(name)
         try await executeCommand(withArguments: runArgs)
