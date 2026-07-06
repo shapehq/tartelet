@@ -1,3 +1,4 @@
+import Composers
 import AppKit
 import Foundation
 import SettingsUI
@@ -82,7 +83,10 @@ private extension AppDelegate {
             let menu = NSApplication.shared.menu,
             let sensoriumMenu = menu.items.first,
             let sensoriumMenuSubmenu = sensoriumMenu.submenu,
-            let settingsMenuItem = sensoriumMenuSubmenu.items[safe: 2],
+            let settingsMenuItem = sensoriumMenuSubmenu.items.first(where: { menuItem in
+                menuItem.action == Selector(("showSettingsWindow:")) ||
+                    menuItem.title == "Settings…"
+            }),
             let settingsMenuItemAction = settingsMenuItem.action
         else {
             return

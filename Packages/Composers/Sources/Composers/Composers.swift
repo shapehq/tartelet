@@ -12,10 +12,10 @@ import SSHData
 import VirtualMachineData
 import VirtualMachineDomain
 
-enum Composers {
-    static let settingsStore = AppStorageSettingsStore()
+public enum Composers {
+    public static let settingsStore = AppStorageSettingsStore()
 
-    static let fleet = VirtualMachineFleet(
+    public static let fleet = VirtualMachineFleet(
         logger: logger(subsystem: "VirtualMachineFleet"),
         baseVirtualMachine: SSHConnectingVirtualMachine(
             logger: logger(subsystem: "SSHConnectingVirtualMachine"),
@@ -55,7 +55,7 @@ enum Composers {
         )
     )
 
-    static let editor = VirtualMachineEditor(
+    public static let editor = VirtualMachineEditor(
         logger: logger(subsystem: "VirtualMachineEditor"),
         virtualMachine: SettingsVirtualMachine(
             tart: Tart(
@@ -68,21 +68,21 @@ enum Composers {
         )
     )
 
-    static let gitHubCredentialsStore = KeychainGitHubCredentialsStore(
+    public static let gitHubCredentialsStore = KeychainGitHubCredentialsStore(
         keychain: keychain(
             logger: logger(subsystem: "GitHubCredentialsStore")
         ),
         serviceName: "Tartelet GitHub Account"
     )
 
-    static let virtualMachineSSHCredentialsStore = KeychainVirtualMachineSSHCredentialsStore(
+    public static let virtualMachineSSHCredentialsStore = KeychainVirtualMachineSSHCredentialsStore(
         keychain: keychain(
             logger: logger(subsystem: "KeychainVirtualMachineSSHCredentialsStore")
         ),
         serviceName: "Tartelet Virtual Machine SSH Credentials"
     )
 
-    static func logger(subsystem: String) -> Logger {
+    public static func logger(subsystem: String) -> Logger {
         FileLogger(
             fileSystem: DiskFileSystem(),
             dateProvider: FoundationDateProvider(),

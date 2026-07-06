@@ -2,26 +2,32 @@ import GitHubDomain
 import SettingsDomain
 import VirtualMachineDomain
 
-struct SettingsGitHubActionsRunnerConfiguration<
+public struct SettingsGitHubActionsRunnerConfiguration<
     SettingsStoreType: SettingsStore
 >: GitHubActionsRunnerConfiguration {
-    let settingsStore: SettingsStoreType
-    var runnerDisableDefaultLabels: Bool {
+    public let settingsStore: SettingsStoreType
+
+    public var runnerDisableDefaultLabels: Bool {
         settingsStore.gitHubRunnerDisableDefaultLabels
     }
-    var runnerDisableUpdates: Bool {
+
+    public var runnerDisableUpdates: Bool {
         settingsStore.gitHubRunnerDisableUpdates
     }
-    var runnerScope: GitHubRunnerScope {
+
+    public var runnerScope: GitHubRunnerScope {
         settingsStore.githubRunnerScope
     }
-    var runnerLabels: String {
+
+    public var runnerLabels: String {
         settingsStore.gitHubRunnerLabels
     }
-    var runnerGroup: String {
+
+    public var runnerGroup: String {
         settingsStore.gitHubRunnerGroup
     }
-    var runnerName: String {
+
+    public var runnerName: String {
         settingsStore.gitHubRunnerName
     }
 }

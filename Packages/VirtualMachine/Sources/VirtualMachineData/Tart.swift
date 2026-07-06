@@ -21,22 +21,33 @@ public struct Tart {
     }
 
     public func run(name: String) async throws {
-        let homeFolderURL = homeProvider.homeFolderURL ??
-            FileManager.default.homeDirectoryForCurrentUser.appending(component: ".tart")
-        let cacheFolder = homeFolderURL.appendingPathComponent("cache")
-        if !FileManager.default.fileExists(atPath: cacheFolder.path) {
-            try FileManager.default.createDirectory(atPath: cacheFolder.path, withIntermediateDirectories: true)
+        try await executeCommand(withArguments: runArguments(name: name))
+    }
+
+    public func runDetached(name: String) throws {
+        let locator = TartLocator(shell: shell)
+        let filePath = try locator.locate()
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: filePath)
+        process.arguments = try runArguments(name: name)
+        if let environment {
+            process.environment = environment
         }
-        var runArgs =  ["run", "--dir=cache:\(cacheFolder.path())"]
-        if let tartRunOptions = ProcessInfo.processInfo.environment["TARTELET_RUN_OPTIONS"] {
-            runArgs.append(tartRunOptions)
-        }
-        runArgs.append(name)
-        try await executeCommand(withArguments: runArgs)
+
+        let nullDevice = FileHandle(forWritingAtPath: "/dev/null")
+        process.standardInput = nil
+        process.standardOutput = nullDevice
+        process.standardError = nullDevice
+
+        try process.run()
     }
 
     public func delete(name: String) async throws {
         try await executeCommand(withArguments: ["delete", name])
+    }
+
+    public func stop(name: String) async throws {
+        try await executeCommand(withArguments: ["stop", name])
     }
 
     public func list() async throws -> [String] {
@@ -51,6 +62,21 @@ public struct Tart {
 }
 
 private extension Tart {
+    private func runArguments(name: String) throws -> [String] {
+        let homeFolderURL = homeProvider.homeFolderURL ??
+            FileManager.default.homeDirectoryForCurrentUser.appending(component: ".tart")
+        let cacheFolder = homeFolderURL.appendingPathComponent("cache")
+        if !FileManager.default.fileExists(atPath: cacheFolder.path) {
+            try FileManager.default.createDirectory(atPath: cacheFolder.path, withIntermediateDirectories: true)
+        }
+        var runArgs =  ["run", "--dir=cache:\(cacheFolder.path())"]
+        if let tartRunOptions = ProcessInfo.processInfo.environment["TARTELET_RUN_OPTIONS"] {
+            runArgs.append(tartRunOptions)
+        }
+        runArgs.append(name)
+        return runArgs
+    }
+
     @discardableResult
     private func executeCommand(withArguments arguments: [String]) async throws -> String {
         let locator = TartLocator(shell: shell)

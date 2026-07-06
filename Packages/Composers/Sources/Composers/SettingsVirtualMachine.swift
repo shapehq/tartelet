@@ -2,8 +2,8 @@ import SettingsDomain
 import VirtualMachineData
 import VirtualMachineDomain
 
-struct SettingsVirtualMachine<SettingsStoreType: SettingsStore>: VirtualMachineDomain.VirtualMachine {
-    var name: String {
+public struct SettingsVirtualMachine<SettingsStoreType: SettingsStore>: VirtualMachineDomain.VirtualMachine {
+    public var name: String {
         switch settingsStore.virtualMachine {
         case let .virtualMachine(name):
             return name
@@ -11,7 +11,7 @@ struct SettingsVirtualMachine<SettingsStoreType: SettingsStore>: VirtualMachineD
             fatalError("Cannot get name of virtual machine because none has been selected in settings")
         }
     }
-    var canStart: Bool {
+    public var canStart: Bool {
         switch settingsStore.virtualMachine {
         case .virtualMachine:
             return true
@@ -20,26 +20,26 @@ struct SettingsVirtualMachine<SettingsStoreType: SettingsStore>: VirtualMachineD
         }
     }
 
-    let tart: Tart
-    let settingsStore: SettingsStoreType
+    public let tart: Tart
+    public let settingsStore: SettingsStoreType
 
     private var virtualMachine: VirtualMachineDomain.VirtualMachine {
         TartVirtualMachine(tart: tart, vmName: name)
     }
 
-    func start() async throws {
+    public func start() async throws {
         try await virtualMachine.start()
     }
 
-    func clone(named newName: String) async throws -> VirtualMachineDomain.VirtualMachine {
+    public func clone(named newName: String) async throws -> VirtualMachineDomain.VirtualMachine {
         try await virtualMachine.clone(named: newName)
     }
 
-    func delete() async throws {
+    public func delete() async throws {
         try await virtualMachine.delete()
     }
 
-    func getIPAddress() async throws -> String {
+    public func getIPAddress() async throws -> String {
         try await virtualMachine.getIPAddress()
     }
 }

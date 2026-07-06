@@ -18,6 +18,38 @@ targets:
     platform: macOS
     sources: [Tartelet]
     postCompileScripts:
+    - name: Bundle Command Line Tool
+      script: |
+        set -euo pipefail
+
+        case "${CONFIGURATION}" in
+          Release)
+            SWIFT_CONFIGURATION="release"
+            ;;
+          *)
+            SWIFT_CONFIGURATION="debug"
+            ;;
+        esac
+
+        swift build \
+          --package-path "${SRCROOT}/Packages/CLI" \
+          -c "${SWIFT_CONFIGURATION}"
+
+        CLI_BINARY="${SRCROOT}/Packages/CLI/.build/${SWIFT_CONFIGURATION}/tartelet"
+        HELPERS_DIR="${TARGET_BUILD_DIR}/${CONTENTS_FOLDER_PATH}/Helpers"
+
+        mkdir -p "${HELPERS_DIR}"
+        cp "${CLI_BINARY}" "${HELPERS_DIR}/tartelet"
+        chmod 755 "${HELPERS_DIR}/tartelet"
+
+        if [ "${CODE_SIGNING_ALLOWED:-NO}" = "YES" ] && [ -n "${EXPANDED_CODE_SIGN_IDENTITY:-}" ]; then
+          codesign \
+            --force \
+            --sign "${EXPANDED_CODE_SIGN_IDENTITY}" \
+            --options runtime \
+            "${HELPERS_DIR}/tartelet"
+        fi
+      basedOnDependencyAnalysis: false
     - name: Run SwiftLint
       path: scripts/swiftlint.sh
       basedOnDependencyAnalysis: false
@@ -42,7 +74,11 @@ targets:
         products: [SSHData, SSHDomain]
       - package: VirtualMachine
         products: [VirtualMachineData, VirtualMachineDomain]
+      - package: Composers
+        products: Composers
 localPackages:
+  - Packages/CLI
+  - Packages/Composers
   - Packages/FileSystem
   - Packages/GitHub
   - Packages/Keychain
